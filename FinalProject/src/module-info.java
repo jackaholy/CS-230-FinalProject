@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * @author jackholy
- *
- */
-module JavaFxProject {
-}
