@@ -5,9 +5,9 @@ import javax.swing.JFrame;
 /**
  * This class will be our level 2 boat.
  */
-public class FloatingPoint extends Player{
+public class BoatFloatingPoint extends Player{
 
-	public FloatingPoint(JFrame playerJFrame) {
+	public BoatFloatingPoint(JFrame playerJFrame) {
 		super(playerJFrame);
 		// TODO Auto-generated constructor stub
 	}
