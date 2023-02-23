@@ -2,6 +2,7 @@ package final_project;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JFrame;
 
 /**
  * A "thing" in the game. Should handle some basic stuff. Show/hide, movement,
@@ -9,19 +10,40 @@ import javax.swing.JLabel;
  */
 abstract public class Sprite {
     private final JLabel spriteJLabel = new JLabel();
-    private ImageIcon image;
+    private ImageIcon unrotatedIcon;
+    private int rotationDegrees = 0;
     protected int x;
     protected int y;
 
-    public Sprite(ImageIcon image, int x, int y) {
-        this.image = image;
+    protected Sprite(JFrame gameJFrame, ImageIcon image, int x, int y) {
+        // Add sprite to play area
+        gameJFrame.getContentPane().add(spriteJLabel);
+
+        // Assign instance variables
+        this.unrotatedIcon = image;
         this.x = x;
         this.y = y;
     }
 
     protected void draw() {
-        spriteJLabel.setIcon(image);
-        spriteJLabel.setBounds(x, y, image.getIconWidth(), image.getIconHeight());
+        // Create a new rotated icon based on the current rotation
+        RotatedIcon rotatedIcon = new RotatedIcon(unrotatedIcon, rotationDegrees);
+
+        // Set the sprite to use the rotated icon and it's dimensions
+        spriteJLabel.setBounds(x, y, rotatedIcon.getIconWidth(), rotatedIcon.getIconHeight());
+        spriteJLabel.setIcon(rotatedIcon);
+
+        // Show the sprite
         spriteJLabel.setVisible(true);
+    }
+
+    public void setRotation(int rotationDegrees) {
+        // Set the rotation and update the ui
+        this.rotationDegrees = rotationDegrees;
+        draw();
+    }
+
+    public int getRotation() {
+        return rotationDegrees;
     }
 }

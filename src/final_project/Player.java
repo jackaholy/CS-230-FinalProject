@@ -1,6 +1,7 @@
 package final_project;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 /**
  * This class will probably do some heavy lifting. Controls, player inventory,
@@ -12,8 +13,9 @@ public class Player extends Sprite {
 	private int turningRadius;
 	private int pickupRadius;
 
-	public Player(ImageIcon image, int x, int y, int cost, int speed, int turningRadius, int pickupRadius) {
-		super(image, x, y);
+	public Player(JFrame gameJFrame, ImageIcon image, int x, int y, int cost, int speed, int turningRadius,
+			int pickupRadius) {
+		super(gameJFrame, image, x, y);
 		this.cost = cost;
 		this.speed = speed;
 		this.turningRadius = turningRadius;
