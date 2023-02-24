@@ -46,4 +46,12 @@ abstract public class Sprite {
     public int getRotation() {
         return rotationDegrees;
     }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
