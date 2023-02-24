@@ -23,6 +23,7 @@ public class GameController {
         // The window itself
         JFrame gameJFrame = new JFrame();
         // With arbitrary default dimensions
+        gameJFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameJFrame.setSize(800, 600);
 
         // The play area
