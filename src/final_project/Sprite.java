@@ -30,7 +30,10 @@ abstract public class Sprite {
         RotatedIcon rotatedIcon = new RotatedIcon(unrotatedIcon, rotationDegrees);
 
         // Set the sprite to use the rotated icon and it's dimensions
-        spriteJLabel.setBounds(x, y, rotatedIcon.getIconWidth(), rotatedIcon.getIconHeight());
+        // Java uses the top left corner for coordinates, but we want to rotate about
+        // the center, so we have to offset it by half it's width & height
+        spriteJLabel.setBounds(x - rotatedIcon.getIconWidth() / 2,
+                y - rotatedIcon.getIconHeight() / 2, rotatedIcon.getIconWidth(), rotatedIcon.getIconHeight());
         spriteJLabel.setIcon(rotatedIcon);
 
         // Show the sprite
