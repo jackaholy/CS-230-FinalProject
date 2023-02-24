@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 abstract public class Sprite {
     private final JLabel spriteJLabel = new JLabel();
     private ImageIcon unrotatedIcon;
-    private double rotationDegrees = 0;
+    private int rotationDegrees = 0;
     protected int x;
     protected int y;
 
@@ -37,13 +37,13 @@ abstract public class Sprite {
         spriteJLabel.setVisible(true);
     }
 
-    public void setRotation(double rotationDegrees) {
+    public void setRotation(int rotationDegrees) {
         // Set the rotation and update the ui
         this.rotationDegrees = rotationDegrees;
         draw();
     }
 
-    public double getRotation() {
+    public int getRotation() {
         return rotationDegrees;
     }
 
