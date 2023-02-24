@@ -10,10 +10,17 @@ import javax.swing.JFrame;
  * ship speed, health and so on will all go here
  */
 public class Player extends Sprite {
+	public enum Direction {
+		CLOCKWISE,
+		COUNTER_CLOCKWISE,
+		NOT_ROTATING
+	}
+
 	private int cost;
 	private double speed;
 	private double turningSpeed;
 	private int pickupRadius;
+	private Direction rotationDirection = Direction.NOT_ROTATING;
 
 	public Player(JFrame gameJFrame, ImageIcon image, int x, int y, int cost, double speed,
 			double turningSpeed,
@@ -32,15 +39,20 @@ public class Player extends Sprite {
 	}
 
 	public void rotate() {
-		// setRotation(30);
-		setRotation(getRotation() + turningSpeed);
+		if (rotationDirection == Direction.CLOCKWISE) {
+
+			setRotation(getRotation() + turningSpeed);
+		} else if (rotationDirection == Direction.COUNTER_CLOCKWISE) {
+			setRotation(getRotation() - turningSpeed);
+		}
+	}
+
+	public void setRotationDirection(Direction direction) {
+		this.rotationDirection = direction;
 	}
 
 	public void moveForward() {
-		// System.out.println(getX());
-		System.out.println((int) (Math.cos(getRotation()) * speed));
-		System.out.println((int) (Math.sin(getRotation()) * speed));
-		setX(getX() + (int) (Math.cos(Math.toRadians(getRotation())) * speed));
-		setY(getY() + (int) (Math.sin(Math.toRadians(getRotation())) * speed));
+		setX(getX() + (int) (Math.cos(Math.toRadians(getRotation() + 180)) * speed));
+		setY(getY() + (int) (Math.sin(Math.toRadians(getRotation() + 180)) * speed));
 	}
 }

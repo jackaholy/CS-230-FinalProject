@@ -17,6 +17,8 @@ import java.awt.event.MouseEvent;
  */
 public class GameController {
     private final Timer tickTimer = new Timer();
+    private int cursorX;
+    private int cursorY;
 
     public static void main(String[] args) {
         new GameController();
@@ -39,7 +41,7 @@ public class GameController {
         Player player = new Player(
                 gameJFrame,
                 new ImageIcon("assets/water_bug.png"),
-                300, 300, 0, 5, 5, 0);
+                300, 300, 0, 3, 5, 0);
 
         // Show the window and player
         gameJFrame.setVisible(true);
@@ -50,6 +52,19 @@ public class GameController {
             // A single tick of the game
             @Override
             public void run() {
+                // Calcuate the width of the cursor
+                double xDiff = player.getX() - cursorX;
+                // Calculate the height of the triangle
+                double yDiff = player.getY() - cursorY;
+
+                // Calculate the angle between the player and the cursor
+                double desiredAngle = Math.toDegrees(Math.atan2(yDiff, xDiff));
+                if (desiredAngle > player.getRotation()) {
+                    player.setRotationDirection(Player.Direction.CLOCKWISE);
+                } else if (desiredAngle < player.getRotation()) {
+                    player.setRotationDirection(Player.Direction.COUNTER_CLOCKWISE);
+                }
+
                 player.tick();
             }
             // About 30 fps
@@ -57,21 +72,9 @@ public class GameController {
         gameContentPane.addMouseMotionListener(new MouseInputListener() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                // Calcuate the width of the cursor
-                double xDiff = player.getX() - e.getX();
-                // Calculate the height of the triangle
-                double yDiff = player.getY() - e.getY();
+                cursorX = e.getX();
+                cursorY = e.getY();
 
-                // Calculate the angle between the player and the cursor
-                double desiredAngle = Math.toDegrees(Math.atan2(yDiff, xDiff));
-                player.setRotation(desiredAngle + 180);
-                /*
-                 * if (desiredAngle < player.getRotation()) {
-                 * player.setRotationDirection(Player.Direction.CLOCKWISE);
-                 * } else if (desiredAngle > player.getRotation()) {
-                 * player.setRotation(Player.Direction.COUNTER_CLOCKWISE);
-                 * }
-                 */
             }
 
             @Override
