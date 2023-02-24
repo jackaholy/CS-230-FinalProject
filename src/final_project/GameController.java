@@ -6,6 +6,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Container;
 import java.awt.Color;
+import java.awt.MouseInfo;
+import java.awt.Point;
 
 /**
  * The main file of the project. Run this one to start the project
@@ -44,8 +46,16 @@ public class GameController {
             // A single tick of the game
             @Override
             public void run() {
-                // Rotate one degree
-                player.setRotation(player.getRotation() + 1);
+                // Get the position of the cursor
+                Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+                // Calcuate the width of the cursor
+                double xDiff = player.getX() - mouseLocation.getX();
+                // Calculate the height of the triangle
+                double yDiff = player.getY() - mouseLocation.getY();
+
+                // Calculate the angle between the player and the cursor
+                double desiredAngle = Math.toDegrees(Math.atan2(yDiff, xDiff)) + 90;
+                player.setRotation(desiredAngle);
             }
             // About 30 fps
         }, 0, 33);
