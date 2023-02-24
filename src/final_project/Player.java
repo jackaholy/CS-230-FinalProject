@@ -22,3 +22,4 @@ public class Player extends Sprite {
 		this.pickupRadius = pickupRadius;
 	}
 }
+
