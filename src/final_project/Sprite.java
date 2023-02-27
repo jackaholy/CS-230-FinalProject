@@ -41,8 +41,9 @@ abstract public class Sprite {
     }
 
     public void setRotation(double rotationDegrees) {
-        // Set the rotation and update the ui
-        this.rotationDegrees = rotationDegrees;
+
+        // Restrict angle to 0 < angle < 360
+        this.rotationDegrees = (rotationDegrees + 360) % 360;
         draw();
     }
 

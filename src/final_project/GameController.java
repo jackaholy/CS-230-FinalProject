@@ -59,16 +59,29 @@ public class GameController {
 
                 // Calculate the angle between the player and the cursor
                 double desiredAngle = Math.toDegrees(Math.atan2(yDiff, xDiff));
-                if (desiredAngle > player.getRotation()) {
-                    player.setRotationDirection(Player.Direction.CLOCKWISE);
-                } else if (desiredAngle < player.getRotation()) {
+
+                // Restrict angle to 0 < angle < 360
+                desiredAngle = (desiredAngle + 360) % 360;
+
+                // Find the difference
+                double angleDiff = desiredAngle - player.getRotation();
+
+                // Force it to be positive
+                if (angleDiff < 0)
+                    angleDiff += 360;
+
+                // Find shorter rotation direction
+                if (angleDiff > 180) {
                     player.setRotationDirection(Player.Direction.COUNTER_CLOCKWISE);
+                } else {
+                    player.setRotationDirection(Player.Direction.CLOCKWISE);
                 }
 
                 player.tick();
             }
             // About 30 fps
         }, 0, 30);
+
         gameContentPane.addMouseMotionListener(new MouseInputListener() {
             @Override
             public void mouseMoved(MouseEvent e) {

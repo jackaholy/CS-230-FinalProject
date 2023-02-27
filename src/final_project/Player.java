@@ -52,7 +52,7 @@ public class Player extends Sprite {
 	}
 
 	public void moveForward() {
-		setX(getX() + (int) (Math.cos(Math.toRadians(getRotation() + 180)) * speed));
-		setY(getY() + (int) (Math.sin(Math.toRadians(getRotation() + 180)) * speed));
+		setX(getX() - (int) (Math.cos(Math.toRadians(getRotation())) * speed));
+		setY(getY() - (int) (Math.sin(Math.toRadians(getRotation())) * speed));
 	}
 }
