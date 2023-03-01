@@ -45,6 +45,7 @@ public class GameController {
                 gameJFrame,
                 new ImageIcon("assets/water_bug.png"),
                 300, 300, 0, 0.5, 0.5, 0);
+        Enemy enemy = new Enemy(gameJFrame, new ImageIcon("assets/pirate_temp.jpg"), 500, 500, 0.25, 1);
 
         // Show the window and player
         gameJFrame.setVisible(true);
@@ -57,6 +58,8 @@ public class GameController {
             public void run() {
                 player.setTarget(cursorX, cursorY);
                 player.tick();
+                enemy.setTarget(player.getX(), player.getY());
+                enemy.tick();
             }
         }, 0, 1000 / FRAMES_PER_SECOND);
 
