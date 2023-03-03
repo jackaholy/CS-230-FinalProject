@@ -9,8 +9,12 @@ import javax.swing.JFrame;
  * collisions, etc.
  */
 abstract public class Sprite {
+    // The J "thing" that's draw onto the screen
     private final JLabel spriteJLabel = new JLabel();
+    // The original icon
     private ImageIcon unrotatedIcon;
+
+    // Current position
     private double rotationDegrees = 0;
     protected int x;
     protected int y;
@@ -25,6 +29,9 @@ abstract public class Sprite {
         this.y = y;
     }
 
+    /**
+     * Display current position and rotation to the screen
+     */
     protected void draw() {
         // Create a new rotated icon based on the current rotation
         RotatedIcon rotatedIcon = new RotatedIcon(unrotatedIcon, rotationDegrees);
@@ -40,6 +47,11 @@ abstract public class Sprite {
         spriteJLabel.setVisible(true);
     }
 
+    /**
+     * Set rotation
+     * 
+     * @param rotationDegrees degrees from 0 (right)
+     */
     public void setRotation(double rotationDegrees) {
 
         // Restrict angle to 0 < angle < 360
@@ -47,22 +59,49 @@ abstract public class Sprite {
         draw();
     }
 
+    /**
+     * Get current rotation direction
+     * 
+     * @return Degrees from 0 (right)
+     */
     public double getRotation() {
         return rotationDegrees;
     }
 
+    /**
+     * Get the currently set X position
+     * 
+     * @return current X position
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Sets the X position of the player. Will be shown next time draw() is
+     * called.
+     * 
+     * @param y desired x position.
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     * Get the player's currently set Y position
+     * 
+     * @return current Y position
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Sets the Y position of the player. Will be shown next time draw() is
+     * called.
+     * 
+     * @param y desired y position.
+     */
     public void setY(int y) {
         this.y = y;
     }

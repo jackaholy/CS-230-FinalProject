@@ -3,15 +3,13 @@ package final_project;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-import javax.swing.event.MouseInputListener;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Container;
 import java.awt.Color;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
+import javax.swing.event.MouseInputAdapter;
 
 /**
  * The main file of the project. Run this one to start the project
@@ -19,7 +17,10 @@ import java.awt.event.MouseEvent;
 public class GameController {
     private static final int FRAMES_PER_SECOND = 120;
 
+    // Timer goes off once per frame
     private final Timer tickTimer = new Timer();
+
+    // Last known coordinates of the player
     private int cursorX;
     private int cursorY;
 
@@ -41,11 +42,12 @@ public class GameController {
         gameContentPane.setLayout(null);
 
         // Create a player
-        Player player = new Player(
+        PlayerShip player = new PlayerShip(
                 gameJFrame,
                 new ImageIcon("assets/water_bug.png"),
                 300, 300, 0, 0.5, 0.5, 0);
-        Enemy enemy = new Enemy(gameJFrame, new ImageIcon("assets/pirate_temp.jpg"), 500, 500, 0.25, 1);
+
+        PirateShip enemy = new PirateShip(gameJFrame, new ImageIcon("assets/pirate_temp.jpg"), 500, 500, 1, 0.4, 125);
 
         // Show the window and player
         gameJFrame.setVisible(true);
@@ -56,55 +58,24 @@ public class GameController {
             // A single tick of the game
             @Override
             public void run() {
+                // Aim for the cursor
                 player.setTarget(cursorX, cursorY);
+                // Move towards the cursor
                 player.tick();
+
+                // Aim for the player
                 enemy.setTarget(player.getX(), player.getY());
+                // Move towards the player
                 enemy.tick();
             }
         }, 0, 1000 / FRAMES_PER_SECOND);
 
-        gameContentPane.addMouseMotionListener(new MouseInputListener() {
+        gameContentPane.addMouseMotionListener(new MouseInputAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
+                // Every time the cursor moves, save the new coordinates
                 cursorX = e.getX();
                 cursorY = e.getY();
-
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent arg0) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
-
             }
         });
     }
