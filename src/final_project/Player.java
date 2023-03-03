@@ -7,19 +7,19 @@ import javax.swing.JFrame;
  * This class will probably do some heavy lifting. Controls, player inventory,
  * ship speed, health and so on will all go here
  */
-public class Player extends Sprite {
+public class Player extends MovingSprite {
 	private int cost;
-	private int speed;
-	private int turningRadius;
 	private int pickupRadius;
 
-	public Player(JFrame gameJFrame, ImageIcon image, int x, int y, int cost, int speed, int turningRadius,
+	public Player(JFrame gameJFrame, ImageIcon image, int x, int y, int cost, double speed, double turningSpeed,
 			int pickupRadius) {
-		super(gameJFrame, image, x, y);
+		super(gameJFrame, image, x, y, speed, turningSpeed);
 		this.cost = cost;
-		this.speed = speed;
-		this.turningRadius = turningRadius;
 		this.pickupRadius = pickupRadius;
 	}
-}
 
+	public void tick() {
+		// Add player tick stuff here
+		super.tick();
+	}
+}
