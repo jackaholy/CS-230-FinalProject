@@ -8,8 +8,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Container;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 /**
  * The main file of the project. Run this one to start the project
@@ -47,7 +50,7 @@ public class GameController {
                 new ImageIcon("assets/water_bug.png"),
                 300, 300, 0, 0.5, 0.5, 0);
 
-        PirateShip enemy = new PirateShip(gameJFrame, new ImageIcon("assets/pirate_temp.jpg"), 500, 500, 1, 0.4, 125);
+        PirateShip enemy = new PirateShip(gameJFrame, new ImageIcon("assets/floating_point.png"), 500, 500, 1, 0.4, 125);
 
         // Show the window and player
         gameJFrame.setVisible(true);
@@ -70,6 +73,7 @@ public class GameController {
             }
         }, 0, 1000 / FRAMES_PER_SECOND);
 
+    
         gameContentPane.addMouseMotionListener(new MouseInputAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -78,6 +82,10 @@ public class GameController {
                 cursorY = e.getY();
             }
         });
-    }
-
-}
+        gameContentPane.addComponentListener(new ComponentAdaptr() { @Override
+                 Component component = (Component) event.getSource();
+                player.setBounds(component.getWidth(), component.getHeight());
+                enemy.setBounds(component.getWidth(), component.getHeight());
+            }
+        });
+}}

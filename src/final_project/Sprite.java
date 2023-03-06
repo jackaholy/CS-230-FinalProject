@@ -13,6 +13,7 @@ abstract public class Sprite {
     private final JLabel spriteJLabel = new JLabel();
     // The original icon
     private ImageIcon unrotatedIcon;
+    private RotatedIcon rotatedIcon;
 
     // Current position
     private double rotationDegrees = 0;
@@ -34,7 +35,7 @@ abstract public class Sprite {
      */
     protected void draw() {
         // Create a new rotated icon based on the current rotation
-        RotatedIcon rotatedIcon = new RotatedIcon(unrotatedIcon, rotationDegrees);
+        rotatedIcon = new RotatedIcon(unrotatedIcon, rotationDegrees);
 
         // Set the sprite to use the rotated icon and it's dimensions
         // Java uses the top left corner for coordinates, but we want to rotate about
@@ -104,5 +105,23 @@ abstract public class Sprite {
      */
     public void setY(int y) {
         this.y = y;
+    }
+
+    /**
+     * Get the width of the sprite
+     * 
+     * @return the width of the sprite
+     */
+    public int getWidth() {
+        return rotatedIcon.getIconWidth();
+    }
+
+    /**
+     * Get the height of the sprite
+     * 
+     * @return the height of the sprite
+     */
+    public int getHeight() {
+        return rotatedIcon.getIconHeight();
     }
 }

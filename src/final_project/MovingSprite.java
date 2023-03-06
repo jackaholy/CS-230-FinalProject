@@ -26,6 +26,10 @@ abstract public class MovingSprite extends Sprite {
     private double previousFrameXChangeRemainder = 0;
     private double previousFrameYChangeRemainder = 0;
 
+    // The maximum x & y position before going out of bounds
+    private int maxX = 0;
+    private int maxY = 0;
+
     /**
      * Class constructor. Sets speed and turning speed, and creates the sprite.
      * 
@@ -104,11 +108,17 @@ abstract public class MovingSprite extends Sprite {
         // The exact distance we want to move in each direction
         double xChangeExact = Math.cos(Math.toRadians(getRotation())) * speed + previousFrameXChangeRemainder;
         double yChangeExact = Math.sin(Math.toRadians(getRotation())) * speed + previousFrameYChangeRemainder;
-
+        if (xChangeExact > 0 && !canMoveLeft())
+            xChangeExact = 0;
+        if (xChangeExact < 0 && !canMoveRight())
+            xChangeExact = 0;
+        if (yChangeExact > 0 && !canMoveUp())
+            yChangeExact = 0;
+        if (yChangeExact < 0 && !canMoveDown())
+            yChangeExact = 0;
         // Since you can't move part of a pixel, convert to ints
         int xChangeInt = (int) xChangeExact;
         int yChangeInt = (int) yChangeExact;
-
         // Move the desired amount
         setX(getX() - xChangeInt);
         setY(getY() - yChangeInt);
@@ -116,5 +126,26 @@ abstract public class MovingSprite extends Sprite {
         // Save the remaining distance for the next frame
         previousFrameXChangeRemainder = xChangeExact - xChangeInt;
         previousFrameYChangeRemainder = yChangeExact - yChangeInt;
+    }
+
+    private boolean canMoveLeft() {
+        return (getX() - (getWidth() / 2)) > 0;
+    }
+
+    private boolean canMoveUp() {
+        return getY() - (getHeight() / 2) > 0;
+    }
+
+    private boolean canMoveRight() {
+        return getX() + (getWidth() / 2) < maxX;
+    }
+
+    private boolean canMoveDown() {
+        return getY() + (getHeight() / 2) < maxY;
+    }
+
+    public void setBounds(int maxX, int maxY) {
+        this.maxX = maxX;
+        this.maxY = maxY;
     }
 }
