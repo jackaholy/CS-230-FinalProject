@@ -17,92 +17,95 @@ import java.awt.event.MouseEvent;
  * The main file of the project. Run this one to start the project
  */
 public class GameController {
-    private static final int FRAMES_PER_SECOND = 120;
+	private static final int FRAMES_PER_SECOND = 120;
 
-    private final Timer tickTimer = new Timer();
-    private int cursorX;
-    private int cursorY;
+	private final Timer tickTimer = new Timer();
+	private int cursorX;
+	private int cursorY;
 
-    public static void main(String[] args) {
-        new GameController();
-    }
+	public static void main(String[] args) {
+		new GameController();
+	}
 
-    public GameController() {
-        // The window itself
-        JFrame gameJFrame = new JFrame();
-        // With arbitrary default dimensions
-        gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        gameJFrame.setSize(800, 600);
+	public GameController() {
+		// The window itself
+		JFrame gameJFrame = new JFrame();
+		// With arbitrary default dimensions
+		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		gameJFrame.setSize(800, 600);
 
-        // The play area
-        Container gameContentPane = gameJFrame.getContentPane();
-        gameContentPane.setBackground(Color.blue);
-        // Use absolute positioning
-        gameContentPane.setLayout(null);
+		// The play area
+		Container gameContentPane = gameJFrame.getContentPane();
+		gameContentPane.setBackground(Color.blue);
+		// Use absolute positioning
+		gameContentPane.setLayout(null);
 
-        // Create a player
-        Player player = new Player(
-                gameJFrame,
-                new ImageIcon("assets/water_bug.png"),
-                300, 300, 0, 0.5, 0.5, 0);
+		// Create a player
+		Player player = new Player(gameJFrame, new ImageIcon("assets/water_bug.png"), 300, 300, 0, 0.5, 0.5, 0);
 
-        // Show the window and player
-        gameJFrame.setVisible(true);
-        player.draw();
+		// Show the window and player
+		gameJFrame.setVisible(true);
+		player.draw();
 
-        tickTimer.schedule(new TimerTask() {
+		// Create some loot
+		Loot loot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 5, 100, 100);
+		
 
-            // A single tick of the game
-            @Override
-            public void run() {
-                player.setTarget(cursorX, cursorY);
-                player.tick();
-            }
-        }, 0, 1000 / FRAMES_PER_SECOND);
+		tickTimer.schedule(new TimerTask() {
 
-        gameContentPane.addMouseMotionListener(new MouseInputListener() {
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                cursorX = e.getX();
-                cursorY = e.getY();
+			// A single tick of the game
+			@Override
+			public void run() {
+				// Show the loot on the map
+				loot.draw();
+				player.setTarget(cursorX, cursorY);
+				player.tick();
+			}
+		}, 0, 1000 / FRAMES_PER_SECOND);
 
-            }
+		gameContentPane.addMouseMotionListener(new MouseInputListener() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				cursorX = e.getX();
+				cursorY = e.getY();
 
-            @Override
-            public void mouseClicked(MouseEvent arg0) {
-                // TODO Auto-generated method stub
+			}
 
-            }
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
+			}
 
-            }
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
+			}
 
-            }
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
 
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                // TODO Auto-generated method stub
+			}
 
-            }
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				// TODO Auto-generated method stub
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-                // TODO Auto-generated method stub
+			}
 
-            }
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
+			}
 
-            }
-        });
-    }
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
 }
