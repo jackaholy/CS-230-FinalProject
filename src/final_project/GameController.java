@@ -12,8 +12,6 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
 
-import org.w3c.dom.events.Event;
-
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
