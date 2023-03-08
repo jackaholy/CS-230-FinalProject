@@ -3,6 +3,10 @@ package final_project;
 import javax.swing.JFrame;
 import javax.swing.ImageIcon;
 
+/**
+ * A sprite that moves towards a specific set of coordinates at a given speed
+ * and rotation rate.
+ */
 abstract public class MovingSprite extends Sprite {
     public enum Direction {
         CLOCKWISE,
@@ -10,13 +14,32 @@ abstract public class MovingSprite extends Sprite {
         NOT_ROTATING
     }
 
-    private double speed;
-    private double turningSpeed;
-    private Direction rotationDirection = Direction.NOT_ROTATING;
+    protected Direction rotationDirection = Direction.NOT_ROTATING;
 
+    // How many pixels the sprite should move per frame
+    private double speed;
+    // How many degrees the sprite should rotate per frame
+    private double turningSpeed;
+
+    // If the sprite wants to move <1 pixel, save the
+    // remainder for the next frame
     private double previousFrameXChangeRemainder = 0;
     private double previousFrameYChangeRemainder = 0;
 
+    // The maximum x & y position before going out of bounds
+    private int maxX = 0;
+    private int maxY = 0;
+
+    /**
+     * Class constructor. Sets speed and turning speed, and creates the sprite.
+     * 
+     * @param gameJFrame   the game window, passed to sprite
+     * @param image        the image for the sprite, passed to sprite
+     * @param x            starting x position
+     * @param y            starting y position
+     * @param speed        how many pixels the player should move per frame
+     * @param turningSpeed how many degrees the player should rotate per frame
+     */
     protected MovingSprite(JFrame gameJFrame, ImageIcon image, int x, int y, double speed,
             double turningSpeed) {
         super(gameJFrame, image, x, y);
@@ -24,21 +47,34 @@ abstract public class MovingSprite extends Sprite {
         this.turningSpeed = turningSpeed;
     }
 
+    /**
+     * A single "moment" in game. Should rotate and move slightly, and update the UI
+     */
     protected void tick() {
         rotate();
         moveForward();
         draw();
     }
 
+    /**
+     * Rotate slightly in the desired direction.
+     * If NOT_ROTATING, do nothing
+     */
     protected void rotate() {
         if (rotationDirection == Direction.CLOCKWISE) {
-
             setRotation(getRotation() + turningSpeed);
         } else if (rotationDirection == Direction.COUNTER_CLOCKWISE) {
             setRotation(getRotation() - turningSpeed);
         }
     }
 
+    /**
+     * Calculate which direction to rotate in order to get closer to the destination
+     * coordinates
+     * 
+     * @param destinationX the X position to aim for
+     * @param destinationY the Y position to aim for
+     */
     public void setTarget(int destinationX, int destinationY) {
         // Calculate difference in X and Y
         double xDiff = this.getX() - destinationX;
@@ -65,14 +101,51 @@ abstract public class MovingSprite extends Sprite {
         }
     }
 
+    /**
+     * Move "forward" at the set speed, based on the current direction
+     */
     protected void moveForward() {
+        // The exact distance we want to move in each direction
         double xChangeExact = Math.cos(Math.toRadians(getRotation())) * speed + previousFrameXChangeRemainder;
         double yChangeExact = Math.sin(Math.toRadians(getRotation())) * speed + previousFrameYChangeRemainder;
+        if (xChangeExact > 0 && !canMoveLeft())
+            xChangeExact = 0;
+        if (xChangeExact < 0 && !canMoveRight())
+            xChangeExact = 0;
+        if (yChangeExact > 0 && !canMoveUp())
+            yChangeExact = 0;
+        if (yChangeExact < 0 && !canMoveDown())
+            yChangeExact = 0;
+        // Since you can't move part of a pixel, convert to ints
         int xChangeInt = (int) xChangeExact;
         int yChangeInt = (int) yChangeExact;
-        previousFrameXChangeRemainder = xChangeExact - xChangeInt;
-        previousFrameYChangeRemainder = yChangeExact - yChangeInt;
+        // Move the desired amount
         setX(getX() - xChangeInt);
         setY(getY() - yChangeInt);
+
+        // Save the remaining distance for the next frame
+        previousFrameXChangeRemainder = xChangeExact - xChangeInt;
+        previousFrameYChangeRemainder = yChangeExact - yChangeInt;
+    }
+
+    private boolean canMoveLeft() {
+        return (getX() - (getWidth() / 2)) > 0;
+    }
+
+    private boolean canMoveUp() {
+        return getY() - (getHeight() / 2) > 0;
+    }
+
+    private boolean canMoveRight() {
+        return getX() + (getWidth() / 2) < maxX;
+    }
+
+    private boolean canMoveDown() {
+        return getY() + (getHeight() / 2) < maxY;
+    }
+
+    public void setBounds(int maxX, int maxY) {
+        this.maxX = maxX;
+        this.maxY = maxY;
     }
 }
