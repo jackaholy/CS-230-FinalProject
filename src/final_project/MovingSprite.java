@@ -85,6 +85,13 @@ abstract public class MovingSprite extends Sprite {
         this.targetY = targetY;
     }
 
+    /**
+     * Calculate the angle of the target relative to this MovingSprite.
+     * 
+     * @return Angle of the target relative to the MovingSprite bounded from 0-360.
+     *         Such that right = 0, up = 90,
+     *         left = 180,down = 270
+     */
     protected double calculatedAngleToTarget() {
         // Calculate difference in X and Y
         double xDiff = this.getX() - targetX;
@@ -96,6 +103,13 @@ abstract public class MovingSprite extends Sprite {
         return (desiredAngle + 360) % 360;
     }
 
+    /**
+     * Return the direction to turn in order to get closer to the target angle. If
+     * the target is to the moving sprite's right, will return CLOCKWISE, if to the
+     * left, COUNTER_CLOCKWISE
+     * 
+     * @return CLOCKWISE or COUNTERCLOCKWISE
+     */
     protected Direction calculateDirectionToDesiredAngle() {
         double desiredAngle = calculatedAngleToTarget();
         // Find the difference between current and target angle
@@ -113,6 +127,12 @@ abstract public class MovingSprite extends Sprite {
         }
     }
 
+    /**
+     * Returns the opposite of the given direction
+     * 
+     * @param given the direction to invert
+     * @return the opposite direction
+     */
     protected Direction oppositeDirection(Direction given) {
         if (given == Direction.COUNTER_CLOCKWISE)
             return Direction.CLOCKWISE;
@@ -136,6 +156,7 @@ abstract public class MovingSprite extends Sprite {
             yChangeExact = 0;
         if (yChangeExact < 0 && !canMoveDown())
             yChangeExact = 0;
+
         // Since you can't move part of a pixel, convert to ints
         int xChangeInt = (int) xChangeExact;
         int yChangeInt = (int) yChangeExact;
@@ -148,18 +169,39 @@ abstract public class MovingSprite extends Sprite {
         previousFrameYChangeRemainder = yChangeExact - yChangeInt;
     }
 
+    /**
+     * Whether or not the sprite can move left without moving offscreen
+     * 
+     * @return boolean, whether or not the sprite can move left
+     */
     private boolean canMoveLeft() {
         return (getX() - (getWidth() / 2)) > 0;
     }
+
+    /**
+     * Whether or not the sprite can move up without moving offscreen
+     * 
+     * @return boolean, whether or not the sprite can move up
+     */
 
     private boolean canMoveUp() {
         return getY() - (getHeight() / 2) > 0;
     }
 
+    /**
+     * Whether or not the sprite can move right without moving offscreen
+     * 
+     * @return boolean, whether or not the sprite can move right
+     */
     private boolean canMoveRight() {
         return getX() + (getWidth() / 2) < gameJFrame.getContentPane().getWidth();
     }
 
+    /**
+     * Whether or not the sprite can move down without moving offscreen
+     * 
+     * @return boolean, whether or not the sprite can move down
+     */
     private boolean canMoveDown() {
         return getY() + (getHeight() / 2) < gameJFrame.getContentPane().getHeight();
     }
