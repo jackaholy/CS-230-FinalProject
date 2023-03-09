@@ -16,6 +16,10 @@ abstract public class MovingSprite extends Sprite {
 
     protected Direction rotationDirection = Direction.NOT_ROTATING;
 
+    // Position of the thing to sail towards
+    protected int targetX;
+    protected int targetY;
+
     // How many pixels the sprite should move per frame
     private double speed;
     // How many degrees the sprite should rotate per frame
@@ -51,6 +55,7 @@ abstract public class MovingSprite extends Sprite {
      * A single "moment" in game. Should rotate and move slightly, and update the UI
      */
     protected void tick() {
+        setRotationDirection(calculateDirectionToDesiredAngle());
         rotate();
         moveForward();
         draw();
@@ -75,17 +80,24 @@ abstract public class MovingSprite extends Sprite {
      * @param destinationX the X position to aim for
      * @param destinationY the Y position to aim for
      */
-    public void setTarget(int destinationX, int destinationY) {
+    public void setTarget(int targetX, int targetY) {
+        this.targetX = targetX;
+        this.targetY = targetY;
+    }
+
+    protected double calculatedAngleToTarget() {
         // Calculate difference in X and Y
-        double xDiff = this.getX() - destinationX;
-        double yDiff = this.getY() - destinationY;
+        double xDiff = this.getX() - targetX;
+        double yDiff = this.getY() - targetY;
 
         // Calculate the angle between the sprite and the cursor
         double desiredAngle = Math.toDegrees(Math.atan2(yDiff, xDiff));
-
         // Restrict angle to 0 < angle < 360
-        desiredAngle = (desiredAngle + 360) % 360;
+        return (desiredAngle + 360) % 360;
+    }
 
+    protected Direction calculateDirectionToDesiredAngle() {
+        double desiredAngle = calculatedAngleToTarget();
         // Find the difference between current and target angle
         double angleDiff = desiredAngle - this.getRotation();
 
@@ -95,10 +107,18 @@ abstract public class MovingSprite extends Sprite {
 
         // Find shorter rotation direction
         if (angleDiff > 180) {
-            this.rotationDirection = MovingSprite.Direction.COUNTER_CLOCKWISE;
+            return MovingSprite.Direction.COUNTER_CLOCKWISE;
         } else {
-            this.rotationDirection = MovingSprite.Direction.CLOCKWISE;
+            return MovingSprite.Direction.CLOCKWISE;
         }
+    }
+
+    protected Direction oppositeDirection(Direction given) {
+        if (given == Direction.COUNTER_CLOCKWISE)
+            return Direction.CLOCKWISE;
+        else if (given == Direction.CLOCKWISE)
+            return Direction.COUNTER_CLOCKWISE;
+        return Direction.NOT_ROTATING;
     }
 
     /**
@@ -147,5 +167,13 @@ abstract public class MovingSprite extends Sprite {
     public void setBounds(int maxX, int maxY) {
         this.maxX = maxX;
         this.maxY = maxY;
+    }
+
+    public Direction getRotationDirection() {
+        return rotationDirection;
+    }
+
+    protected void setRotationDirection(Direction rotationDirection) {
+        this.rotationDirection = rotationDirection;
     }
 }
