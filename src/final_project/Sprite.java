@@ -15,12 +15,16 @@ abstract public class Sprite {
     private ImageIcon unrotatedIcon;
     private RotatedIcon rotatedIcon;
 
+    // The JFrame this Sprite is part of
+    protected JFrame gameJFrame;
+
     // Current position
     private double rotationDegrees = 0;
     protected int x;
     protected int y;
 
     protected Sprite(JFrame gameJFrame, ImageIcon image, int x, int y) {
+        this.gameJFrame = gameJFrame;
         // Add sprite to play area
         gameJFrame.getContentPane().add(spriteJLabel);
 

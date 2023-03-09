@@ -102,14 +102,5 @@ public class GameController {
                 cursorY = e.getY();
             }
         });
-        gameContentPane.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent event) {
-                Component component = (Component) event.getSource();
-                player.setBounds(component.getWidth(), component.getHeight());
-                enemy.setBounds(component.getWidth(), component.getHeight());
-            }
-        });
-
     }
 }

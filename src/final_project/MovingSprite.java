@@ -157,16 +157,11 @@ abstract public class MovingSprite extends Sprite {
     }
 
     private boolean canMoveRight() {
-        return getX() + (getWidth() / 2) < maxX;
+        return getX() + (getWidth() / 2) < gameJFrame.getContentPane().getWidth();
     }
 
     private boolean canMoveDown() {
-        return getY() + (getHeight() / 2) < maxY;
-    }
-
-    public void setBounds(int maxX, int maxY) {
-        this.maxX = maxX;
-        this.maxY = maxY;
+        return getY() + (getHeight() / 2) < gameJFrame.getContentPane().getHeight();
     }
 
     public Direction getRotationDirection() {
