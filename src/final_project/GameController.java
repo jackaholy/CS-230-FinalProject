@@ -98,6 +98,7 @@ public class GameController {
 	    }
 	}, 0, 1000 / FRAMES_PER_SECOND);
 
+
 	gameContentPane.addMouseMotionListener(new MouseInputAdapter() {
 	    @Override
 	    public void mouseMoved(MouseEvent e) {
@@ -114,6 +115,5 @@ public class GameController {
 		enemy.setBounds(component.getWidth(), component.getHeight());
 	    }
 	});
-
     }
 }

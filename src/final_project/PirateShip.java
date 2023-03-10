@@ -32,32 +32,16 @@ public class PirateShip extends MovingSprite {
     }
 
     @Override
-    public void setTarget(int destinationX, int destinationY) {
-        // Calculate difference in X and Y
-        double xDiff = this.getX() - destinationX;
-        double yDiff = this.getY() - destinationY;
+    protected void tick() {
+        Direction directionToRotate = calculateDirectionToDesiredAngle();
 
-        // If too close, aim away
-        // If too far, aim towards
-        int attackOrAvoid = tooClose(xDiff, yDiff);
-        double desiredAngle = Math.toDegrees(Math.atan2(attackOrAvoid * yDiff, attackOrAvoid * xDiff));
-
-        // Restrict angle to 0 < angle < 360
-        desiredAngle = (desiredAngle + 360) % 360;
-
-        // Find the difference between current and target angle
-        double angleDiff = desiredAngle - this.getRotation();
-
-        // Force it to be positive
-        if (angleDiff < 0)
-            angleDiff += 360;
-
-        // Find shorter rotation direction
-        if (angleDiff > 180) {
-            this.rotationDirection = MovingSprite.Direction.COUNTER_CLOCKWISE;
-        } else {
-            this.rotationDirection = MovingSprite.Direction.CLOCKWISE;
+        if (shouldAvoidPlayer()) {
+            directionToRotate = oppositeDirection(directionToRotate);
         }
+
+        setRotationDirection(directionToRotate);
+        rotate();
+        moveForward();
     }
 
     /**
@@ -65,9 +49,9 @@ public class PirateShip extends MovingSprite {
      * 
      * @param xDiff the X distance from the player
      * @param yDiff the Y distance from the player
-     * @return 1 if too close, -1 otherwise
+     * @return true if too close
      */
-    private int tooClose(double xDiff, double yDiff) {
-        return (Math.hypot(xDiff, yDiff) > turnDistance) ? 1 : -1;
+    private boolean shouldAvoidPlayer() {
+        return Math.hypot(getX() - targetX, getY() - targetY) < turnDistance;
     }
 }
