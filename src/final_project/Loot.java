@@ -10,13 +10,11 @@ import javax.swing.JFrame;
 
 public class Loot extends Sprite {
     // the coordinates that the loot will spawn at
-    int lootX;
-    int lootY;
+    private int lootX;
+    private int lootY;
     // arbitrary loot positions
-    int xPosition;
-    int yPosition;
-    // the total amount of loot collected
-    int totalLoot;
+    private int xPosition;
+    private int yPosition;
 
     /**
      * Create loot
@@ -29,8 +27,8 @@ public class Loot extends Sprite {
     protected Loot(JFrame gameJFrame, ImageIcon image, int x, int y) {
 	super(gameJFrame, image, x, y);
 	// Subtract 20 so loot doesn't spawn too close to the content pane border.
-	xPosition = getRandomX(30, gameJFrame.getContentPane().getWidth() - 20);
-	yPosition = getRandomY(30, gameJFrame.getContentPane().getHeight() - 20);
+	xPosition = getRandomX(20, gameJFrame.getContentPane().getWidth() - 20);
+	yPosition = getRandomY(20, gameJFrame.getContentPane().getHeight() - 20);
 
 	this.x = lootX;
 	this.y = lootY;
@@ -64,25 +62,17 @@ public class Loot extends Sprite {
      * @param player - the player's boat.
      * @return true if loot is collected by player ship.
      */
-    private boolean isCollected(PlayerShip player, Loot loot) {
-
+    protected boolean isCollected(PlayerShip player, Loot loot) {
 	if (xPosition <= player.getX() && player.getX() <= (xPosition + loot.getWidth())
 		&& (yPosition <= player.getY() && player.getY() <= (yPosition + loot.getHeight()))) {
-	    // ERASE IMAGE OF LOOT.
-
-	    totalLoot++;
-	    System.out.println(totalLoot);
 	    return true;
 	}
 	return false;
     }
 
-    /**
-     * 
-     * @return lootCollected
-     */
-    private int getLootCollected() {
-	return totalLoot;
+    protected boolean collect(JFrame gameJFrame) {
+	gameJFrame.getContentPane().remove(spriteJLabel);
+	return true;
     }
 
     /**
