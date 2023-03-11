@@ -69,7 +69,7 @@ public class GameController {
 
 		// Create some loot
 		for (int i = 0; i < lootArray.length; i++) {
-			lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 100, 100);
+			lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
 			// Draw loot on map
 			lootArray[i].draw();
 		}
@@ -99,7 +99,7 @@ public class GameController {
 						if (spawnedLoot == null) {
 							totalLoot++;
 							// create a new loot object.
-							spawnedLoot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 100, 100);
+							spawnedLoot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
 							loot = spawnedLoot;
 							System.out.println("Total Loot: " + totalLoot);
 						}
@@ -112,7 +112,7 @@ public class GameController {
 				// a player actually collects one.
 				if (spawnedLoot != null) {
 					// Add a new piece of loot to the array
-					Loot newLoot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 100, 100);
+					Loot newLoot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
 					lootArray[Arrays.asList(lootArray).indexOf(null)] = newLoot;
 					// Draw the newly added loot
 					newLoot.draw();
