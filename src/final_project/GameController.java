@@ -9,10 +9,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Container;
 import java.awt.Color;
-import java.awt.Component;
-
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
@@ -130,14 +126,6 @@ public class GameController {
 				// Every time the cursor moves, save the new coordinates
 				cursorX = e.getX();
 				cursorY = e.getY();
-			}
-		});
-		gameContentPane.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent event) {
-				Component component = (Component) event.getSource();
-				player.setBounds(component.getWidth(), component.getHeight());
-				enemy.setBounds(component.getWidth(), component.getHeight());
 			}
 		});
 	}
