@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
  * A sprite that moves towards a specific set of coordinates at a given speed
  * and rotation rate.
  */
-abstract public class MovingSprite extends Sprite {
+public abstract class MovingSprite extends Sprite {
     public enum Direction {
         CLOCKWISE,
         COUNTER_CLOCKWISE,
@@ -29,10 +29,6 @@ abstract public class MovingSprite extends Sprite {
     // remainder for the next frame
     private double previousFrameXChangeRemainder = 0;
     private double previousFrameYChangeRemainder = 0;
-
-    // The maximum x & y position before going out of bounds
-    private int maxX = 0;
-    private int maxY = 0;
 
     /**
      * Class constructor. Sets speed and turning speed, and creates the sprite.

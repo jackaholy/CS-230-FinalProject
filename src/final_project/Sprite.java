@@ -3,12 +3,13 @@ package final_project;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JFrame;
+import java.awt.Point;
 
 /**
  * A "thing" in the game. Should handle some basic stuff. Show/hide, movement,
  * collisions, etc.
  */
-abstract public class Sprite {
+public abstract class Sprite {
     // The J "thing" that's draw onto the screen
     private final JLabel spriteJLabel = new JLabel();
     // The original icon
@@ -20,18 +21,20 @@ abstract public class Sprite {
 
     // Current position
     private double rotationDegrees = 0;
-    protected int x;
-    protected int y;
+    protected Point position;
 
     protected Sprite(JFrame gameJFrame, ImageIcon image, int x, int y) {
+        this(gameJFrame, image, new Point(x, y));
+    }
+
+    protected Sprite(JFrame gameJFrame, ImageIcon image, Point position) {
         this.gameJFrame = gameJFrame;
         // Add sprite to play area
         gameJFrame.getContentPane().add(spriteJLabel);
 
         // Assign instance variables
         this.unrotatedIcon = image;
-        this.x = x;
-        this.y = y;
+        this.position = position;
     }
 
     /**
@@ -44,8 +47,8 @@ abstract public class Sprite {
         // Set the sprite to use the rotated icon and it's dimensions
         // Java uses the top left corner for coordinates, but we want to rotate about
         // the center, so we have to offset it by half it's width & height
-        spriteJLabel.setBounds(x - rotatedIcon.getIconWidth() / 2,
-                y - rotatedIcon.getIconHeight() / 2, rotatedIcon.getIconWidth(), rotatedIcon.getIconHeight());
+        spriteJLabel.setBounds(position.x - rotatedIcon.getIconWidth() / 2,
+                position.y - rotatedIcon.getIconHeight() / 2, rotatedIcon.getIconWidth(), rotatedIcon.getIconHeight());
         spriteJLabel.setIcon(rotatedIcon);
 
         // Show the sprite
@@ -79,7 +82,7 @@ abstract public class Sprite {
      * @return current X position
      */
     public int getX() {
-        return x;
+        return position.x;
     }
 
     /**
@@ -89,7 +92,7 @@ abstract public class Sprite {
      * @param y desired x position.
      */
     public void setX(int x) {
-        this.x = x;
+        this.position.x = x;
     }
 
     /**
@@ -98,7 +101,7 @@ abstract public class Sprite {
      * @return current Y position
      */
     public int getY() {
-        return y;
+        return position.y;
     }
 
     /**
@@ -108,7 +111,7 @@ abstract public class Sprite {
      * @param y desired y position.
      */
     public void setY(int y) {
-        this.y = y;
+        this.position.y = y;
     }
 
     /**
@@ -129,4 +132,41 @@ abstract public class Sprite {
         return rotatedIcon.getIconHeight();
     }
 
+    public Point[] getCorners() {
+
+        // Step 1: Calculate the center point of the rectangle.
+        double centerX = position.getX();
+        double centerY = position.getY();
+
+        // Step 2: Calculate the half-width and half-height of the rectangle.
+        double halfWidth = unrotatedIcon.getIconWidth() / 2.0;
+        double halfHeight = unrotatedIcon.getIconHeight() / 2.0;
+
+        // Step 3: Calculate the sine and cosine of the rotation angle.
+        double cosAngle = Math.cos(getRotation());
+        double sinAngle = Math.sin(getRotation());
+
+        // Step 4: Calculate the relative coordinates of each corner.
+        double positionX = centerX - halfWidth * cosAngle - halfHeight * sinAngle;
+        double positionY = centerY - halfWidth * sinAngle + halfHeight * cosAngle;
+        double topRightX = centerX + halfWidth * cosAngle - halfHeight * sinAngle;
+        double topRightY = centerY + halfWidth * sinAngle + halfHeight * cosAngle;
+        double bottomLeftX = centerX - halfWidth * cosAngle + halfHeight * sinAngle;
+        double bottomLeftY = centerY - halfWidth * sinAngle - halfHeight * cosAngle;
+        double bottomRightX = centerX + halfWidth * cosAngle + halfHeight * sinAngle;
+        double bottomRightY = centerY + halfWidth * sinAngle - halfHeight * cosAngle;
+
+        // Step 5: Return an array of Points representing the absolute coordinates of
+        // each corner.
+        Point[] corners = new Point[4];
+        corners[0] = new Point((int) positionX, (int) positionY);
+        corners[1] = new Point((int) topRightX, (int) topRightY);
+        corners[2] = new Point((int) bottomLeftX, (int) bottomLeftY);
+        corners[3] = new Point((int) bottomRightX, (int) bottomRightY);
+        return corners;
+    }
+
+    boolean isColliding(Sprite other) {
+        return false;
+    }
 }

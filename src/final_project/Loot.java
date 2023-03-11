@@ -27,13 +27,13 @@ public class Loot extends Sprite {
      * @param y          the y coordinate the loot will spawn at
      */
     protected Loot(JFrame gameJFrame, ImageIcon image, int x, int y) {
-	super(gameJFrame, image, x, y);
-	// Subtract 20 so loot doesn't spawn too close to the content pane border.
-	xPosition = getRandomX(30, gameJFrame.getContentPane().getWidth() - 20);
-	yPosition = getRandomY(30, gameJFrame.getContentPane().getHeight() - 20);
+        super(gameJFrame, image, x, y);
+        // Subtract 20 so loot doesn't spawn too close to the content pane border.
+        xPosition = getRandomX(30, gameJFrame.getContentPane().getWidth() - 20);
+        yPosition = getRandomY(30, gameJFrame.getContentPane().getHeight() - 20);
 
-	this.x = lootX;
-	this.y = lootY;
+        this.setX(lootX);
+        this.setY(lootY);
     }
 
     /**
@@ -43,8 +43,8 @@ public class Loot extends Sprite {
      * @param max - the maximum x coordinate value that loot could spawn
      */
     private int getRandomX(int min, int max) {
-	lootX = (int) ((Math.random() * (max - min)) + min);
-	return lootX;
+        lootX = (int) ((Math.random() * (max - min)) + min);
+        return lootX;
     }
 
     /**
@@ -54,8 +54,8 @@ public class Loot extends Sprite {
      * @param max - the maximum y coordinate value that loot could spawn
      */
     private int getRandomY(int min, int max) {
-	lootY = (int) ((Math.random() * (max - min)) + min);
-	return lootY;
+        lootY = (int) ((Math.random() * (max - min)) + min);
+        return lootY;
     }
 
     /**
@@ -66,15 +66,15 @@ public class Loot extends Sprite {
      */
     private boolean isCollected(PlayerShip player, Loot loot) {
 
-	if (xPosition <= player.getX() && player.getX() <= (xPosition + loot.getWidth())
-		&& (yPosition <= player.getY() && player.getY() <= (yPosition + loot.getHeight()))) {
-	    // ERASE IMAGE OF LOOT.
+        if (xPosition <= player.getX() && player.getX() <= (xPosition + loot.getWidth())
+                && (yPosition <= player.getY() && player.getY() <= (yPosition + loot.getHeight()))) {
+            // ERASE IMAGE OF LOOT.
 
-	    totalLoot++;
-	    System.out.println(totalLoot);
-	    return true;
-	}
-	return false;
+            totalLoot++;
+            System.out.println(totalLoot);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -82,7 +82,7 @@ public class Loot extends Sprite {
      * @return lootCollected
      */
     private int getLootCollected() {
-	return totalLoot;
+        return totalLoot;
     }
 
     /**
@@ -90,7 +90,7 @@ public class Loot extends Sprite {
      * @return lootX
      */
     private int getLootX() {
-	return lootX;
+        return lootX;
     }
 
     /**
@@ -98,6 +98,6 @@ public class Loot extends Sprite {
      * @return lootY
      */
     private int getLootY() {
-	return lootY;
+        return lootY;
     }
 }

@@ -18,8 +18,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
 
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import final_project.MovingSprite.Direction;
 
 /**
  * The main file of the project. Run this one to start the project
@@ -40,28 +39,27 @@ public class GameController {
     Loot lootList[] = new Loot[lootFrequency];
 
     public static void main(String[] args) {
-	new GameController();
+        new GameController();
     }
 
     public GameController() {
-	// The window itself
-	JFrame gameJFrame = new JFrame("Virtual Voyagers");
-	// With arbitrary default dimensions
-	gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-	gameJFrame.setSize(800, 600);
+        // The window itself
+        JFrame gameJFrame = new JFrame("Virtual Voyagers");
+        // With arbitrary default dimensions
+        gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        gameJFrame.setSize(800, 600);
 
-	// The play area
-	Container gameContentPane = gameJFrame.getContentPane();
-	gameContentPane.setBackground(Color.blue);
-	// Use absolute positioning
-	gameContentPane.setLayout(null);
-
+        // The play area
+        Container gameContentPane = gameJFrame.getContentPane();
+        gameContentPane.setBackground(Color.blue);
+        // Use absolute positioning
+        gameContentPane.setLayout(null);
 
         // Create a player
         PlayerShip player = new PlayerShip(
                 gameJFrame,
                 new ImageIcon("assets/water_bug.png"),
-                300, 300, 0, 0.5, 0.5, 0);
+                300, 300, 0, 0.5, 0.1, 0);
 
         PirateShip enemy = new PirateShip(gameJFrame, new ImageIcon("assets/floating_point.png"), 500, 500, 1, 0.4,
                 125);
@@ -70,27 +68,32 @@ public class GameController {
         gameJFrame.setVisible(true);
         player.draw();
 
-	// Create some loot
-	for (int i = 0; i < lootList.length; i++) {
-	    lootList[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 100, 100);
-	    // Draw loot on map
-	    lootList[i].draw();
-//	    isCollected(player, lootList[i]);
-	}
+        // Create some loot
+        for (int i = 0; i < lootList.length; i++) {
+            lootList[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 100, 100);
+            // Draw loot on map
+            lootList[i].draw();
+            // isCollected(player, lootList[i]);
+        }
 
-	tickTimer.schedule(new TimerTask() {
+        tickTimer.schedule(new TimerTask() {
             // A single tick of the game
             @Override
             public void run() {
                 // Aim for the cursor
                 player.setTarget(cursorX, cursorY);
                 // Move towards the cursor
-                player.tick();
-
+                // player.tick();
+                player.setRotationDirection(Direction.CLOCKWISE);
+                player.rotate();
+                player.draw();
                 // Aim for the player
-                enemy.setTarget(player.getX(), player.getY());
+                // enemy.setTarget(player.getX(), player.getY());
                 // Move towards the player
-                enemy.tick();
+                // enemy.tick();
+                enemy.setX(player.getCorners()[0].x);
+                enemy.setY(player.getCorners()[0].y);
+                enemy.draw();
             }
         }, 0, 1000 / FRAMES_PER_SECOND);
 
