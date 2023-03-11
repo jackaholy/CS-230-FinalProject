@@ -57,21 +57,8 @@ public class GameController {
 				// Move towards the player
 				enemy.tick();
 
-				for (int i = 0; i < lootArray.length; i++) {
-					Loot loot = lootArray[i];
-					// when the player comes in contact with the loot make it disappear
-					if (loot != null && loot.isCollected(player, 10)) {
-						loot.collect(gameJFrame);
-						// increment totalLoot only once
-						totalLoot++;
-						System.out.println("Total Loot: " + totalLoot);
-
-						// Remove the collected loot from the array
-						lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
-						lootArray[i].draw();
-						break;
-					}
-				}
+				// Check if loot can be collected and handle it if it can
+				checkLootCollection();
 			}
 		}, 0, 1000 / FRAMES_PER_SECOND);
 
@@ -121,6 +108,28 @@ public class GameController {
 			lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
 			// Draw loot on map
 			lootArray[i].draw();
+		}
+	}
+
+	/**
+	 * Check if any pieces of loot have been picked up. If so, increase player money
+	 * and create new loot
+	 */
+	private void checkLootCollection() {
+		for (int i = 0; i < lootArray.length; i++) {
+			Loot loot = lootArray[i];
+			// when the player comes in contact with the loot make it disappear
+			if (loot != null && loot.isCollected(player, 10)) {
+				loot.collect(gameJFrame);
+				// increment totalLoot only once
+				money++;
+				System.out.println("Total Loot: " + money);
+
+				// Remove the collected loot from the array
+				lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
+				lootArray[i].draw();
+				break;
+			}
 		}
 	}
 }
