@@ -88,34 +88,20 @@ public class GameController {
 				// Move towards the player
 				enemy.tick();
 
-				// holds all future loot spawns.
-				Loot spawnedLoot = null;
 				for (int i = 0; i < lootArray.length; i++) {
 					Loot loot = lootArray[i];
 					// when the player comes in contact with the loot make it disappear
 					if (loot != null && loot.isCollected(player, 10)) {
 						loot.collect(gameJFrame);
 						// increment totalLoot only once
-						if (spawnedLoot == null) {
-							totalLoot++;
-							// create a new loot object.
-							spawnedLoot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
-							loot = spawnedLoot;
-							System.out.println("Total Loot: " + totalLoot);
-						}
+						totalLoot++;
+						System.out.println("Total Loot: " + totalLoot);
+
 						// Remove the collected loot from the array
-						lootArray[i] = null;
+						lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
+						lootArray[i].draw();
 						break;
 					}
-				}
-				// Add the new piece of loot to the array only when
-				// a player actually collects one.
-				if (spawnedLoot != null) {
-					// Add a new piece of loot to the array
-					Loot newLoot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
-					lootArray[Arrays.asList(lootArray).indexOf(null)] = newLoot;
-					// Draw the newly added loot
-					newLoot.draw();
 				}
 			}
 		}, 0, 1000 / FRAMES_PER_SECOND);
