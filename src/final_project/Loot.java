@@ -10,13 +10,13 @@ import javax.swing.JFrame;
 
 public class Loot extends Sprite {
     // the coordinates that the loot will spawn at
-    int lootX;
-    int lootY;
+    private int lootX;
+    private int lootY;
     // arbitrary loot positions
-    int xPosition;
-    int yPosition;
-    // the total amount of loot collected
-    int totalLoot;
+    private int xPosition;
+    private int yPosition;
+    // boolean flag to determine if loot has already been collected
+    private boolean collected = false;
 
     /**
      * Create loot
@@ -79,7 +79,8 @@ public class Loot extends Sprite {
 
     /**
      * 
-     * @return lootCollected
+     * @param gameJFrame
+     * @return true if the player collects loot.
      */
     private int getLootCollected() {
         return totalLoot;

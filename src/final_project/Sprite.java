@@ -11,7 +11,7 @@ import java.awt.Point;
  */
 public abstract class Sprite {
     // The J "thing" that's draw onto the screen
-    private final JLabel spriteJLabel = new JLabel();
+    protected final JLabel spriteJLabel = new JLabel();
     // The original icon
     private ImageIcon unrotatedIcon;
     private RotatedIcon rotatedIcon;
