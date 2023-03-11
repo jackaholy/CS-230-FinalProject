@@ -87,7 +87,7 @@ public class GameController {
 
 	private void createWindow() {
 		// The window itself
-		JFrame gameJFrame = new JFrame("Virtual Voyagers");
+		gameJFrame = new JFrame("Virtual Voyagers");
 		// With arbitrary default dimensions
 		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		gameJFrame.setSize(800, 600);
