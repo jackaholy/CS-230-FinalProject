@@ -213,4 +213,9 @@ abstract public class MovingSprite extends Sprite {
     protected void setRotationDirection(Direction rotationDirection) {
         this.rotationDirection = rotationDirection;
     }
+    
+    public void setBounds(int maxX, int maxY) {
+        this.maxX = maxX;
+        this.maxY = maxY;
+    }
 }

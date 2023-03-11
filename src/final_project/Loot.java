@@ -15,6 +15,8 @@ public class Loot extends Sprite {
     // arbitrary loot positions
     private int xPosition;
     private int yPosition;
+    // boolean flag to determine if loot has already been collected
+    private boolean collected = false;
 
     /**
      * Create loot
@@ -62,14 +64,20 @@ public class Loot extends Sprite {
      * @param player - the player's boat.
      * @return true if loot is collected by player ship.
      */
-    protected boolean isCollected(PlayerShip player, Loot loot) {
-	if (xPosition <= player.getX() && player.getX() <= (xPosition + loot.getWidth())
-		&& (yPosition <= player.getY() && player.getY() <= (yPosition + loot.getHeight()))) {
+    protected boolean isCollected(PlayerShip player, Loot loot, int padding) {
+	if (!collected && xPosition - padding <= player.getX() && player.getX() <= (xPosition + loot.getWidth() + padding)
+		&& (yPosition - padding <= player.getY() && player.getY() <= (yPosition + loot.getHeight() + padding))) {
+	    collected = true;
 	    return true;
 	}
 	return false;
     }
-
+    
+    /**
+     * 
+     * @param gameJFrame
+     * @return true if the player collects loot.
+     */
     protected boolean collect(JFrame gameJFrame) {
 	gameJFrame.getContentPane().remove(spriteJLabel);
 	return true;
