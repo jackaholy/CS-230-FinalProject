@@ -26,10 +26,12 @@ public class GameController {
 	private int cursorX;
 	private int cursorY;
 
-	// Handles how much loot spawns
+	// Handles how much loot should be onscreen at any given time
 	private int lootFrequency = 20;
-	// How much loot has been collected
-	public int totalLoot = 0;
+
+	// How much money the player has
+	public int money = 0;
+
 	// Where the loot is stored
 	Loot lootArray[] = new Loot[lootFrequency];
 	PlayerShip player;
@@ -72,6 +74,9 @@ public class GameController {
 		});
 	}
 
+	/**
+	 * Create the window and content pane for the game itself
+	 */
 	private void createWindow() {
 		// The window itself
 		gameJFrame = new JFrame("Virtual Voyagers");
@@ -89,6 +94,9 @@ public class GameController {
 		gameJFrame.setVisible(true);
 	}
 
+	/**
+	 * Initialize any in-game objects that should exist right as the game starts up
+	 */
 	private void createSprites() {
 		// Create a player
 		player = new PlayerShip(
