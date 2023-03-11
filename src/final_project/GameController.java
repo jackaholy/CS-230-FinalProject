@@ -38,18 +38,7 @@ public class GameController {
 	}
 
 	public GameController() {
-		// The window itself
-		JFrame gameJFrame = new JFrame("Virtual Voyagers");
-		// With arbitrary default dimensions
-		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		gameJFrame.setSize(800, 600);
-
-		// The play area
-		Container gameContentPane = gameJFrame.getContentPane();
-		gameContentPane.setBackground(Color.blue);
-		// Use absolute positioning
-		gameContentPane.setLayout(null);
-
+		createWindow();
 		// Create a player
 		PlayerShip player = new PlayerShip(
 				gameJFrame,
@@ -62,10 +51,6 @@ public class GameController {
 				new ImageIcon("assets/floating_point.png"),
 				500, 500, 1, 0.4,
 				125);
-
-		// Show the window and player
-		gameJFrame.setVisible(true);
-		player.draw();
 
 		// Create some loot
 		for (int i = 0; i < lootArray.length; i++) {
@@ -114,5 +99,22 @@ public class GameController {
 				cursorY = e.getY();
 			}
 		});
+	}
+
+	private void createWindow() {
+		// The window itself
+		JFrame gameJFrame = new JFrame("Virtual Voyagers");
+		// With arbitrary default dimensions
+		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		gameJFrame.setSize(800, 600);
+
+		// The play area
+		Container gameContentPane = gameJFrame.getContentPane();
+		gameContentPane.setBackground(Color.blue);
+		// Use absolute positioning
+		gameContentPane.setLayout(null);
+
+		// Show the window and player
+		gameJFrame.setVisible(true);
 	}
 }
