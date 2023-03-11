@@ -19,6 +19,7 @@ import javax.swing.event.MouseInputAdapter;
 public class GameController {
 	private static final int FRAMES_PER_SECOND = 120;
 
+	private JFrame gameJFrame;
 	// Timer goes off once per frame
 	private final Timer tickTimer = new Timer();
 
@@ -32,6 +33,8 @@ public class GameController {
 	public int totalLoot = 0;
 	// Where the loot is stored
 	Loot lootArray[] = new Loot[lootFrequency];
+	PlayerShip player;
+	PirateShip enemy;
 
 	public static void main(String[] args) {
 		new GameController();
@@ -39,25 +42,7 @@ public class GameController {
 
 	public GameController() {
 		createWindow();
-		// Create a player
-		PlayerShip player = new PlayerShip(
-				gameJFrame,
-				new ImageIcon("assets/water_bug.png"),
-				300, 300, 0, 0.9, 0.9, 0);
-
-		// Create an enemy
-		PirateShip enemy = new PirateShip(
-				gameJFrame,
-				new ImageIcon("assets/floating_point.png"),
-				500, 500, 1, 0.4,
-				125);
-
-		// Create some loot
-		for (int i = 0; i < lootArray.length; i++) {
-			lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
-			// Draw loot on map
-			lootArray[i].draw();
-		}
+		createSprites();
 
 		tickTimer.schedule(new TimerTask() {
 			// A single tick of the game
@@ -91,7 +76,7 @@ public class GameController {
 			}
 		}, 0, 1000 / FRAMES_PER_SECOND);
 
-		gameContentPane.addMouseMotionListener(new MouseInputAdapter() {
+		gameJFrame.getContentPane().addMouseMotionListener(new MouseInputAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				// Every time the cursor moves, save the new coordinates
@@ -116,5 +101,27 @@ public class GameController {
 
 		// Show the window and player
 		gameJFrame.setVisible(true);
+	}
+
+	private void createSprites() {
+		// Create a player
+		player = new PlayerShip(
+				gameJFrame,
+				new ImageIcon("assets/water_bug.png"),
+				300, 300, 0, 0.9, 0.9, 0);
+
+		// Create an enemy
+		enemy = new PirateShip(
+				gameJFrame,
+				new ImageIcon("assets/floating_point.png"),
+				500, 500, 1, 0.4,
+				125);
+
+		// Create some loot
+		for (int i = 0; i < lootArray.length; i++) {
+			lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
+			// Draw loot on map
+			lootArray[i].draw();
+		}
 	}
 }
