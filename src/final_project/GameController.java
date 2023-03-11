@@ -4,7 +4,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Container;
