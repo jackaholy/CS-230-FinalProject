@@ -30,10 +30,6 @@ abstract public class MovingSprite extends Sprite {
     private double previousFrameXChangeRemainder = 0;
     private double previousFrameYChangeRemainder = 0;
 
-    // The maximum x & y position before going out of bounds
-    private int maxX = 0;
-    private int maxY = 0;
-
     /**
      * Class constructor. Sets speed and turning speed, and creates the sprite.
      * 
@@ -212,10 +208,5 @@ abstract public class MovingSprite extends Sprite {
 
     protected void setRotationDirection(Direction rotationDirection) {
         this.rotationDirection = rotationDirection;
-    }
-    
-    public void setBounds(int maxX, int maxY) {
-        this.maxX = maxX;
-        this.maxY = maxY;
     }
 }
