@@ -9,17 +9,25 @@ import javax.swing.JFrame;
  */
 
 public class Loot extends Sprite {
-    // the coordinates that the loot will spawn at
-    private int lootX;
-    private int lootY;
-    // arbitrary loot positions
-    private int xPosition;
-    private int yPosition;
     // boolean flag to determine if loot has already been collected
     private boolean collected = false;
 
     /**
-     * Create loot
+     * Create loot with random coordinates
+     * 
+     * @param gameJFrame the window to add the loot to
+     * @param image      the image of the loot
+     */
+    protected Loot(JFrame gameJFrame, ImageIcon image) {
+        super(gameJFrame, image, 0, 0);
+
+        // Subtract 20 so loot doesn't spawn too close to the content pane border.
+        this.x = getRandomX(20, gameJFrame.getContentPane().getWidth() - 20);
+        this.y = getRandomY(20, gameJFrame.getContentPane().getHeight() - 20);
+    }
+
+    /**
+     * Create loot with specific coordinates
      * 
      * @param gameJFrame the window to add the loot to
      * @param image      the image of the loot
@@ -27,13 +35,7 @@ public class Loot extends Sprite {
      * @param y          the y coordinate the loot will spawn at
      */
     protected Loot(JFrame gameJFrame, ImageIcon image, int x, int y) {
-	super(gameJFrame, image, x, y);
-	// Subtract 20 so loot doesn't spawn too close to the content pane border.
-	xPosition = getRandomX(20, gameJFrame.getContentPane().getWidth() - 20);
-	yPosition = getRandomY(20, gameJFrame.getContentPane().getHeight() - 20);
-
-	this.x = lootX;
-	this.y = lootY;
+        super(gameJFrame, image, x, y);
     }
 
     /**
@@ -43,8 +45,7 @@ public class Loot extends Sprite {
      * @param max - the maximum x coordinate value that loot could spawn
      */
     private int getRandomX(int min, int max) {
-	lootX = (int) ((Math.random() * (max - min)) + min);
-	return lootX;
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
     /**
@@ -54,8 +55,7 @@ public class Loot extends Sprite {
      * @param max - the maximum y coordinate value that loot could spawn
      */
     private int getRandomY(int min, int max) {
-	lootY = (int) ((Math.random() * (max - min)) + min);
-	return lootY;
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
     /**
@@ -64,38 +64,24 @@ public class Loot extends Sprite {
      * @param player - the player's boat.
      * @return true if loot is collected by player ship.
      */
-    protected boolean isCollected(PlayerShip player, Loot loot, int padding) {
-	if (!collected && xPosition - padding <= player.getX() && player.getX() <= (xPosition + loot.getWidth() + padding)
-		&& (yPosition - padding <= player.getY() && player.getY() <= (yPosition + loot.getHeight() + padding))) {
-	    collected = true;
-	    return true;
-	}
-	return false;
+    protected boolean isCollected(PlayerShip player, int padding) {
+        if (!collected && x - padding <= player.getX()
+                && player.getX() <= (x + this.getWidth() + padding)
+                && (y - padding <= player.getY()
+                        && player.getY() <= (y + this.getHeight() + padding))) {
+            collected = true;
+            return true;
+        }
+        return false;
     }
-    
+
     /**
      * 
      * @param gameJFrame
      * @return true if the player collects loot.
      */
     protected boolean collect(JFrame gameJFrame) {
-	gameJFrame.getContentPane().remove(spriteJLabel);
-	return true;
-    }
-
-    /**
-     * 
-     * @return lootX
-     */
-    private int getLootX() {
-	return lootX;
-    }
-
-    /**
-     * 
-     * @return lootY
-     */
-    private int getLootY() {
-	return lootY;
+        gameJFrame.getContentPane().remove(spriteJLabel);
+        return true;
     }
 }

@@ -4,7 +4,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Container;
@@ -18,6 +17,7 @@ import javax.swing.event.MouseInputAdapter;
 public class GameController {
 	private static final int FRAMES_PER_SECOND = 120;
 
+	private JFrame gameJFrame;
 	// Timer goes off once per frame
 	private final Timer tickTimer = new Timer();
 
@@ -25,53 +25,24 @@ public class GameController {
 	private int cursorX;
 	private int cursorY;
 
-	// Handles how much loot spawns
+	// Handles how much loot should be onscreen at any given time
 	private int lootFrequency = 20;
-	// How much loot has been collected
-	public int totalLoot = 0;
+
+	// How much money the player has
+	public int money = 0;
+
 	// Where the loot is stored
 	Loot lootArray[] = new Loot[lootFrequency];
+	PlayerShip player;
+	PirateShip enemy;
 
 	public static void main(String[] args) {
 		new GameController();
 	}
 
 	public GameController() {
-		// The window itself
-		JFrame gameJFrame = new JFrame("Virtual Voyagers");
-		// With arbitrary default dimensions
-		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		gameJFrame.setSize(800, 600);
-
-		// The play area
-		Container gameContentPane = gameJFrame.getContentPane();
-		gameContentPane.setBackground(Color.blue);
-		// Use absolute positioning
-		gameContentPane.setLayout(null);
-
-		// Create a player
-		PlayerShip player = new PlayerShip(
-				gameJFrame,
-				new ImageIcon("assets/water_bug.png"),
-				300, 300, 0, 0.5, 0.5, 0);
-
-		// Create an enemy
-		PirateShip enemy = new PirateShip(
-				gameJFrame,
-				new ImageIcon("assets/floating_point.png"),
-				500, 500, 1, 0.4,
-				125);
-
-		// Show the window and player
-		gameJFrame.setVisible(true);
-		player.draw();
-
-		// Create some loot
-		for (int i = 0; i < lootArray.length; i++) {
-			lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 100, 100);
-			// Draw loot on map
-			lootArray[i].draw();
-		}
+		createWindow();
+		createSprites();
 
 		tickTimer.schedule(new TimerTask() {
 			// A single tick of the game
@@ -87,39 +58,12 @@ public class GameController {
 				// Move towards the player
 				enemy.tick();
 
-				// holds all future loot spawns.
-				Loot spawnedLoot = null;
-				for (int i = 0; i < lootArray.length; i++) {
-					Loot loot = lootArray[i];
-					// when the player comes in contact with the loot make it disappear
-					if (loot != null && loot.isCollected(player, loot, 10)) {
-						loot.collect(gameJFrame);
-						// increment totalLoot only once
-						if (spawnedLoot == null) {
-							totalLoot++;
-							// create a new loot object.
-							spawnedLoot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 100, 100);
-							loot = spawnedLoot;
-							System.out.println("Total Loot: " + totalLoot);
-						}
-						// Remove the collected loot from the array
-						lootArray[i] = null;
-						break;
-					}
-				}
-				// Add the new piece of loot to the array only when
-				// a player actually collects one.
-				if (spawnedLoot != null) {
-					// Add a new piece of loot to the array
-					Loot newLoot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 100, 100);
-					lootArray[Arrays.asList(lootArray).indexOf(null)] = newLoot;
-					// Draw the newly added loot
-					newLoot.draw();
-				}
+				// Check if loot can be collected and handle it if it can
+				checkLootCollection();
 			}
 		}, 0, 1000 / FRAMES_PER_SECOND);
 
-		gameContentPane.addMouseMotionListener(new MouseInputAdapter() {
+		gameJFrame.getContentPane().addMouseMotionListener(new MouseInputAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				// Every time the cursor moves, save the new coordinates
@@ -127,5 +71,72 @@ public class GameController {
 				cursorY = e.getY();
 			}
 		});
+	}
+
+	/**
+	 * Create the window and content pane for the game itself
+	 */
+	private void createWindow() {
+		// The window itself
+		gameJFrame = new JFrame("Virtual Voyagers");
+		// With arbitrary default dimensions
+		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		gameJFrame.setSize(800, 600);
+
+		// The play area
+		Container gameContentPane = gameJFrame.getContentPane();
+		gameContentPane.setBackground(Color.blue);
+		// Use absolute positioning
+		gameContentPane.setLayout(null);
+
+		// Show the window and player
+		gameJFrame.setVisible(true);
+	}
+
+	/**
+	 * Initialize any in-game objects that should exist right as the game starts up
+	 */
+	private void createSprites() {
+		// Create a player
+		player = new PlayerShip(
+				gameJFrame,
+				new ImageIcon("assets/water_bug.png"),
+				300, 300, 0, 0.9, 0.9, 0);
+
+		// Create an enemy
+		enemy = new PirateShip(
+				gameJFrame,
+				new ImageIcon("assets/floating_point.png"),
+				500, 500, 1, 0.4,
+				125);
+
+		// Create some loot
+		for (int i = 0; i < lootArray.length; i++) {
+			lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
+			// Draw loot on map
+			lootArray[i].draw();
+		}
+	}
+
+	/**
+	 * Check if any pieces of loot have been picked up. If so, increase player money
+	 * and create new loot
+	 */
+	private void checkLootCollection() {
+		for (int i = 0; i < lootArray.length; i++) {
+			Loot loot = lootArray[i];
+			// when the player comes in contact with the loot make it disappear
+			if (loot != null && loot.isCollected(player, 10)) {
+				loot.collect(gameJFrame);
+				// increment totalLoot only once
+				money++;
+				System.out.println("Total Loot: " + money);
+
+				// Remove the collected loot from the array
+				lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
+				lootArray[i].draw();
+				break;
+			}
+		}
 	}
 }
