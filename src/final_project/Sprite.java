@@ -21,20 +21,18 @@ public abstract class Sprite {
 
     // Current position
     private double rotationDegrees = 0;
-    protected Point position;
+    protected int x;
+    protected int y;
 
     protected Sprite(JFrame gameJFrame, ImageIcon image, int x, int y) {
-        this(gameJFrame, image, new Point(x, y));
-    }
-
-    protected Sprite(JFrame gameJFrame, ImageIcon image, Point position) {
         this.gameJFrame = gameJFrame;
         // Add sprite to play area
         gameJFrame.getContentPane().add(spriteJLabel);
 
         // Assign instance variables
         this.unrotatedIcon = image;
-        this.position = position;
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -47,8 +45,8 @@ public abstract class Sprite {
         // Set the sprite to use the rotated icon and it's dimensions
         // Java uses the top left corner for coordinates, but we want to rotate about
         // the center, so we have to offset it by half it's width & height
-        spriteJLabel.setBounds(position.x - rotatedIcon.getIconWidth() / 2,
-                position.y - rotatedIcon.getIconHeight() / 2, rotatedIcon.getIconWidth(), rotatedIcon.getIconHeight());
+        spriteJLabel.setBounds(x - rotatedIcon.getIconWidth() / 2,
+                y - rotatedIcon.getIconHeight() / 2, rotatedIcon.getIconWidth(), rotatedIcon.getIconHeight());
         spriteJLabel.setIcon(rotatedIcon);
 
         // Show the sprite
@@ -82,7 +80,7 @@ public abstract class Sprite {
      * @return current X position
      */
     public int getX() {
-        return position.x;
+        return x;
     }
 
     /**
@@ -92,7 +90,7 @@ public abstract class Sprite {
      * @param y desired x position.
      */
     public void setX(int x) {
-        this.position.x = x;
+        this.x = x;
     }
 
     /**
@@ -101,7 +99,7 @@ public abstract class Sprite {
      * @return current Y position
      */
     public int getY() {
-        return position.y;
+        return y;
     }
 
     /**
@@ -111,7 +109,7 @@ public abstract class Sprite {
      * @param y desired y position.
      */
     public void setY(int y) {
-        this.position.y = y;
+        this.y = y;
     }
 
     /**
@@ -135,8 +133,8 @@ public abstract class Sprite {
     public Point[] getCorners() {
 
         // Step 1: Calculate the center point of the rectangle.
-        double centerX = position.getX();
-        double centerY = position.getY();
+        double centerX = getX();
+        double centerY = getY();
 
         // Step 2: Calculate the half-width and half-height of the rectangle.
         double halfWidth = unrotatedIcon.getIconWidth() / 2.0;
