@@ -9,15 +9,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Container;
 import java.awt.Color;
-import java.awt.Component;
-
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
-
-import final_project.MovingSprite.Direction;
 
 /**
  * The main file of the project. Run this one to start the project
@@ -87,18 +80,42 @@ public class GameController {
 				// Aim for the cursor
 				player.setTarget(cursorX, cursorY);
 				// Move towards the cursor
-				// player.tick();
-				player.setRotationDirection(Direction.CLOCKWISE);
-				player.rotate();
-				player.draw();
+				player.tick();
 
 				// Aim for the player
-				// enemy.setTarget(player.getX(), player.getY());
+				enemy.setTarget(player.getX(), player.getY());
 				// Move towards the player
-				// enemy.tick();
-				enemy.setX(player.getCorners()[0].x);
-				enemy.setY(player.getCorners()[0].y);
-				enemy.draw();
+				enemy.tick();
+
+				// holds all future loot spawns.
+				Loot spawnedLoot = null;
+				for (int i = 0; i < lootArray.length; i++) {
+					Loot loot = lootArray[i];
+					// when the player comes in contact with the loot make it disappear
+					if (loot != null && loot.isCollected(player, loot, 10)) {
+						loot.collect(gameJFrame);
+						// increment totalLoot only once
+						if (spawnedLoot == null) {
+							totalLoot++;
+							// create a new loot object.
+							spawnedLoot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 100, 100);
+							loot = spawnedLoot;
+							System.out.println("Total Loot: " + totalLoot);
+						}
+						// Remove the collected loot from the array
+						lootArray[i] = null;
+						break;
+					}
+				}
+				// Add the new piece of loot to the array only when
+				// a player actually collects one.
+				if (spawnedLoot != null) {
+					// Add a new piece of loot to the array
+					Loot newLoot = new Loot(gameJFrame, new ImageIcon("assets/loot.png"), 100, 100);
+					lootArray[Arrays.asList(lootArray).indexOf(null)] = newLoot;
+					// Draw the newly added loot
+					newLoot.draw();
+				}
 			}
 		}, 0, 1000 / FRAMES_PER_SECOND);
 
