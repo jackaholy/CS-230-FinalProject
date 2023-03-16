@@ -4,12 +4,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JFrame;
 import java.awt.Point;
+import java.awt.Polygon;
 
 /**
  * A "thing" in the game. Should handle some basic stuff. Show/hide, movement,
  * collisions, etc.
  */
 public abstract class Sprite {
+    // Use this constant to scale the hitboxes up or down
+    // If too sensitive, decrease. If not sensitive enough, increase.
+    // Should be about 1.
+    static final double COLLISION_SCALE_FACTOR = 0.8;
+
     // The J "thing" that's draw onto the screen
     protected final JLabel spriteJLabel = new JLabel();
     // The original icon
@@ -130,41 +136,70 @@ public abstract class Sprite {
         return rotatedIcon.getIconHeight();
     }
 
+    /**
+     * Get the cordinates of this Sprites' corners (if it's represented as a rotated
+     * rectangle)\
+     * 
+     * ChatGPT was used for this function. Comments are my own.
+     * 
+     * @return
+     */
     public Point[] getCorners() {
+        // The distance from the center to the edge of the hitbox
+        double halfWidth = ((double) unrotatedIcon.getIconWidth() / 2) * COLLISION_SCALE_FACTOR;
+        double halfHeight = ((double) unrotatedIcon.getIconHeight() / 2) * COLLISION_SCALE_FACTOR;
+        // 0 if horizontal, 1 if vertical
+        double sin = Math.sin(Math.toRadians(rotationDegrees));
+        // 1 if horizontal, 0 if vertical
+        double cos = Math.cos(Math.toRadians(rotationDegrees));
 
-        // Step 1: Calculate the center point of the rectangle.
-        double centerX = getX();
-        double centerY = getY();
-
-        // Step 2: Calculate the half-width and half-height of the rectangle.
-        double halfWidth = unrotatedIcon.getIconWidth() / 2.0;
-        double halfHeight = unrotatedIcon.getIconHeight() / 2.0;
-
-        // Step 3: Calculate the sine and cosine of the rotation angle.
-        double cosAngle = Math.cos(getRotation());
-        double sinAngle = Math.sin(getRotation());
-
-        // Step 4: Calculate the relative coordinates of each corner.
-        double positionX = centerX - halfWidth * cosAngle - halfHeight * sinAngle;
-        double positionY = centerY - halfWidth * sinAngle + halfHeight * cosAngle;
-        double topRightX = centerX + halfWidth * cosAngle - halfHeight * sinAngle;
-        double topRightY = centerY + halfWidth * sinAngle + halfHeight * cosAngle;
-        double bottomLeftX = centerX - halfWidth * cosAngle + halfHeight * sinAngle;
-        double bottomLeftY = centerY - halfWidth * sinAngle - halfHeight * cosAngle;
-        double bottomRightX = centerX + halfWidth * cosAngle + halfHeight * sinAngle;
-        double bottomRightY = centerY + halfWidth * sinAngle - halfHeight * cosAngle;
-
-        // Step 5: Return an array of Points representing the absolute coordinates of
-        // each corner.
+        // Construct each of the points
         Point[] corners = new Point[4];
-        corners[0] = new Point((int) positionX, (int) positionY);
-        corners[1] = new Point((int) topRightX, (int) topRightY);
-        corners[2] = new Point((int) bottomLeftX, (int) bottomLeftY);
-        corners[3] = new Point((int) bottomRightX, (int) bottomRightY);
+        corners[0] = new Point(
+                (int) (this.x + halfWidth * cos + halfHeight * sin),
+                (int) (this.y + halfWidth * sin - halfHeight * cos));
+        corners[1] = new Point(
+                (int) (this.x - halfWidth * cos + halfHeight * sin),
+                (int) (this.y - halfWidth * sin - halfHeight * cos));
+        corners[2] = new Point(
+                (int) (this.x - halfWidth * cos - halfHeight * sin),
+                (int) (this.y - halfWidth * sin + halfHeight * cos));
+        corners[3] = new Point(
+                (int) (this.x + halfWidth * cos - halfHeight * sin),
+                (int) (this.y + halfWidth * sin + halfHeight * cos));
         return corners;
     }
 
+    /**
+     * Check whether any corners of one sprite are within the bounds of another.
+     * 
+     * @param other the sprite to check ours against
+     * @return
+     */
     boolean isColliding(Sprite other) {
+        // Get the corners of both sprites
+        Point[] ourCorners = getCorners();
+        Point[] theirCorners = other.getCorners();
+        // Construct Polygons from the points
+        Polygon ourPoly = new Polygon();
+        for (Point corner : ourCorners) {
+            ourPoly.addPoint(corner.x, corner.y);
+        }
+        Polygon theirPoly = new Polygon();
+        for (Point corner : theirCorners) {
+            theirPoly.addPoint(corner.x, corner.y);
+        }
+        // Check if our polygon contains any of their corners
+        for (Point corner : theirCorners) {
+            if (ourPoly.contains(corner))
+                return true;
+        }
+        // Check if their polygon contains any of our corners
+        for (Point corner : ourCorners) {
+            if (theirPoly.contains(corner))
+                return true;
+        }
+        // If none of the corners are within the bounds, we're not colliding
         return false;
     }
 }

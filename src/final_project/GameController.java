@@ -57,7 +57,10 @@ public class GameController {
 				enemy.setTarget(player.getX(), player.getY());
 				// Move towards the player
 				enemy.tick();
-
+				if (player.isColliding(enemy))
+					System.out.println("CRASH!");
+				else
+					System.out.println("EVERTHING'S FINE!");
 				// Check if loot can be collected and handle it if it can
 				checkLootCollection();
 			}
