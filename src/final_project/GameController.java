@@ -7,6 +7,8 @@ import javax.swing.WindowConstants;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Container;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
@@ -88,7 +90,10 @@ public class GameController {
 		gameJFrame = new JFrame("Virtual Voyagers");
 		// With arbitrary default dimensions
 		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		gameJFrame.setSize(800, 600);
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+		gameJFrame.setSize(width, height);
 
 		// The play area
 		Container gameContentPane = gameJFrame.getContentPane();
