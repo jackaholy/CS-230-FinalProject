@@ -88,10 +88,10 @@ public abstract class MovingSprite extends Sprite {
      *         Such that right = 0, up = 90,
      *         left = 180,down = 270
      */
-    protected double calculatedAngleToTarget() {
+    protected double calculatedAngleToCoordinates(int xCoord, int yCoord) {
         // Calculate difference in X and Y
-        double xDiff = this.getX() - targetX;
-        double yDiff = this.getY() - targetY;
+        double xDiff = this.getX() - xCoord;
+        double yDiff = this.getY() - yCoord;
 
         // Calculate the angle between the sprite and the cursor
         double desiredAngle = Math.toDegrees(Math.atan2(yDiff, xDiff));
@@ -107,7 +107,7 @@ public abstract class MovingSprite extends Sprite {
      * @return CLOCKWISE or COUNTERCLOCKWISE
      */
     protected Direction calculateDirectionToDesiredAngle() {
-        double desiredAngle = calculatedAngleToTarget();
+        double desiredAngle = calculatedAngleToCoordinates(targetX, targetY);
         // Find the difference between current and target angle
         double angleDiff = desiredAngle - this.getRotation();
 
@@ -138,12 +138,14 @@ public abstract class MovingSprite extends Sprite {
     }
 
     /**
-     * Move "forward" at the set speed, based on the current direction
+     * Move at "speed" in angle direction
+     * 
+     * @param angle the angle to move in
      */
-    protected void moveForward() {
+    private void move(double angle) {
         // The exact distance we want to move in each direction
-        double xChangeExact = Math.cos(Math.toRadians(getRotation())) * speed + previousFrameXChangeRemainder;
-        double yChangeExact = Math.sin(Math.toRadians(getRotation())) * speed + previousFrameYChangeRemainder;
+        double xChangeExact = Math.cos(Math.toRadians(angle)) * speed + previousFrameXChangeRemainder;
+        double yChangeExact = Math.sin(Math.toRadians(angle)) * speed + previousFrameYChangeRemainder;
         if (xChangeExact > 0 && !canMoveLeft())
             xChangeExact = 0;
         if (xChangeExact < 0 && !canMoveRight())
@@ -163,6 +165,27 @@ public abstract class MovingSprite extends Sprite {
         // Save the remaining distance for the next frame
         previousFrameXChangeRemainder = xChangeExact - xChangeInt;
         previousFrameYChangeRemainder = yChangeExact - yChangeInt;
+    }
+
+    /**
+     * Move "forward" at the set speed, based on the current direction
+     */
+    protected void moveForward() {
+        move(getRotation());
+    }
+
+    /**
+     * Move away from "other"
+     */
+    protected void moveAway(Sprite other) {
+        // Get the angle towards "other"
+        double towardsAngle = calculatedAngleToCoordinates(other.getX(), other.getY());
+        // Get the opposite angle
+        double awayAngle = towardsAngle + 180;
+        // Force it to be 0-360
+        awayAngle = awayAngle % 360;
+
+        move(awayAngle);
     }
 
     /**

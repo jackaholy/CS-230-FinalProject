@@ -57,10 +57,14 @@ public class GameController {
 				enemy.setTarget(player.getX(), player.getY());
 				// Move towards the player
 				enemy.tick();
-				if (player.isColliding(enemy))
-					System.out.println("CRASH!");
-				else
-					System.out.println("EVERTHING'S FINE!");
+
+				// Check if the two ships are colliding
+				if (player.isColliding(enemy)) {
+					// DEAL DAMAGE HERE
+					enemy.moveAway(player);
+					player.moveAway(enemy);
+				}
+
 				// Check if loot can be collected and handle it if it can
 				checkLootCollection();
 			}
