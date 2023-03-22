@@ -9,6 +9,8 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.event.MouseInputAdapter;
 
 /**
@@ -49,6 +51,11 @@ public class GameController {
 		});
 
 		while (true) {
+			try {
+				TimeUnit.MILLISECONDS.sleep(10);
+			} catch (InterruptedException e) {
+				System.out.println("Interrupted");
+			}
 			// Aim for the cursor
 			player.setTarget(cursorX, cursorY);
 			// Move towards the cursor
