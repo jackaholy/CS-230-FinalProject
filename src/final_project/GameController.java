@@ -4,12 +4,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Container;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
 
@@ -18,6 +20,7 @@ import javax.swing.event.MouseInputAdapter;
  */
 public class GameController {
 	private static final int FRAMES_PER_SECOND = 120;
+	private static final Random rand = new Random();
 
 	private JFrame gameJFrame;
 	// Timer goes off once per frame
@@ -66,6 +69,8 @@ public class GameController {
 					enemy.moveAway(player);
 					player.moveAway(enemy);
 				}
+				if (rand.nextInt(100) == 1)
+					enemy.createCannonball(player.getX(), player.getY());
 
 				// Check if loot can be collected and handle it if it can
 				checkLootCollection();
@@ -78,6 +83,12 @@ public class GameController {
 				// Every time the cursor moves, save the new coordinates
 				cursorX = e.getX();
 				cursorY = e.getY();
+			}
+		});
+		gameJFrame.getContentPane().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				player.createCannonball(event.getX(), event.getY());
 			}
 		});
 	}
