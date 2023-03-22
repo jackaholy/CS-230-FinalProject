@@ -1,5 +1,6 @@
 package final_project;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JFrame;
@@ -19,7 +20,7 @@ public abstract class Sprite {
     // The J "thing" that's draw onto the screen
     protected final JLabel spriteJLabel = new JLabel();
     // The original icon
-    private ImageIcon unrotatedIcon;
+    private Icon unrotatedIcon;
     private RotatedIcon rotatedIcon;
 
     // The JFrame this Sprite is part of
@@ -30,7 +31,7 @@ public abstract class Sprite {
     protected int x;
     protected int y;
 
-    protected Sprite(JFrame gameJFrame, ImageIcon image, int x, int y) {
+    protected Sprite(JFrame gameJFrame, Icon image, int x, int y) {
         this.gameJFrame = gameJFrame;
         // Add sprite to play area
         gameJFrame.getContentPane().add(spriteJLabel);
@@ -68,6 +69,11 @@ public abstract class Sprite {
 
         // Restrict angle to 0 < angle < 360
         this.rotationDegrees = (rotationDegrees + 360) % 360;
+        draw();
+    }
+
+    protected void setIcon(Icon icon) {
+        unrotatedIcon = icon;
         draw();
     }
 
