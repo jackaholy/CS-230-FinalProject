@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 /**
  * A pirate. Targets the player but tries to avoid direct collisions.
  */
-public class PirateShip extends MovingSprite {
+public class PirateShip extends Ship {
     // How close to the player is too close?
     private int turnDistance;
 
@@ -33,6 +33,7 @@ public class PirateShip extends MovingSprite {
 
     @Override
     protected void tick() {
+        super.tick();
         Direction directionToRotate = calculateDirectionToDesiredAngle();
 
         if (shouldAvoidPlayer()) {

@@ -7,7 +7,7 @@ import javax.swing.JFrame;
  * This class will probably do some heavy lifting. Controls, player inventory,
  * ship speed, health and so on will all go here
  */
-public class PlayerShip extends MovingSprite {
+public class PlayerShip extends Ship {
 	private int cost;
 	private int pickupRadius;
 
@@ -19,6 +19,7 @@ public class PlayerShip extends MovingSprite {
 		this.pickupRadius = pickupRadius;
 	}
 
+	@Override
 	public void tick() {
 		// Add player tick stuff here
 		super.tick();
