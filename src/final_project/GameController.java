@@ -101,9 +101,6 @@ public class GameController {
 		int height = gd.getDisplayMode().getHeight();
 		gameJFrame.setSize(width, height);
 
-		gameJFrame.setSize(1430, 800);
-
-
 		// The play area
 		Container gameContentPane = gameJFrame.getContentPane();
 		gameContentPane.setBackground(new Color(30, 144, 255));
