@@ -12,6 +12,10 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 /**
  * The main file of the project. Run this one to start the project
@@ -20,6 +24,7 @@ public class GameController {
 	private static final int FRAMES_PER_SECOND = 120;
 
 	private JFrame gameJFrame;
+	protected JTextArea textAreaLoot = new JTextArea();
 	// Timer goes off once per frame
 	private final Timer tickTimer = new Timer();
 
@@ -31,7 +36,7 @@ public class GameController {
 	private int lootFrequency = 20;
 
 	// How much money the player has
-	public int money = 0;
+	public Integer money = 0;
 
 	// Where the loot is stored
 	Loot lootArray[] = new Loot[lootFrequency];
@@ -90,16 +95,68 @@ public class GameController {
 		gameJFrame = new JFrame("Virtual Voyagers");
 		// With arbitrary default dimensions
 		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		int width = gd.getDisplayMode().getWidth();
 		int height = gd.getDisplayMode().getHeight();
 		gameJFrame.setSize(width, height);
 
+		gameJFrame.setSize(1430, 800);
+
+
 		// The play area
 		Container gameContentPane = gameJFrame.getContentPane();
-		gameContentPane.setBackground(Color.blue);
+		gameContentPane.setBackground(new Color(30, 144, 255));
 		// Use absolute positioning
 		gameContentPane.setLayout(null);
+		
+		// Label for the amount of loot collected
+		JLabel lblLoot = new JLabel("Loot: ");
+		lblLoot.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
+		lblLoot.setBounds(19, 18, 61, 16);
+		gameJFrame.getContentPane().add(lblLoot);
+		
+		// Label for the amount of health the user has left
+		JLabel lblUserHealth = new JLabel("Health: ");
+		lblUserHealth.setHorizontalAlignment(SwingConstants.LEFT);
+		lblUserHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
+		lblUserHealth.setBounds(19, 48, 76, 16);
+		gameJFrame.getContentPane().add(lblUserHealth);
+		
+		// Label for the amount of health the enemy has left
+		JLabel lblEnemyHealth = new JLabel("Enemy's Health: ");
+		lblEnemyHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
+		lblEnemyHealth.setBounds(19, 69, 144, 33);
+		gameJFrame.getContentPane().add(lblEnemyHealth);
+		
+		// Displays the amount of loot the user has collected
+		
+		textAreaLoot.setBackground(new Color(30, 144, 255));
+		textAreaLoot.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
+		textAreaLoot.setEditable(false);
+		textAreaLoot.setText("0");
+		textAreaLoot.setBounds(77, 11, 30, 33);
+		gameJFrame.getContentPane().add(textAreaLoot);
+		
+		// Displays the amount of health the user has left
+		JTextArea textAreaUserHealth = new JTextArea();
+		textAreaUserHealth.setBackground(new Color(30, 144, 255));
+		textAreaUserHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
+		textAreaUserHealth.setEditable(false);
+		textAreaUserHealth.setText("100");
+		textAreaUserHealth.setBounds(87, 40, 43, 33);
+		gameJFrame.getContentPane().add(textAreaUserHealth);
+		
+		// Displays the amount of health the enemy has left
+		JTextArea textAreaEnemyHealth = new JTextArea();
+		textAreaEnemyHealth.setBackground(new Color(30, 144, 255));
+		textAreaEnemyHealth.setEditable(false);
+		textAreaEnemyHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
+		textAreaEnemyHealth.setText("100");
+		textAreaEnemyHealth.setBounds(164, 69, 30, 31);
+		gameJFrame.getContentPane().add(textAreaEnemyHealth);
+		
+		
 
 		// Show the window and player
 		gameJFrame.setVisible(true);
@@ -142,6 +199,8 @@ public class GameController {
 				loot.collect(gameJFrame);
 				// increment totalLoot only once
 				money++;
+				String displayMoney = money.toString();
+				textAreaLoot.setText(displayMoney);
 				System.out.println("Total Loot: " + money);
 
 				// Remove the collected loot from the array
