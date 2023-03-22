@@ -30,6 +30,9 @@ public abstract class MovingSprite extends Sprite {
     private double previousFrameXChangeRemainder = 0;
     private double previousFrameYChangeRemainder = 0;
 
+    private long previousTime;
+    private float changeTime;
+
     /**
      * Class constructor. Sets speed and turning speed, and creates the sprite.
      * 
@@ -37,20 +40,28 @@ public abstract class MovingSprite extends Sprite {
      * @param image        the image for the sprite, passed to sprite
      * @param x            starting x position
      * @param y            starting y position
-     * @param speed        how many pixels the player should move per frame
-     * @param turningSpeed how many degrees the player should rotate per frame
+     * @param speed        how many pixels the player should move per second
+     * @param turningSpeed how many degrees the player should rotate per second
      */
     protected MovingSprite(JFrame gameJFrame, ImageIcon image, int x, int y, double speed,
             double turningSpeed) {
         super(gameJFrame, image, x, y);
+        previousTime = System.currentTimeMillis();
         this.speed = speed;
         this.turningSpeed = turningSpeed;
+    }
+
+    protected void updateTimeChange() {
+        long currentTime = System.currentTimeMillis();
+        changeTime = (currentTime - previousTime) / 1000f;
+        previousTime = currentTime;
     }
 
     /**
      * A single "moment" in game. Should rotate and move slightly, and update the UI
      */
     protected void tick() {
+        updateTimeChange();
         setRotationDirection(calculateDirectionToDesiredAngle());
         rotate();
         moveForward();
@@ -63,9 +74,9 @@ public abstract class MovingSprite extends Sprite {
      */
     protected void rotate() {
         if (rotationDirection == Direction.CLOCKWISE) {
-            setRotation(getRotation() + turningSpeed);
+            setRotation(getRotation() + turningSpeed * changeTime);
         } else if (rotationDirection == Direction.COUNTER_CLOCKWISE) {
-            setRotation(getRotation() - turningSpeed);
+            setRotation(getRotation() - turningSpeed * changeTime);
         }
     }
 
@@ -144,8 +155,8 @@ public abstract class MovingSprite extends Sprite {
      */
     private void move(double angle) {
         // The exact distance we want to move in each direction
-        double xChangeExact = Math.cos(Math.toRadians(angle)) * speed + previousFrameXChangeRemainder;
-        double yChangeExact = Math.sin(Math.toRadians(angle)) * speed + previousFrameYChangeRemainder;
+        double xChangeExact = Math.cos(Math.toRadians(angle)) * speed * changeTime + previousFrameXChangeRemainder;
+        double yChangeExact = Math.sin(Math.toRadians(angle)) * speed * changeTime + previousFrameYChangeRemainder;
         if (xChangeExact > 0 && !canMoveLeft())
             xChangeExact = 0;
         if (xChangeExact < 0 && !canMoveRight())
