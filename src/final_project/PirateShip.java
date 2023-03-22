@@ -33,6 +33,7 @@ public class PirateShip extends MovingSprite {
 
     @Override
     protected void tick() {
+        updateTimeChange();
         Direction directionToRotate = calculateDirectionToDesiredAngle();
 
         if (shouldAvoidPlayer()) {
