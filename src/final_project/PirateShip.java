@@ -33,7 +33,6 @@ public class PirateShip extends Ship {
 
     @Override
     protected void tick() {
-        super.tick();
         Direction directionToRotate = calculateDirectionToDesiredAngle();
 
         if (shouldAvoidPlayer()) {
@@ -41,8 +40,7 @@ public class PirateShip extends Ship {
         }
 
         setRotationDirection(directionToRotate);
-        rotate();
-        moveForward();
+        super.tick();
     }
 
     /**

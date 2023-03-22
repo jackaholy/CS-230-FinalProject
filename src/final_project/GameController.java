@@ -4,15 +4,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.awt.Container;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -23,13 +22,8 @@ import javax.swing.SwingConstants;
  * The main file of the project. Run this one to start the project
  */
 public class GameController {
-	private static final int FRAMES_PER_SECOND = 120;
-	private static final Random rand = new Random();
-
 	private JFrame gameJFrame;
 	protected JTextArea textAreaLoot = new JTextArea();
-	// Timer goes off once per frame
-	private final Timer tickTimer = new Timer();
 
 	// Last known coordinates of the player
 	private int cursorX;
@@ -53,35 +47,6 @@ public class GameController {
 	public GameController() {
 		createWindow();
 		createSprites();
-
-		tickTimer.schedule(new TimerTask() {
-			// A single tick of the game
-			@Override
-			public void run() {
-				// Aim for the cursor
-				player.setTarget(cursorX, cursorY);
-				// Move towards the cursor
-				player.tick();
-
-				// Aim for the player
-				enemy.setTarget(player.getX(), player.getY());
-				// Move towards the player
-				enemy.tick();
-
-				// Check if the two ships are colliding
-				if (player.isColliding(enemy)) {
-					// DEAL DAMAGE HERE
-					enemy.moveAway(player);
-					player.moveAway(enemy);
-				}
-				if (rand.nextInt(100) == 1)
-					enemy.createCannonball(player.getX(), player.getY());
-
-				// Check if loot can be collected and handle it if it can
-				checkLootCollection();
-			}
-		}, 0, 1000 / FRAMES_PER_SECOND);
-
 		gameJFrame.getContentPane().addMouseMotionListener(new MouseInputAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
@@ -90,12 +55,33 @@ public class GameController {
 				cursorY = e.getY();
 			}
 		});
-		gameJFrame.getContentPane().addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent event) {
-				player.createCannonball(event.getX(), event.getY());
+
+		while (true) {
+			try {
+				TimeUnit.MILLISECONDS.sleep(10);
+			} catch (InterruptedException e) {
+				System.out.println("Interrupted");
 			}
-		});
+			// Aim for the cursor
+			player.setTarget(cursorX, cursorY);
+			// Move towards the cursor
+			player.tick();
+
+			// Aim for the player
+			enemy.setTarget(player.getX(), player.getY());
+			// Move towards the player
+			enemy.tick();
+
+			// Check if the two ships are colliding
+			if (player.isColliding(enemy)) {
+				// DEAL DAMAGE HERE
+				enemy.moveAway(player);
+				player.moveAway(enemy);
+			}
+
+			// Check if loot can be collected and handle it if it can
+			checkLootCollection();
+		}
 	}
 
 	/**
@@ -106,6 +92,7 @@ public class GameController {
 		gameJFrame = new JFrame("Virtual Voyagers");
 		// With arbitrary default dimensions
 		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		int width = gd.getDisplayMode().getWidth();
 		int height = gd.getDisplayMode().getHeight();
@@ -175,13 +162,13 @@ public class GameController {
 		player = new PlayerShip(
 				gameJFrame,
 				new ImageIcon("assets/water_bug.png"),
-				300, 300, 0, 0.9, 0.9, 0);
+				300, 300, 0, 100, 90, 0);
 
 		// Create an enemy
 		enemy = new PirateShip(
 				gameJFrame,
-				new ImageIcon("assets/floating_point.png"),
-				500, 500, 1, 0.4,
+				new ImageIcon("assets/cyber_scourge.png"),
+				500, 500, 120, 75,
 				125);
 
 		// Create some loot
