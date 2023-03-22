@@ -14,8 +14,13 @@ import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import java.awt.Label;
+import java.awt.BorderLayout;
 
 /**
  * The main file of the project. Run this one to start the project
@@ -48,8 +53,9 @@ public class GameController {
 	}
 
 	public GameController() {
-		createWindow();
-		createSprites();
+	    	createTitleScreen();
+//		createWindow();
+//		createSprites();
 
 		tickTimer.schedule(new TimerTask() {
 			// A single tick of the game
@@ -87,6 +93,32 @@ public class GameController {
 		});
 	}
 
+	/**
+	 * Create a title screen
+	 */
+	private void createTitleScreen() {
+	    	JFrame titleScreen = new JFrame("Virutal Voyagers");
+	    	titleScreen.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		
+	    	GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth();
+		int height = gd.getDisplayMode().getHeight();
+	    	// Set the size of the title screen
+	    	titleScreen.setSize((width / 2) + 50, (height / 2) + 150);
+		
+	    	// Put the window in the middle of the screen.
+		titleScreen.setLocationRelativeTo(null);
+		
+		// Label for the amount of loot collected
+		JLabel lblTitle = new JLabel("Virtual Voyagers");
+		lblTitle.setBackground(new Color(98, 255, 203));
+		lblTitle.setFont(new Font("Apple Chancery", Font.BOLD, 50));
+		lblTitle.setBounds(100, 30, 100, 100);
+		titleScreen.getContentPane().add(lblTitle);
+		
+		titleScreen.setVisible(true);
+	}
+	
 	/**
 	 * Create the window and content pane for the game itself
 	 */
@@ -127,7 +159,6 @@ public class GameController {
 		gameJFrame.getContentPane().add(lblEnemyHealth);
 		
 		// Displays the amount of loot the user has collected
-		
 		textAreaLoot.setBackground(new Color(30, 144, 255));
 		textAreaLoot.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
 		textAreaLoot.setEditable(false);
@@ -153,8 +184,6 @@ public class GameController {
 		textAreaEnemyHealth.setBounds(164, 69, 30, 31);
 		gameJFrame.getContentPane().add(textAreaEnemyHealth);
 		
-		
-
 		// Show the window and player
 		gameJFrame.setVisible(true);
 	}
