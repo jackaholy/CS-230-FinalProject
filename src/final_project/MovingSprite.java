@@ -31,7 +31,7 @@ public abstract class MovingSprite extends Sprite {
     private double previousFrameYChangeRemainder = 0;
 
     private long previousTime;
-    private float changeTime;
+    protected float changeTime;
 
     /**
      * Class constructor. Sets speed and turning speed, and creates the sprite.
@@ -62,7 +62,7 @@ public abstract class MovingSprite extends Sprite {
      */
     protected void tick() {
         updateTimeChange();
-        setRotationDirection(calculateDirectionToDesiredAngle());
+        // setRotationDirection(calculateDirectionToDesiredAngle());
         rotate();
         moveForward();
         draw();

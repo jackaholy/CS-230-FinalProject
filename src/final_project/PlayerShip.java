@@ -9,19 +9,17 @@ import javax.swing.JFrame;
  */
 public class PlayerShip extends Ship {
 	private int cost;
-	private int pickupRadius;
 
 	public PlayerShip(JFrame gameJFrame, ImageIcon image, int x, int y, int cost, double speed,
-			double turningSpeed,
-			int pickupRadius) {
-		super(gameJFrame, image, x, y, speed, turningSpeed);
+			double turningSpeed, int health) {
+		super(gameJFrame, image, x, y, speed, turningSpeed, health);
 		this.cost = cost;
-		this.pickupRadius = pickupRadius;
 	}
 
 	@Override
 	public void tick() {
 		// Add player tick stuff here
+		setRotationDirection(calculateDirectionToDesiredAngle());
 		super.tick();
 	}
 }

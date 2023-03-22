@@ -22,10 +22,10 @@ public class PirateShip extends Ship {
      * @param turnDistance how close it should get to the player before turning
      *                     around to avoid a collision
      */
-    public PirateShip(JFrame gameJFrame, ImageIcon image, int x, int y, double speed, double turningSpeed,
+    public PirateShip(JFrame gameJFrame, ImageIcon image, int x, int y, double speed, double turningSpeed, int health,
             int turnDistance) {
         // Create the super class
-        super(gameJFrame, image, x, y, speed, turningSpeed);
+        super(gameJFrame, image, x, y, speed, turningSpeed, health);
 
         // Set the turn distance
         this.turnDistance = turnDistance;

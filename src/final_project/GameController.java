@@ -24,6 +24,8 @@ import javax.swing.SwingConstants;
 public class GameController {
 	private JFrame gameJFrame;
 	protected JTextArea textAreaLoot = new JTextArea();
+	JTextArea textAreaPlayerHealth = new JTextArea();
+	JTextArea textAreaEnemyHealth = new JTextArea();
 
 	// Last known coordinates of the player
 	private int cursorX;
@@ -74,7 +76,10 @@ public class GameController {
 
 			// Check if the two ships are colliding
 			if (player.isColliding(enemy)) {
-				// DEAL DAMAGE HERE
+				player.takeDamagePerSecond(15);
+				enemy.takeDamagePerSecond(15);
+				textAreaPlayerHealth.setText(String.valueOf(player.getHealth()));
+				textAreaEnemyHealth.setText(String.valueOf(enemy.getHealth()));
 				enemy.moveAway(player);
 				player.moveAway(enemy);
 			}
@@ -133,16 +138,14 @@ public class GameController {
 		gameJFrame.getContentPane().add(textAreaLoot);
 
 		// Displays the amount of health the user has left
-		JTextArea textAreaUserHealth = new JTextArea();
-		textAreaUserHealth.setBackground(new Color(30, 144, 255));
-		textAreaUserHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
-		textAreaUserHealth.setEditable(false);
-		textAreaUserHealth.setText("100");
-		textAreaUserHealth.setBounds(87, 40, 43, 33);
-		gameJFrame.getContentPane().add(textAreaUserHealth);
+		textAreaPlayerHealth.setBackground(new Color(30, 144, 255));
+		textAreaPlayerHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
+		textAreaPlayerHealth.setEditable(false);
+		textAreaPlayerHealth.setText("100");
+		textAreaPlayerHealth.setBounds(87, 40, 43, 33);
+		gameJFrame.getContentPane().add(textAreaPlayerHealth);
 
 		// Displays the amount of health the enemy has left
-		JTextArea textAreaEnemyHealth = new JTextArea();
 		textAreaEnemyHealth.setBackground(new Color(30, 144, 255));
 		textAreaEnemyHealth.setEditable(false);
 		textAreaEnemyHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
@@ -162,14 +165,14 @@ public class GameController {
 		player = new PlayerShip(
 				gameJFrame,
 				new ImageIcon("assets/water_bug.png"),
-				300, 300, 0, 100, 90, 0);
+				300, 300, 0, 100, 90, 30);
 
 		// Create an enemy
 		enemy = new PirateShip(
 				gameJFrame,
 				new ImageIcon("assets/cyber_scourge.png"),
 				500, 500, 120, 75,
-				125);
+				100, 125);
 
 		// Create some loot
 		for (int i = 0; i < lootArray.length; i++) {
