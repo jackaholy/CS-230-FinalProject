@@ -21,8 +21,12 @@ import javax.swing.SwingConstants;
  * The main file of the project. Run this one to start the project
  */
 public class GameController {
-	private JFrame gameJFrame;
-	protected JTextArea textAreaLoot = new JTextArea();
+    	
+    	// How much money the player has
+ 	public int money = 0;
+    	
+    	private JFrame gameJFrame;
+	private JTextArea textAreaLoot = new JTextArea();
 
 	// Last known coordinates of the player
 	private int cursorX;
@@ -31,13 +35,10 @@ public class GameController {
 	// Handles how much loot should be onscreen at any given time
 	private int lootFrequency = 20;
 
-	// How much money the player has
-	public Integer money = 0;
-
 	// Where the loot is stored
-	Loot lootArray[] = new Loot[lootFrequency];
-	PlayerShip player;
-	PirateShip enemy;
+	private Loot lootArray[] = new Loot[lootFrequency];
+	private PlayerShip player;
+	private PirateShip enemy;
 
 	public static void main(String[] args) {
 		new GameController();
@@ -190,9 +191,8 @@ public class GameController {
 				loot.collect(gameJFrame);
 				// increment totalLoot only once
 				money++;
-				String displayMoney = money.toString();
+				String displayMoney = "" + money;
 				textAreaLoot.setText(displayMoney);
-				System.out.println("Total Loot: " + money);
 
 				// Remove the collected loot from the array
 				lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
