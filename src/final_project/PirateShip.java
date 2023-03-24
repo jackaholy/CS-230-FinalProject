@@ -44,6 +44,12 @@ public class PirateShip extends Ship {
         super.tick();
     }
 
+    @Override
+    protected void erase() {
+        // Can we spawn loot here?
+        super.erase();
+    }
+
     /**
      * Calcuate whether or not the pirate is too close to the player.
      * 

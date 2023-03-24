@@ -28,9 +28,9 @@ public class GameController {
 	private Random rand = new Random();
 
 	private JFrame gameJFrame;
-	protected JTextArea textAreaLoot = new JTextArea();
-	JTextArea textAreaPlayerHealth = new JTextArea();
-	JTextArea textAreaEnemyHealth = new JTextArea();
+	private JTextArea textAreaLoot = new JTextArea();
+	private JTextArea textAreaPlayerHealth = new JTextArea();
+	private JTextArea textAreaEnemyHealth = new JTextArea();
 
 	// Last known coordinates of the player
 	private int cursorX;
@@ -40,13 +40,13 @@ public class GameController {
 	private int lootFrequency = 20;
 
 	// How much money the player has
-	public Integer money = 0;
+	private int money = 0;
 
 	// Where the loot is stored
-	Loot lootArray[] = new Loot[lootFrequency];
-	PlayerShip player;
-	PirateShip enemy;
-	Ship[] ships = new Ship[2];
+	private Loot lootArray[] = new Loot[lootFrequency];
+	private PlayerShip player;
+	private PirateShip enemy;
+	private Ship[] ships = new Ship[2];
 
 	public static void main(String[] args) {
 		new GameController();
@@ -72,6 +72,7 @@ public class GameController {
 			}
 		});
 
+		// TODO: Change back to timer....
 		while (true) {
 			try {
 				// Sleep a few ms every frame to avoid hogging the CPU too much
@@ -215,9 +216,8 @@ public class GameController {
 				loot.collect(gameJFrame);
 				// increment totalLoot only once
 				money++;
-				String displayMoney = money.toString();
+				String displayMoney = "" + money;
 				textAreaLoot.setText(displayMoney);
-				System.out.println("Total Loot: " + money);
 
 				// Remove the collected loot from the array
 				lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));

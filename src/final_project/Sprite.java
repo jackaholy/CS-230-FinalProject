@@ -12,19 +12,10 @@ import java.awt.Polygon;
  * collisions, etc.
  */
 public abstract class Sprite {
-    // Use this constant to scale the hitboxes up or down
-    // If too sensitive, decrease. If not sensitive enough, increase.
-    // Should be about 1.
-    static final double COLLISION_SCALE_FACTOR = 0.8;
-
-    // The J "thing" that's draw onto the screen
-    protected final JLabel spriteJLabel = new JLabel();
-    // The original icon
-    private Icon unrotatedIcon;
-    private RotatedIcon rotatedIcon;
-
     // The JFrame this Sprite is part of
     protected JFrame gameJFrame;
+    // The J "thing" that's draw onto the screen
+    protected final JLabel spriteJLabel = new JLabel();
 
     // Current position
     private double rotationDegrees = 0;
@@ -32,6 +23,15 @@ public abstract class Sprite {
     protected int y;
 
     protected boolean exists = true;
+
+    // Use this constant to scale the hitboxes up or down
+    // If too sensitive, decrease. If not sensitive enough, increase.
+    // Should be about 1.
+    private static final double COLLISION_SCALE_FACTOR = 0.8;
+
+    // The original icon
+    private Icon unrotatedIcon;
+    private RotatedIcon rotatedIcon;
 
     protected Sprite(JFrame gameJFrame, Icon image, int x, int y) {
         this.gameJFrame = gameJFrame;
