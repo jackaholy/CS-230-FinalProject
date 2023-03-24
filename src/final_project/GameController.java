@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import java.awt.Container;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
@@ -20,6 +21,7 @@ import java.awt.Graphics2D;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import java.awt.Label;
+import java.awt.Toolkit;
 import java.awt.BorderLayout;
 
 /**
@@ -53,9 +55,8 @@ public class GameController {
 	}
 
 	public GameController() {
-	    	createTitleScreen();
-//		createWindow();
-//		createSprites();
+		createWindow();
+		createSprites();
 
 		tickTimer.schedule(new TimerTask() {
 			// A single tick of the game
@@ -91,32 +92,6 @@ public class GameController {
 				cursorY = e.getY();
 			}
 		});
-	}
-
-	/**
-	 * Create a title screen
-	 */
-	private void createTitleScreen() {
-	    	JFrame titleScreen = new JFrame("Virutal Voyagers");
-	    	titleScreen.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		
-	    	GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		int width = gd.getDisplayMode().getWidth();
-		int height = gd.getDisplayMode().getHeight();
-	    	// Set the size of the title screen
-	    	titleScreen.setSize((width / 2) + 50, (height / 2) + 150);
-		
-	    	// Put the window in the middle of the screen.
-		titleScreen.setLocationRelativeTo(null);
-		
-		// Label for the amount of loot collected
-		JLabel lblTitle = new JLabel("Virtual Voyagers");
-		lblTitle.setBackground(new Color(98, 255, 203));
-		lblTitle.setFont(new Font("Apple Chancery", Font.BOLD, 50));
-		lblTitle.setBounds(100, 30, 100, 100);
-		titleScreen.getContentPane().add(lblTitle);
-		
-		titleScreen.setVisible(true);
 	}
 	
 	/**
