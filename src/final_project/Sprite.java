@@ -31,6 +31,8 @@ public abstract class Sprite {
     protected int x;
     protected int y;
 
+    protected boolean exists = true;
+
     protected Sprite(JFrame gameJFrame, Icon image, int x, int y) {
         this.gameJFrame = gameJFrame;
         // Add sprite to play area
@@ -46,6 +48,8 @@ public abstract class Sprite {
      * Display current position and rotation to the screen
      */
     protected void draw() {
+        if (!exists)
+            return;
         // Create a new rotated icon based on the current rotation
         rotatedIcon = new RotatedIcon(unrotatedIcon, rotationDegrees);
 
@@ -61,6 +65,14 @@ public abstract class Sprite {
     }
 
     /**
+     * Remove the sprite from the game
+     */
+    protected void erase() {
+        spriteJLabel.setVisible(false);
+        exists = false;
+    }
+
+    /**
      * Set rotation
      * 
      * @param rotationDegrees degrees from 0 (right)
@@ -72,6 +84,11 @@ public abstract class Sprite {
         draw();
     }
 
+    /**
+     * Set the icon to a new one
+     * 
+     * @param icon
+     */
     protected void setIcon(Icon icon) {
         unrotatedIcon = icon;
         draw();
@@ -84,6 +101,15 @@ public abstract class Sprite {
      */
     public double getRotation() {
         return rotationDegrees;
+    }
+
+    /**
+     * Check whether the sprite exists
+     * 
+     * @return
+     */
+    public boolean getExistance() {
+        return exists;
     }
 
     /**
@@ -183,6 +209,11 @@ public abstract class Sprite {
      * @return
      */
     boolean isColliding(Sprite other) {
+        // If one of the sprites doesn't exist,
+        // there's no collision
+        if (!exists || !other.getExistance()) {
+            return false;
+        }
         // Get the corners of both sprites
         Point[] ourCorners = getCorners();
         Point[] theirCorners = other.getCorners();

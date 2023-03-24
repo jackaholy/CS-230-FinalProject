@@ -1,6 +1,7 @@
 package final_project;
 
 import javax.swing.JFrame;
+
 import javax.swing.ImageIcon;
 
 /**
@@ -53,4 +54,5 @@ public class PirateShip extends Ship {
     private boolean shouldAvoidPlayer() {
         return Math.hypot(getX() - targetX, getY() - targetY) < turnDistance;
     }
+
 }

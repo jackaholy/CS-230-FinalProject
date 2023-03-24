@@ -11,6 +11,9 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Random;
 
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.JLabel;
@@ -22,6 +25,8 @@ import javax.swing.SwingConstants;
  * The main file of the project. Run this one to start the project
  */
 public class GameController {
+	private Random rand = new Random();
+
 	private JFrame gameJFrame;
 	protected JTextArea textAreaLoot = new JTextArea();
 	JTextArea textAreaPlayerHealth = new JTextArea();
@@ -41,6 +46,7 @@ public class GameController {
 	Loot lootArray[] = new Loot[lootFrequency];
 	PlayerShip player;
 	PirateShip enemy;
+	Ship[] ships = new Ship[2];
 
 	public static void main(String[] args) {
 		new GameController();
@@ -58,12 +64,26 @@ public class GameController {
 			}
 		});
 
+		// Every time the player clicks the cannonball, fire the cannon
+		gameJFrame.getContentPane().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				player.createCannonball(cursorX, cursorY, ships);
+			}
+		});
+
 		while (true) {
 			try {
+				// Sleep a few ms every frame to avoid hogging the CPU too much
 				TimeUnit.MILLISECONDS.sleep(10);
 			} catch (InterruptedException e) {
 				System.out.println("Interrupted");
 			}
+
+			// Randomly decide to fire the cannons at the player
+			if (rand.nextInt(250) == 1)
+				enemy.createCannonball(player.getX(), player.getY(), ships);
+
 			// Aim for the cursor
 			player.setTarget(cursorX, cursorY);
 			// Move towards the cursor
@@ -78,11 +98,11 @@ public class GameController {
 			if (player.isColliding(enemy)) {
 				player.takeDamagePerSecond(15);
 				enemy.takeDamagePerSecond(15);
-				textAreaPlayerHealth.setText(String.valueOf(player.getHealth()));
-				textAreaEnemyHealth.setText(String.valueOf(enemy.getHealth()));
 				enemy.moveAway(player);
 				player.moveAway(enemy);
 			}
+			textAreaPlayerHealth.setText(String.valueOf(player.getHealth()));
+			textAreaEnemyHealth.setText(String.valueOf(enemy.getHealth()));
 
 			// Check if loot can be collected and handle it if it can
 			checkLootCollection();
@@ -173,7 +193,8 @@ public class GameController {
 				new ImageIcon("assets/cyber_scourge.png"),
 				500, 500, 120, 75,
 				100, 125);
-
+		ships[0] = player;
+		ships[1] = enemy;
 		// Create some loot
 		for (int i = 0; i < lootArray.length; i++) {
 			lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));

@@ -51,6 +51,9 @@ public abstract class MovingSprite extends Sprite {
         this.turningSpeed = turningSpeed;
     }
 
+    /**
+     * Calculate how much time has passed since the previous frame
+     */
     protected void updateTimeChange() {
         long currentTime = System.currentTimeMillis();
         changeTime = (currentTime - previousTime) / 1000f;
@@ -61,8 +64,9 @@ public abstract class MovingSprite extends Sprite {
      * A single "moment" in game. Should rotate and move slightly, and update the UI
      */
     protected void tick() {
+        if (!exists)
+            return;
         updateTimeChange();
-        // setRotationDirection(calculateDirectionToDesiredAngle());
         rotate();
         moveForward();
         draw();
