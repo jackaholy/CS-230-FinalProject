@@ -55,6 +55,7 @@ public class GameController {
 	}
 
 	public GameController() {
+	    	new TitleScreen();
 		createWindow();
 		createSprites();
 
@@ -171,13 +172,13 @@ public class GameController {
 		player = new PlayerShip(
 				gameJFrame,
 				new ImageIcon("assets/water_bug.png"),
-				300, 300, 0, 0.9, 0.9, 0);
+				300, 300, 0, 1, 1, 0);
 
 		// Create an enemy
 		enemy = new PirateShip(
 				gameJFrame,
-				new ImageIcon("assets/floating_point.png"),
-				500, 500, 1, 0.4,
+				new ImageIcon("assets/cyber_scourge.png"),
+				500, 500, 0.8, 0.9,
 				125);
 
 		// Create some loot
