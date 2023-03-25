@@ -7,6 +7,7 @@ import javax.swing.WindowConstants;
 import java.awt.Container;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.util.concurrent.TimeUnit;
@@ -14,8 +15,14 @@ import java.util.concurrent.TimeUnit;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import java.awt.Label;
+import java.awt.Toolkit;
+import java.awt.BorderLayout;
 
 /**
  * The main file of the project. Run this one to start the project
@@ -45,6 +52,7 @@ public class GameController {
 	}
 
 	public GameController() {
+	    	new TitleScreen();
 		createWindow();
 		createSprites();
 		gameJFrame.getContentPane().addMouseMotionListener(new MouseInputAdapter() {
@@ -83,7 +91,7 @@ public class GameController {
 			checkLootCollection();
 		}
 	}
-
+	
 	/**
 	 * Create the window and content pane for the game itself
 	 */
@@ -162,13 +170,17 @@ public class GameController {
 		player = new PlayerShip(
 				gameJFrame,
 				new ImageIcon("assets/water_bug.png"),
-				300, 300, 0, 100, 90, 0);
+
+				300, 300, 0, 100, 100, 125);
+
 
 		// Create an enemy
 		enemy = new PirateShip(
 				gameJFrame,
 				new ImageIcon("assets/cyber_scourge.png"),
-				500, 500, 120, 75,
+
+				500, 500, 100, 100,
+
 				125);
 
 		// Create some loot
