@@ -170,7 +170,7 @@ public abstract class Sprite {
 
     /**
      * Get the cordinates of this Sprites' corners (if it's represented as a rotated
-     * rectangle)\
+     * rectangle)
      * 
      * ChatGPT was used for this function. Comments are my own.
      * 
