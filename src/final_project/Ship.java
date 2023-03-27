@@ -6,6 +6,9 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+/**
+ * A MovingSprite capable of firing cannons and taking damage.
+ */
 public class Ship extends MovingSprite {
     private double health;
 

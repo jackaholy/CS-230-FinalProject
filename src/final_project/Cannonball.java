@@ -5,6 +5,10 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+/**
+ * A projectile that travels to a particular target and deals damage to any Ship
+ * it collides with on impact
+ */
 public class Cannonball extends MovingSprite {
     public static final ImageIcon ICON = new ImageIcon("assets/cannonball.png");
     private static final int SPEED = 120;
