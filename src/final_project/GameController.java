@@ -54,6 +54,14 @@ public class GameController {
 	private Loot lootArray[] = new Loot[lootFrequency];
 	private PlayerShip player;
 	private PirateShip enemy;
+	
+	// Handles how many island should spawn at runtime
+	private int islandFrequency = 5;
+	
+	// Where the islands are stored
+	private Island islandArray[] = new Island[islandFrequency];
+	
+	// The number of enemy ships on screen
 	private Ship[] ships = new Ship[2];
 
 	public static void main(String[] args) {
@@ -208,8 +216,14 @@ public class GameController {
 			// Draw loot on map
 			lootArray[i].draw();
 		}
+		// Create some islands
+		for (int i = 0; i < islandArray.length; i++) {
+		    islandArray[i] = new Island(gameJFrame, new ImageIcon("assets/island_up.png"));
+		    // Draw islands on map
+		    islandArray[i].draw();
+		}
 	}
-
+	
 	/**
 	 * Check if any pieces of loot have been picked up. If so, increase player money
 	 * and create new loot
