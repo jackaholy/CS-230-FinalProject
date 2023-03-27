@@ -192,7 +192,7 @@ public class GameController {
 		player = new PlayerShip(
 				gameJFrame,
 				new ImageIcon("assets/water_bug.png"),
-				300, 300, 0, 100, 90, 30);
+				300, 300, 0, 100, 90, 30, 500);
 
 		// Create an enemy
 		enemy = new PirateShip(
