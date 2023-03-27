@@ -25,6 +25,7 @@ import javax.swing.SwingConstants;
  * The main file of the project. Run this one to start the project
  */
 public class GameController {
+	private static int FRAME_RATE = 120;
 	private Random rand = new Random();
 
 	private JFrame gameJFrame;
@@ -72,42 +73,39 @@ public class GameController {
 			}
 		});
 
-		// TODO: Change back to timer....
-		while (true) {
-			try {
-				// Sleep a few ms every frame to avoid hogging the CPU too much
-				TimeUnit.MILLISECONDS.sleep(10);
-			} catch (InterruptedException e) {
-				System.out.println("Interrupted");
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				// Randomly decide to fire the cannons at the player
+				if (rand.nextInt(250) == 1)
+					enemy.createCannonball(player.getX(), player.getY(), ships);
+
+				// Aim for the cursor
+				player.setTarget(cursorX, cursorY);
+				// Move towards the cursor
+				player.tick();
+
+				// Aim for the player
+				enemy.setTarget(player.getX(), player.getY());
+				// Move towards the player
+				enemy.tick();
+
+				// Check if the two ships are colliding
+				if (player.isColliding(enemy)) {
+					player.takeDamagePerSecond(15);
+					enemy.takeDamagePerSecond(15);
+					enemy.moveAway(player);
+					player.moveAway(enemy);
+				}
+				textAreaPlayerHealth.setText(String.valueOf(player.getHealth()));
+				textAreaEnemyHealth.setText(String.valueOf(enemy.getHealth()));
+
+				// Check if loot can be collected and handle it if it can
+				checkLootCollection();
 			}
+		}, 0, 1000 / FRAME_RATE);
 
-			// Randomly decide to fire the cannons at the player
-			if (rand.nextInt(250) == 1)
-				enemy.createCannonball(player.getX(), player.getY(), ships);
-
-			// Aim for the cursor
-			player.setTarget(cursorX, cursorY);
-			// Move towards the cursor
-			player.tick();
-
-			// Aim for the player
-			enemy.setTarget(player.getX(), player.getY());
-			// Move towards the player
-			enemy.tick();
-
-			// Check if the two ships are colliding
-			if (player.isColliding(enemy)) {
-				player.takeDamagePerSecond(15);
-				enemy.takeDamagePerSecond(15);
-				enemy.moveAway(player);
-				player.moveAway(enemy);
-			}
-			textAreaPlayerHealth.setText(String.valueOf(player.getHealth()));
-			textAreaEnemyHealth.setText(String.valueOf(enemy.getHealth()));
-
-			// Check if loot can be collected and handle it if it can
-			checkLootCollection();
-		}
 	}
 
 	/**
