@@ -18,7 +18,6 @@ public abstract class Sprite {
     protected final JLabel spriteJLabel = new JLabel();
 
     // Current position
-    private double rotationDegrees = 0;
     protected int x;
     protected int y;
 
@@ -31,6 +30,7 @@ public abstract class Sprite {
 
     // The original icon
     private Icon unrotatedIcon;
+    private double rotationDegrees = 0;
     private RotatedIcon rotatedIcon;
 
     protected Sprite(JFrame gameJFrame, Icon image, int x, int y) {
