@@ -7,11 +7,9 @@ import javax.swing.WindowConstants;
 import java.awt.Container;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.concurrent.TimeUnit;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Random;
@@ -19,14 +17,9 @@ import java.util.Random;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.JLabel;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
-import java.awt.Label;
-import java.awt.Toolkit;
-import java.awt.BorderLayout;
 
 /**
  * The main file of the project. Run this one to start the project

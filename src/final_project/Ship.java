@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 /**
  * A MovingSprite capable of firing cannons and taking damage.
  */
-public class Ship extends MovingSprite {
+public abstract class Ship extends MovingSprite {
     private double health;
 
     // Cannonballs we've fired
@@ -33,13 +33,13 @@ public class Ship extends MovingSprite {
      * @param turningSpeed how many degrees to rotate per second
      * @param health       how much health the ship has, arbitarary units
      */
-    public Ship(JFrame gameJFrame, ImageIcon image, int x, int y, double speed, double turningSpeed, int health) {
+    protected Ship(JFrame gameJFrame, ImageIcon image, int x, int y, double speed, double turningSpeed, int health) {
         super(gameJFrame, image, x, y, speed, turningSpeed);
         this.health = health;
     }
 
     @Override
-    protected void tick() {
+    public void tick() {
         // Don't do anything if we're dead
         if (!exists)
             return;

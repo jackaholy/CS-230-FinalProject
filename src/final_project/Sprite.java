@@ -67,7 +67,7 @@ public abstract class Sprite {
     /**
      * Remove the sprite from the game
      */
-    protected void erase() {
+    public void erase() {
         spriteJLabel.setVisible(false);
         exists = false;
     }
@@ -77,7 +77,7 @@ public abstract class Sprite {
      * 
      * @param rotationDegrees degrees from 0 (right)
      */
-    public void setRotation(double rotationDegrees) {
+    protected void setRotation(double rotationDegrees) {
 
         // Restrict angle to 0 < angle < 360
         this.rotationDegrees = (rotationDegrees + 360) % 360;
@@ -127,7 +127,7 @@ public abstract class Sprite {
      * 
      * @param y desired x position.
      */
-    public void setX(int x) {
+    protected void setX(int x) {
         this.x = x;
     }
 
@@ -146,7 +146,7 @@ public abstract class Sprite {
      * 
      * @param y desired y position.
      */
-    public void setY(int y) {
+    protected void setY(int y) {
         this.y = y;
     }
 
@@ -208,7 +208,7 @@ public abstract class Sprite {
      * @param other the sprite to check ours against
      * @return
      */
-    boolean isColliding(Sprite other) {
+    public boolean isColliding(Sprite other) {
         // If one of the sprites doesn't exist,
         // there's no collision
         if (!exists || !other.getExistance()) {

@@ -33,7 +33,7 @@ public class PirateShip extends Ship {
     }
 
     @Override
-    protected void tick() {
+    public void tick() {
         Direction directionToRotate = calculateDirectionToDesiredAngle();
 
         if (shouldAvoidPlayer()) {
@@ -45,7 +45,7 @@ public class PirateShip extends Ship {
     }
 
     @Override
-    protected void erase() {
+    public void erase() {
         // Can we spawn loot here?
         super.erase();
     }
