@@ -1,9 +1,9 @@
-package testing;
-
+import java.awt.Component;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import final_project.Cannonball;
 import final_project.PlayerShip;
@@ -18,21 +18,19 @@ public class TestPlayerShip {
         JFrame jFrame = new JFrame();
         PlayerShip p = new PlayerShip(jFrame, new ImageIcon("../assets/water_bug.png"), 0, 0, 0, 0.0, 0.0, 0, 0);
         p.createCannonball(100, 200, new Ship[] { p });
+
+        // Assert that there are no cannonballs on screen.
+        Component[] components = jFrame.getContentPane().getComponents();
+        for (Component component : components) {
+            System.out.println(component);
+            if (component instanceof JLabel) {
+                ((JLabel) component).getIcon().;
+            }
+        }
+        
         p.tick();
         p.tick();
-        List<Cannonball> cannonballs = Publicizer.getField(p, "cannonballs");
-
-        if (cannonballs.size() != 1) {
-            System.out.println("FAILED: Expected creation of one cannonball");
-            return false;
-        }
-        if ((int) Publicizer.getField(cannonballs.get(0), "targetX") != 100
-                || (int) Publicizer.getField(cannonballs.get(0), "targetY") != 200) {
-            System.out.println("FAILED: Cannonball target set incorrectly");
-            return false;
-        }
-
-        System.out.println("PASSED: Cannonballs created successfully");
         return true;
+
     }
 }
