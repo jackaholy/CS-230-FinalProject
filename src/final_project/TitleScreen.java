@@ -13,7 +13,12 @@ import javax.swing.WindowConstants;
 import java.awt.Font;
 
 /**
- * Create a title screen
+ * Create a title screen with a "Play" button and a "Quit" button. This is the
+ * first window to appear to the user when running the program. In order to
+ * continue to the main game the user must press the "Play" button. If they want
+ * to quit the game they must press the "Quit" button, or close the window.
+ * 
+ * @author jackholy
  */
 @SuppressWarnings("serial")
 public class TitleScreen extends JFrame {
@@ -78,7 +83,7 @@ public class TitleScreen extends JFrame {
 	setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
 	/*
-	 * Taken from ChatGTP. This loop waits for the "play" button to be pressed
+	 * Taken from ChatGTP. This loop waits for the "Play" button to be pressed
 	 * before continuing execution.
 	 */
 	while (!this.isPlayPressed()) {
