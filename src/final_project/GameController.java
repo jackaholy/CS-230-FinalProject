@@ -34,8 +34,8 @@ import java.awt.BorderLayout;
 public class GameController {
 	private static int FRAME_RATE = 120;
 	private Random rand = new Random();
-
-	private JFrame gameJFrame;
+	// Create the window
+	private JFrame gameJFrame = new JFrame("Virtual Voyagers");
 	private JTextArea textAreaLoot = new JTextArea();
 	private JTextArea textAreaPlayerHealth = new JTextArea();
 	private JTextArea textAreaEnemyHealth = new JTextArea();
@@ -55,11 +55,14 @@ public class GameController {
 	private PlayerShip player;
 	private PirateShip enemy;
 	
-	// Handles how many island should spawn at runtime
-	private int islandFrequency = 5;
-	
 	// Where the islands are stored
-	private Island islandArray[] = new Island[islandFrequency];
+	private final Island[] islandArray = {
+		new Island(gameJFrame, new ImageIcon("assets/island_up.png"), 225, 200),
+		new Island(gameJFrame, new ImageIcon("assets/island_down.png"), 700, 200),
+		new Island(gameJFrame, new ImageIcon("assets/island_left.png"), 1300, 150),
+		new Island(gameJFrame, new ImageIcon("assets/island_down.png"), 440, 600),
+		new Island(gameJFrame, new ImageIcon("assets/island_right.png"), 1000, 600)
+	};
 	
 	// The number of enemy ships on screen
 	private Ship[] ships = new Ship[2];
@@ -116,7 +119,22 @@ public class GameController {
 				}
 				textAreaPlayerHealth.setText(String.valueOf(player.getHealth()));
 				textAreaEnemyHealth.setText(String.valueOf(enemy.getHealth()));
-
+				
+				// Check if the player ship is colliding any of the islands
+				for (int i = 0; i < islandArray.length; i++) {
+					if (player.isColliding(islandArray[i])) {
+						player.takeDamagePerSecond(15);
+						player.moveAway(islandArray[i]);
+					}
+					// Check if the enemy ship is colliding with any of the islands
+					if (enemy.isColliding(islandArray[i])) {
+					    enemy.takeDamagePerSecond(15);
+					    enemy.moveAway(islandArray[i]);
+					}
+					textAreaPlayerHealth.setText(String.valueOf(player.getHealth()));
+					textAreaEnemyHealth.setText(String.valueOf(enemy.getHealth()));
+				}
+				
 				// Check if loot can be collected and handle it if it can
 				checkLootCollection();
 			}
@@ -128,8 +146,6 @@ public class GameController {
 	 * Create the window and content pane for the game itself
 	 */
 	private void createWindow() {
-		// The window itself
-		gameJFrame = new JFrame("Virtual Voyagers");
 		// With arbitrary default dimensions
 		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -216,11 +232,9 @@ public class GameController {
 			// Draw loot on map
 			lootArray[i].draw();
 		}
-		// Create some islands
+		// Draw islands on map.
 		for (int i = 0; i < islandArray.length; i++) {
-		    islandArray[i] = new Island(gameJFrame, new ImageIcon("assets/island_up.png"));
-		    // Draw islands on map
-		    islandArray[i].draw();
+		    	islandArray[i].draw();
 		}
 	}
 	
