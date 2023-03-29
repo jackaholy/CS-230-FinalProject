@@ -33,7 +33,7 @@ public class Cannonball extends MovingSprite {
 
         // Set the target and rotate towards it
         setTarget(targetX, targetY);
-        setRotation(calculatedAngleToCoordinates(targetX, targetY));
+        setRotation(calculateAngleToCoordinates(targetX, targetY));
 
         // Don't make heatseeking cannonballs
         setRotationDirection(Direction.NOT_ROTATING);
@@ -42,7 +42,7 @@ public class Cannonball extends MovingSprite {
     @Override
     public void tick() {
         // The angle to the target now
-        int expectedAngle = (int) calculatedAngleToCoordinates(targetX, targetY);
+        int expectedAngle = (int) calculateAngleToCoordinates(targetX, targetY);
 
         // The angle to the target on creation
         int actualAngle = (int) getRotation();
