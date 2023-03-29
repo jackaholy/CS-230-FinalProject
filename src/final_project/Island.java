@@ -49,5 +49,5 @@ public class Island extends Sprite {
     private int getRandomY(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
-    
+
 }
