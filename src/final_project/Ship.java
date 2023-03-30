@@ -74,7 +74,6 @@ public class Ship extends MovingSprite {
     }
 
     public void takeDamagePerSecond(int damage) {
-        System.out.println(damage * changeTime);
         health -= damage * changeTime;
     }
 

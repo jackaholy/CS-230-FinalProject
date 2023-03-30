@@ -14,9 +14,9 @@ public class PlayerShip extends Ship {
 	private final int cannonCooldownMS;
 	private boolean cannonCoolingDown = false;
 
-	public PlayerShip(JFrame gameJFrame, ImageIcon image, int x, int y, int cost, double speed,
+	public PlayerShip(JFrame gameJFrame, ImageIcon image, int cost, double speed,
 			double turningSpeed, int health, int cannonCooldownMS) {
-		super(gameJFrame, image, x, y, speed, turningSpeed, health);
+		super(gameJFrame, image, 500, 300, speed, turningSpeed, health);
 		this.cost = cost;
 		this.cannonCooldownMS = cannonCooldownMS;
 	}
@@ -41,5 +41,9 @@ public class PlayerShip extends Ship {
 		}, cannonCooldownMS);
 		super.createCannonball(targetX, targetY, targets);
 		cannonCoolingDown = true;
+	}
+
+	public int getCost() {
+		return cost;
 	}
 }
