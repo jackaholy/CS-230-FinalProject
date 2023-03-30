@@ -20,12 +20,12 @@ public class Loot extends Sprite {
      * @param gameJFrame the window to add the loot to
      * @param image      the image of the loot
      */
-    protected Loot(JFrame gameJFrame, ImageIcon image) {
-	super(gameJFrame, image, 0, 0);
+    protected Loot(JFrame gameJFrame) {
+        super(gameJFrame, new ImageIcon("assets/loot.png"), 0, 0);
 
-	// Subtract 20 so loot doesn't spawn too close to the content pane border.
-	this.x = getRandomX(20, gameJFrame.getContentPane().getWidth() - 20);
-	this.y = getRandomY(20, gameJFrame.getContentPane().getHeight() - 20);
+        // Subtract 20 so loot doesn't spawn too close to the content pane border.
+        this.x = getRandomX(20, gameJFrame.getContentPane().getWidth() - 20);
+        this.y = getRandomY(20, gameJFrame.getContentPane().getHeight() - 20);
     }
 
     /**
@@ -37,7 +37,7 @@ public class Loot extends Sprite {
      * @param y          the y coordinate the loot will spawn at
      */
     protected Loot(JFrame gameJFrame, ImageIcon image, int x, int y) {
-	super(gameJFrame, image, x, y);
+        super(gameJFrame, image, x, y);
     }
 
     /**
@@ -47,7 +47,7 @@ public class Loot extends Sprite {
      * @param max the maximum x coordinate value that loot could spawn
      */
     private int getRandomX(int min, int max) {
-	return (int) ((Math.random() * (max - min)) + min);
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
     /**
@@ -57,7 +57,7 @@ public class Loot extends Sprite {
      * @param max the maximum y coordinate value that loot could spawn
      */
     private int getRandomY(int min, int max) {
-	return (int) ((Math.random() * (max - min)) + min);
+        return (int) ((Math.random() * (max - min)) + min);
     }
 
     /**
@@ -68,12 +68,12 @@ public class Loot extends Sprite {
      *         false
      */
     protected boolean isCollected(PlayerShip player, int padding) {
-	if (!collected && x - padding <= player.getX() && player.getX() <= (x + this.getWidth() + padding)
-		&& (y - padding <= player.getY() && player.getY() <= (y + this.getHeight() + padding))) {
-	    collected = true;
-	    return true;
-	}
-	return false;
+        if (!collected && x - padding <= player.getX() && player.getX() <= (x + this.getWidth() + padding)
+                && (y - padding <= player.getY() && player.getY() <= (y + this.getHeight() + padding))) {
+            collected = true;
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -83,6 +83,6 @@ public class Loot extends Sprite {
      * @param gameJFrame the window to remove the loot from
      */
     protected void collect(JFrame gameJFrame) {
-	gameJFrame.getContentPane().remove(spriteJLabel);
+        gameJFrame.getContentPane().remove(spriteJLabel);
     }
 }

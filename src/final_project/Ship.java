@@ -40,7 +40,12 @@ public class Ship extends MovingSprite {
 
     @Override
     protected void tick() {
-        // Don't do anything if we're dead
+        // Tell all of our cannonballs to update
+        for (Cannonball cannonBall : cannonballs) {
+            cannonBall.tick();
+        }
+
+        // Don't do anything else if we're dead
         if (!exists)
             return;
 
@@ -52,11 +57,6 @@ public class Ship extends MovingSprite {
             cannonballs.add(new Cannonball(gameJFrame, x, y, cannonTargetX, cannonTargetY, cannonTargets));
             // Mark it as finished
             shouldCreateCannonballNextFrame = false;
-        }
-
-        // Tell all of our cannonballs to update
-        for (Cannonball cannonBall : cannonballs) {
-            cannonBall.tick();
         }
 
         // Die

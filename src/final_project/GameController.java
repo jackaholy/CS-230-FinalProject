@@ -61,18 +61,17 @@ public class GameController {
 	private int cursorX;
 	private int cursorY;
 
-	// Handles how much loot should be onscreen at any given time
-	private int lootFrequency = 20;
-
 	// How much money the player has
 	private int money = 24;
 
 	// Where the loot is stored
-	private Loot lootArray[] = new Loot[lootFrequency];
+	private List<Loot> lootList = new ArrayList<Loot>();
 
 	private int currentPlayerShipIndex = 0;
 	private PlayerShip currentPlayerShip = availableShips[currentPlayerShipIndex];
 	private List<PirateShip> enemies = new ArrayList();
+
+	private long previousTime;
 
 	public static void main(String[] args) {
 		new GameController();
@@ -106,6 +105,9 @@ public class GameController {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
+				for (Loot loot : lootList) {
+					loot.draw();
+				}
 				// Aim for the cursor
 				currentPlayerShip.setTarget(cursorX, cursorY);
 				// Move towards the cursor
@@ -113,9 +115,18 @@ public class GameController {
 				if (rand.nextInt(5000) == 1)
 					enemies.add(new PirateShip(
 							gameJFrame,
-							new ImageIcon("assets/cyber_scourge.png"),
+							new ImageIcon("assets/cyber_scourge.png"), lootList,
 							500, 500, 120, 75,
 							100, 125));
+
+				if (rand.nextInt(75) == 1) {
+					Loot newLoot = new Loot(gameJFrame);
+					lootList.add(newLoot);
+					if (lootList.size() > 20)
+						lootList.remove(0).erase();
+
+					newLoot.draw();
+				}
 
 				// Check if loot can be collected and handle it if it can
 				checkLootCollection();
@@ -125,7 +136,7 @@ public class GameController {
 				// Randomly decide to fire the cannons at the player
 				for (PirateShip enemy : enemies) {
 					if (!enemy.getExistance()) {
-						enemies.remove(enemy);
+						continue;
 					}
 					if (rand.nextInt(250) == 1) {
 						List<Ship> targets = new ArrayList<>();
@@ -154,6 +165,8 @@ public class GameController {
 						currentPlayerShip.moveAway(enemy);
 					}
 					for (PirateShip otherEnemy : enemies) {
+						if (!enemy.getExistance())
+							continue;
 						// Can't collide with self
 						if (otherEnemy == enemy)
 							continue;
@@ -165,7 +178,7 @@ public class GameController {
 							otherEnemy.moveAway(enemy);
 						}
 					}
-
+					textAreaEnemyHealth.setText(String.valueOf(enemy.getHealth()));
 				}
 
 			}
@@ -269,15 +282,9 @@ public class GameController {
 		// Create an enemy
 		enemies.add(new PirateShip(
 				gameJFrame,
-				new ImageIcon("assets/cyber_scourge.png"),
+				new ImageIcon("assets/cyber_scourge.png"), lootList,
 				500, 500, 120, 75,
 				100, 125));
-		// Create some loot
-		for (int i = 0; i < lootArray.length; i++) {
-			lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
-			// Draw loot on map
-			lootArray[i].draw();
-		}
 	}
 
 	/**
@@ -285,8 +292,7 @@ public class GameController {
 	 * and create new loot
 	 */
 	private void checkLootCollection() {
-		for (int i = 0; i < lootArray.length; i++) {
-			Loot loot = lootArray[i];
+		for (Loot loot : lootList) {
 			// when the player comes in contact with the loot make it disappear
 			if (loot != null && loot.isCollected(currentPlayerShip, 10)) {
 				loot.collect(gameJFrame);
@@ -301,9 +307,7 @@ public class GameController {
 				String displayMoney = "" + money;
 				textAreaLoot.setText(displayMoney);
 
-				// Remove the collected loot from the array
-				lootArray[i] = new Loot(gameJFrame, new ImageIcon("assets/loot.png"));
-				lootArray[i].draw();
+				lootList.remove(loot);
 				break;
 			}
 		}
