@@ -65,23 +65,44 @@ public class Ship extends MovingSprite {
 
     }
 
+    /**
+     * Get the ship's current health
+     * 
+     * @return int representing the (truncated) value of the ship's health
+     */
     public int getHealth() {
         return (int) health;
     }
 
+    /**
+     * A one-time hit, like a cannonball
+     * 
+     * @param damage
+     */
     public void takeDamageAbsolute(int damage) {
         health -= damage;
     }
 
+    /**
+     * Continuous damage, like a collision. Deals a slight amount of damage every
+     * time its called, based on the amount of time since the previous tick
+     * 
+     * @param damage
+     */
     public void takeDamagePerSecond(int damage) {
-        System.out.println(damage * changeTime);
         health -= damage * changeTime;
     }
 
+    /**
+     * Requests the creation of a cannonball next tick. Creating a cannonball right
+     * now causes concurrent modification issues, so we store the required
+     * information and create it later.
+     * 
+     * @param targetX X position to fire the cannonball towards
+     * @param targetY Y position to fire the cannonball towards
+     * @param targets Ships to run collision checks on and deal damage to
+     */
     public void createCannonball(int targetX, int targetY, Ship[] targets) {
-        // If we actually create a cannonball here, we can get a
-        // ConcurrentModificationException.
-        // Instead, we just tell the Ship to create it on the next frame
         shouldCreateCannonballNextFrame = true;
         cannonTargetX = targetX;
         cannonTargetY = targetY;
