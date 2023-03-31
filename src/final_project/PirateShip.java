@@ -32,11 +32,13 @@ public class PirateShip extends Ship {
      * @param turnDistance how close it should get to the player before turning
      *                     around to avoid a collision
      */
-    public PirateShip(JFrame gameJFrame, ImageIcon image, List<Loot> lootList, int x, int y, double speed,
+    public PirateShip(JFrame gameJFrame, ImageIcon image, List<Loot> lootList, double speed,
             double turningSpeed, int health,
             int turnDistance) {
         // Create the super class
-        super(gameJFrame, image, x, y, speed, turningSpeed, health);
+        super(gameJFrame, image, rand.nextInt(20, gameJFrame.getContentPane().getWidth() - 20),
+                rand.nextInt(20, gameJFrame.getContentPane().getHeight() - 20), speed, turningSpeed,
+                health);
 
         // Set the lootList
         this.lootList = lootList;

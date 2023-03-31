@@ -95,12 +95,14 @@ public class GameController {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				List<Ship> targets = new ArrayList<>();
-				targets.add(currentPlayerShip);
+				// targets.add(currentPlayerShip);
 				targets.addAll(enemies);
 				currentPlayerShip.createCannonball(cursorX, cursorY, targets.toArray(new Ship[0]));
 			}
 		});
 
+		currentPlayerShip.setX(300);
+		currentPlayerShip.setY(300);
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
@@ -116,7 +118,7 @@ public class GameController {
 					enemies.add(new PirateShip(
 							gameJFrame,
 							new ImageIcon("assets/cyber_scourge.png"), lootList,
-							500, 500, 120, 75,
+							120, 75,
 							100, 125));
 
 				if (rand.nextInt(75) == 1) {
@@ -283,7 +285,7 @@ public class GameController {
 		enemies.add(new PirateShip(
 				gameJFrame,
 				new ImageIcon("assets/cyber_scourge.png"), lootList,
-				500, 500, 120, 75,
+				120, 75,
 				100, 125));
 	}
 
