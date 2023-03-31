@@ -49,6 +49,10 @@ public abstract class MovingSprite extends Sprite {
     // How many milliseconds since tick() was called
     protected float changeTime;
 
+    // How fast to move relative to base speed.
+    // 0.5 = half speed
+    private double speedMultiplier = 1;
+
     /**
      * Class constructor. Sets speed and turning speed, and creates the sprite.
      * 
@@ -177,8 +181,10 @@ public abstract class MovingSprite extends Sprite {
      */
     private void move(double angle) {
         // The exact distance we want to move in each direction
-        double xChangeExact = Math.cos(Math.toRadians(angle)) * speed * changeTime + previousFrameXChangeRemainder;
-        double yChangeExact = Math.sin(Math.toRadians(angle)) * speed * changeTime + previousFrameYChangeRemainder;
+        double xChangeExact = Math.cos(Math.toRadians(angle)) * speed * speedMultiplier * changeTime
+                + previousFrameXChangeRemainder;
+        double yChangeExact = Math.sin(Math.toRadians(angle)) * speed * speedMultiplier * changeTime
+                + previousFrameYChangeRemainder;
 
         if (xChangeExact > 0 && !canMoveLeft())
             xChangeExact = 0;
@@ -200,6 +206,10 @@ public abstract class MovingSprite extends Sprite {
         // Save the remaining distance for the next frame
         previousFrameXChangeRemainder = xChangeExact - xChangeInt;
         previousFrameYChangeRemainder = yChangeExact - yChangeInt;
+    }
+
+    protected void setSpeedMultiplier(double speedMultiplier) {
+        this.speedMultiplier = speedMultiplier;
     }
 
     /**

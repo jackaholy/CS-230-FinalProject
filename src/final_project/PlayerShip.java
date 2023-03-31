@@ -10,6 +10,7 @@ import java.util.TimerTask;
  * ship speed, health and so on will all go here
  */
 public class PlayerShip extends Ship {
+	private int SLOW_DOWN_DISTANCE = 75;
 	private int cost;
 	private final int cannonCooldownMS;
 	private boolean cannonCoolingDown = false;
@@ -25,6 +26,14 @@ public class PlayerShip extends Ship {
 	public void tick() {
 		// Add player tick stuff here
 		setRotationDirection(calculateDirectionToDesiredAngle());
+
+		// Add just a bit of passive regen
+		if (getHealth() < getStartingHealth())
+			takeDamagePerSecond(-0.1);
+
+		if (Math.hypot(getX() - targetX, getY() - targetY) < SLOW_DOWN_DISTANCE) {
+			setSpeedMultiplier(Math.hypot(getX() - targetX, getY() - targetY) / SLOW_DOWN_DISTANCE);
+		}
 		super.tick();
 	}
 
