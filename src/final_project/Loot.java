@@ -20,8 +20,8 @@ public class Loot extends Sprite {
      * @param gameJFrame the window to add the loot to
      * @param image      the image of the loot
      */
-    public Loot(JFrame gameJFrame, ImageIcon image) {
-        super(gameJFrame, image, 0, 0);
+    public Loot(JFrame gameJFrame) {
+        super(gameJFrame, new ImageIcon("assets/loot.png"), 0, 0);
 
         // Subtract 20 so loot doesn't spawn too close to the content pane border.
         this.x = getRandomX(20, gameJFrame.getContentPane().getWidth() - 20);
@@ -36,8 +36,8 @@ public class Loot extends Sprite {
      * @param x          the x coordinate the loot will spawn at
      * @param y          the y coordinate the loot will spawn at
      */
-    protected Loot(JFrame gameJFrame, ImageIcon image, int x, int y) {
-        super(gameJFrame, image, x, y);
+    public Loot(JFrame gameJFrame, int x, int y) {
+        super(gameJFrame, new ImageIcon("assets/loot.png"), x, y);
     }
 
     /**

@@ -60,9 +60,7 @@ public class PirateShip extends Ship {
     @Override
     protected void erase() {
         for (int i = 0; i < 15; i++) {
-            Loot newLoot = new Loot(gameJFrame);
-            newLoot.setX(x + rand.nextInt(-15, 15));
-            newLoot.setY(y + rand.nextInt(-15, 15));
+            Loot newLoot = new Loot(gameJFrame, x + rand.nextInt(-15, 15), y + rand.nextInt(-15, 15));
             lootList.add(newLoot);
         }
         super.erase();
