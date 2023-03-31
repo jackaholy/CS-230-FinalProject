@@ -5,8 +5,8 @@ import javax.swing.JFrame;
 
 /**
  * Loot that spawns on map. Each loot has a randomly assigned x and y
- * coordinate. When the player moves over loot their money count increases by
- * one, and the loot image disappears.
+ * coordinate. When the player moves over loot their money count increases and
+ * the loot image disappears.
  */
 
 public class Loot extends Sprite {
@@ -20,7 +20,7 @@ public class Loot extends Sprite {
      * @param gameJFrame the window to add the loot to
      * @param image      the image of the loot
      */
-    protected Loot(JFrame gameJFrame, ImageIcon image) {
+    public Loot(JFrame gameJFrame, ImageIcon image) {
 	super(gameJFrame, image, 0, 0);
 
 	// Subtract 20 so loot doesn't spawn too close to the content pane border.
@@ -45,6 +45,8 @@ public class Loot extends Sprite {
      * 
      * @param min the minimum x coordinate value that loot could spawn
      * @param max the maximum x coordinate value that loot could spawn
+     * @return a random number between the min and max value. Number can be the min
+     *         or max value.
      */
     private int getRandomX(int min, int max) {
 	return (int) ((Math.random() * (max - min)) + min);
@@ -55,15 +57,18 @@ public class Loot extends Sprite {
      * 
      * @param min the minimum y coordinate value that loot could spawn
      * @param max the maximum y coordinate value that loot could spawn
+     * @return a random number between the min and max value. Number can be the min
+     *         or max value.
      */
     private int getRandomY(int min, int max) {
 	return (int) ((Math.random() * (max - min)) + min);
     }
 
     /**
-     * Is called when the player ship overlaps with the loot objects.
+     * Checks to see if the player ship overlaps with the loot objects.
      * 
-     * @param player the player's boat
+     * @param player  the player's boat
+     * @param padding how much space between the player and loot is available
      * @return boolean true if loot is collected by player ship. Otherwise return
      *         false
      */
@@ -77,8 +82,7 @@ public class Loot extends Sprite {
     }
 
     /**
-     * If the player ship overlaps with the loot objects, erase them from the
-     * JFrame.
+     * Erase the loot from the game.
      * 
      * @param gameJFrame the window to remove the loot from
      */
