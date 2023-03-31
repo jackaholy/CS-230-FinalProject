@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 
 import java.util.List;
 import java.util.Random;
-import java.util.function.Function;
 
 import javax.swing.ImageIcon;
 
