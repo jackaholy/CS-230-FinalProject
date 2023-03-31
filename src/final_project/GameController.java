@@ -62,16 +62,14 @@ public class GameController {
 	private int cursorY;
 
 	// How much money the player has
-	private int money = 24;
+	private int money = 0;
 
 	// Where the loot is stored
-	private List<Loot> lootList = new ArrayList<Loot>();
+	private List<Loot> lootList = new ArrayList<>();
 
 	private int currentPlayerShipIndex = 0;
 	private PlayerShip currentPlayerShip = availableShips[currentPlayerShipIndex];
-	private List<PirateShip> enemies = new ArrayList();
-
-	private long previousTime;
+	private List<PirateShip> enemies = new ArrayList<>();
 
 	/**
 	 * The main method. Literally just creates a new game object
@@ -277,6 +275,8 @@ public class GameController {
 					currentPlayerShip.erase();
 					currentPlayerShip = upgradedShip;
 					upgradeButton.setVisible(false);
+					String displayMoney = "" + money;
+					textAreaLoot.setText(displayMoney);
 				}
 			}
 		});
