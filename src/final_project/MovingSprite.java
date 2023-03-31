@@ -272,10 +272,21 @@ public abstract class MovingSprite extends Sprite {
         return getY() + (getHeight() / 2) < gameJFrame.getContentPane().getHeight();
     }
 
+    /**
+     * Gets the direction this sprite is currently rotating
+     * 
+     * @return
+     */
     public Direction getRotationDirection() {
         return rotationDirection;
     }
 
+    /**
+     * Specifies the direction this sprite should rotate every time rotate() is
+     * called.
+     * 
+     * @param rotationDirection
+     */
     protected void setRotationDirection(Direction rotationDirection) {
         this.rotationDirection = rotationDirection;
     }

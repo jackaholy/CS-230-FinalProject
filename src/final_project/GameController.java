@@ -73,10 +73,18 @@ public class GameController {
 
 	private long previousTime;
 
+	/**
+	 * The main method. Literally just creates a new game object
+	 * 
+	 * @param args boilerplate
+	 */
 	public static void main(String[] args) {
 		new GameController();
 	}
 
+	/**
+	 * Create a new game, entrypoint for entire program
+	 */
 	public GameController() {
 		new TitleScreen();
 		createWindow();
