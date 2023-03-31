@@ -11,6 +11,7 @@ import javax.swing.JFrame;
  */
 public class Ship extends MovingSprite {
     private double health;
+    private final double startingHealth;
 
     // Cannonballs we've fired
     private List<Cannonball> cannonballs = new ArrayList<>();
@@ -36,6 +37,7 @@ public class Ship extends MovingSprite {
     public Ship(JFrame gameJFrame, ImageIcon image, int x, int y, double speed, double turningSpeed, int health) {
         super(gameJFrame, image, x, y, speed, turningSpeed);
         this.health = health;
+        this.startingHealth = health;
     }
 
     @Override
@@ -65,6 +67,10 @@ public class Ship extends MovingSprite {
 
     }
 
+    public int getStartingHealth() {
+        return (int) health;
+    }
+
     public int getHealth() {
         return (int) health;
     }
@@ -73,7 +79,7 @@ public class Ship extends MovingSprite {
         health -= damage;
     }
 
-    public void takeDamagePerSecond(int damage) {
+    public void takeDamagePerSecond(double damage) {
         health -= damage * changeTime;
     }
 
