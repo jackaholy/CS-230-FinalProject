@@ -195,7 +195,7 @@ public class GameController {
 	}
 
 	/**
-	 * Create the window and content pane for the game itself
+	 * Create the window and content pane for the game itself.
 	 */
 	private void createWindow() {
 		// With arbitrary default dimensions
@@ -283,7 +283,7 @@ public class GameController {
 	}
 
 	/**
-	 * Initialize any in-game objects that should exist right as the game starts up
+	 * Initialize any in-game objects that should exist right as the game starts up.
 	 */
 	private void createSprites() {
 		// Create a player
@@ -299,14 +299,14 @@ public class GameController {
 
 	/**
 	 * Check if any pieces of loot have been picked up. If so, increase player money
-	 * and create new loot
+	 * and create new loot.
 	 */
 	private void checkLootCollection() {
 		for (Loot loot : lootList) {
-			// when the player comes in contact with the loot make it disappear
+			// When the player comes in contact with the loot make it disappear
 			if (loot != null && loot.isCollected(currentPlayerShip, 10)) {
 				loot.collect(gameJFrame);
-				// increment totalLoot only once
+				// Increment totalLoot only once
 				money++;
 
 				PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
