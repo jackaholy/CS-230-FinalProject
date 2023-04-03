@@ -1,7 +1,7 @@
 package final_project;
 
 import javax.swing.JFrame;
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 
 /**
  * A sprite that moves in a particular direction and can change direction
@@ -56,19 +56,23 @@ public abstract class MovingSprite extends Sprite {
     /**
      * Class constructor. Sets speed and turning speed, and creates the sprite.
      * 
-     * @param gameJFrame   the game window, passed to sprite
-     * @param image        the image for the sprite, passed to sprite
+     * @param gameJFrame   the game window, passed to
+     *                     {@link Sprite#Sprite(JFrame, javax.swing.Icon, int, int)}
+     * @param image        the image for the sprite, passed to
+     *                     {@link Sprite#Sprite(JFrame, javax.swing.Icon, int, int)}
      * @param x            starting x position
      * @param y            starting y position
      * @param speed        how many pixels the player should move per second
      * @param turningSpeed how many degrees the player should rotate per second
      */
-    public MovingSprite(JFrame gameJFrame, ImageIcon image, int x, int y, double speed,
+    public MovingSprite(JFrame gameJFrame, Icon image, int x, int y, double speed,
             double turningSpeed) {
         super(gameJFrame, image, x, y);
         previousTime = System.currentTimeMillis();
         this.speed = speed;
         this.turningSpeed = turningSpeed;
+        this.targetX = x;
+        this.targetY = y;
     }
 
     /**
@@ -93,8 +97,9 @@ public abstract class MovingSprite extends Sprite {
     }
 
     /**
-     * A single "moment" in game. The instance should rotate and move slightly, and
-     * update the UI
+     * A single "moment" in game. The instance should rotate and move based on time
+     * elapsed since the previous tick and the speed, and
+     * redraw
      */
     protected void tick() {
         if (!exists)
@@ -108,6 +113,8 @@ public abstract class MovingSprite extends Sprite {
     /**
      * Rotate turningSpeed degrees per second in the desired direction.
      * If NOT_ROTATING, do nothing
+     * 
+     * Should be called after {@link MovingSprite#updateTimeChange()}
      */
     private void rotate() {
         if (rotationDirection == Direction.CLOCKWISE) {
@@ -208,6 +215,10 @@ public abstract class MovingSprite extends Sprite {
         previousFrameYChangeRemainder = yChangeExact - yChangeInt;
     }
 
+    /**
+     * 
+     * @param speedMultiplier
+     */
     protected void setSpeedMultiplier(double speedMultiplier) {
         this.speedMultiplier = speedMultiplier;
     }
@@ -220,7 +231,7 @@ public abstract class MovingSprite extends Sprite {
     }
 
     /**
-     * Move away from "other"
+     * Move away from "other" at "speed", such as in the case of a collision
      * 
      * @param other The sprite to move away from
      */
