@@ -33,6 +33,14 @@ public abstract class Sprite {
     private double rotationDegrees = 0;
     private RotatedIcon rotatedIcon;
 
+    /**
+     * Constructor for the sprite
+     * 
+     * @param gameJFrame the frame to add the sprite to
+     * @param image      an Icon for the sprite
+     * @param x          the starting Y
+     * @param y          the starting X
+     */
     protected Sprite(JFrame gameJFrame, Icon image, int x, int y) {
         this.gameJFrame = gameJFrame;
         // Add sprite to play area

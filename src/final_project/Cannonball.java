@@ -33,7 +33,7 @@ public class Cannonball extends MovingSprite {
 
         // Set the target and rotate towards it
         setTarget(targetX, targetY);
-        setRotation(calculatedAngleToCoordinates(targetX, targetY));
+        setRotation(calculateAngleToCoordinates(targetX, targetY));
 
         // Don't make heatseeking cannonballs
         setRotationDirection(Direction.NOT_ROTATING);
@@ -42,7 +42,7 @@ public class Cannonball extends MovingSprite {
     @Override
     public void tick() {
         // The angle to the target now
-        int expectedAngle = (int) calculatedAngleToCoordinates(targetX, targetY);
+        int expectedAngle = (int) calculateAngleToCoordinates(targetX, targetY);
 
         // The angle to the target on creation
         int actualAngle = (int) getRotation();
@@ -51,16 +51,19 @@ public class Cannonball extends MovingSprite {
         // Once we pass the target, the difference should be ~180
         int difference = Math.abs(expectedAngle - actualAngle);
 
+        for (Ship ship : targets) {
+            if (isColliding(ship)) {
+                // We did, hit it
+                ship.takeDamageAbsolute(20);
+                erase();
+                return;
+            }
+        }
+
         // Arbitrary difference tolerance. Too low, cannonball disappears early
         // Too high, cannonball never disappears
         if (difference > 90) {
             // We've reached the target, see if we hit anything
-            for (Ship ship : targets) {
-                if (isColliding(ship)) {
-                    // We did, hit it
-                    ship.takeDamageAbsolute(20);
-                }
-            }
             // Splash! Cannonball's gone
             erase();
             return;

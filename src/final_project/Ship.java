@@ -11,6 +11,7 @@ import javax.swing.JFrame;
  */
 public abstract class Ship extends MovingSprite {
     private double health;
+    private final double startingHealth;
 
     // Cannonballs we've fired
     private List<Cannonball> cannonballs = new ArrayList<>();
@@ -34,11 +35,17 @@ public abstract class Ship extends MovingSprite {
     protected Ship(JFrame gameJFrame, ImageIcon image, int x, int y, double speed, double turningSpeed, int health) {
         super(gameJFrame, image, x, y, speed, turningSpeed);
         this.health = health;
+        this.startingHealth = health;
     }
 
     @Override
-    public void tick() {
-        // Don't do anything if we're dead
+    protected void tick() {
+        // Tell all of our cannonballs to update
+        for (Cannonball cannonBall : cannonballs) {
+            cannonBall.tick();
+        }
+
+        // Don't do anything else if we're dead
         if (!exists)
             return;
 
@@ -55,27 +62,52 @@ public abstract class Ship extends MovingSprite {
             shouldCreateCannonballNextFrame = false;
         }
 
-        // Tell all of our cannonballs to update
-        for (Cannonball cannonBall : cannonballs) {
-            cannonBall.tick();
-        }
-
         // Die
-        if (health <= 0)
+        if (health <= 0) {
             erase();
+
+            // Solve ghost cannons
+            for (Cannonball cannonball : cannonballs) {
+                cannonball.erase();
+            }
+        }
 
     }
 
+    /**
+     * Get the ships initial health
+     * 
+     * @return int representing the health the ship had at first
+     */
+    public int getStartingHealth() {
+        return (int) health;
+    }
+
+    /**
+     * Get the ship's current health
+     * 
+     * @return int representing the (truncated) value of the ship's health
+     */
     public int getHealth() {
         return (int) health;
     }
 
+    /**
+     * A one-time hit, like a cannonball
+     * 
+     * @param damage
+     */
     public void takeDamageAbsolute(int damage) {
         health -= damage;
     }
 
-    public void takeDamagePerSecond(int damage) {
-        System.out.println(damage * changeTime);
+    /**
+     * Continuous damage, like a collision. Deals a slight amount of damage every
+     * time its called, based on the amount of time since the previous tick
+     * 
+     * @param damage
+     */
+    public void takeDamagePerSecond(double damage) {
         health -= damage * changeTime;
     }
 

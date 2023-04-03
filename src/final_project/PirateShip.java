@@ -2,20 +2,28 @@ package final_project;
 
 import javax.swing.JFrame;
 
+import java.util.List;
+import java.util.Random;
+
 import javax.swing.ImageIcon;
 
 /**
  * A pirate. Targets the player but tries to avoid direct collisions.
  */
 public class PirateShip extends Ship {
+    private static Random rand = new Random();
+
     // How close to the player is too close?
     private int turnDistance;
+
+    private List<Loot> lootList;
 
     /**
      * Create the pirate
      * 
      * @param gameJFrame   the window to add the pirate to
      * @param image        the image of the pirate
+     * @param lootList     the list to add loot to after the pirate dies
      * @param x            the starting X position of the pirate
      * @param y            the starting Y position of the pirate
      * @param speed        how fast it should move
@@ -23,11 +31,16 @@ public class PirateShip extends Ship {
      * @param turnDistance how close it should get to the player before turning
      *                     around to avoid a collision
      */
-    public PirateShip(JFrame gameJFrame, ImageIcon image, int x, int y, double speed, double turningSpeed, int health,
+    public PirateShip(JFrame gameJFrame, ImageIcon image, List<Loot> lootList, double speed,
+            double turningSpeed, int health,
             int turnDistance) {
         // Create the super class
-        super(gameJFrame, image, x, y, speed, turningSpeed, health);
+        super(gameJFrame, image, rand.nextInt(20, gameJFrame.getContentPane().getWidth() - 20),
+                rand.nextInt(20, gameJFrame.getContentPane().getHeight() - 20), speed, turningSpeed,
+                health);
 
+        // Set the lootList
+        this.lootList = lootList;
         // Set the turn distance
         this.turnDistance = turnDistance;
     }
@@ -46,7 +59,10 @@ public class PirateShip extends Ship {
 
     @Override
     public void erase() {
-        // Can we spawn loot here?
+        for (int i = 0; i < 15; i++) {
+            Loot newLoot = new Loot(gameJFrame, x + rand.nextInt(-15, 15), y + rand.nextInt(-15, 15));
+            lootList.add(newLoot);
+        }
         super.erase();
     }
 

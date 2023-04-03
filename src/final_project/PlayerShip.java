@@ -10,13 +10,14 @@ import java.util.TimerTask;
  * ship speed, health and so on will all go here
  */
 public class PlayerShip extends Ship {
+	private int SLOW_DOWN_DISTANCE = 75;
 	private int cost;
 	private final int cannonCooldownMS;
 	private boolean cannonCoolingDown = false;
 
-	public PlayerShip(JFrame gameJFrame, ImageIcon image, int x, int y, int cost, double speed,
+	public PlayerShip(JFrame gameJFrame, ImageIcon image, int cost, double speed,
 			double turningSpeed, int health, int cannonCooldownMS) {
-		super(gameJFrame, image, x, y, speed, turningSpeed, health);
+		super(gameJFrame, image, 500, 300, speed, turningSpeed, health);
 		this.cost = cost;
 		this.cannonCooldownMS = cannonCooldownMS;
 	}
@@ -25,6 +26,14 @@ public class PlayerShip extends Ship {
 	public void tick() {
 		// Add player tick stuff here
 		setRotationDirection(calculateDirectionToDesiredAngle());
+
+		// Add just a bit of passive regen
+		if (getHealth() < getStartingHealth())
+			takeDamagePerSecond(-0.1);
+
+		if (Math.hypot(getX() - targetX, getY() - targetY) < SLOW_DOWN_DISTANCE) {
+			setSpeedMultiplier(Math.hypot(getX() - targetX, getY() - targetY) / SLOW_DOWN_DISTANCE);
+		}
 		super.tick();
 	}
 
@@ -41,5 +50,9 @@ public class PlayerShip extends Ship {
 		}, cannonCooldownMS);
 		cannonCoolingDown = true;
 		return super.createCannonball(targetX, targetY, targets);
+	}
+
+	public int getCost() {
+		return cost;
 	}
 }
