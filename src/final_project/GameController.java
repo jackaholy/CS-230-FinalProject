@@ -47,10 +47,10 @@ public class GameController {
 
 	private PlayerShip[] availableShips = {
 			new PlayerShip(gameJFrame, new ImageIcon("assets/water_bug.png"), 0, 100, 90, 30, 800),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/floating_point.png"), 25, 125, 120, 50, 500),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/byte_me.png"), 75, 150, 140, 100, 300),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/sea++.png"), 125, 80, 70, 250, 100),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/world_wide_wet.png"), 200, 50, 40, 400, 50)
+			new PlayerShip(gameJFrame, new ImageIcon("assets/floating_point.png"), 20, 125, 120, 50, 500),
+			new PlayerShip(gameJFrame, new ImageIcon("assets/byte_me.png"), 50, 150, 140, 100, 300),
+			new PlayerShip(gameJFrame, new ImageIcon("assets/sea++.png"), 100, 125, 70, 250, 100),
+			new PlayerShip(gameJFrame, new ImageIcon("assets/world_wide_wet.png"), 150, 50, 40, 400, 50)
 	};
 
 	private JTextArea textAreaLoot = new JTextArea();
