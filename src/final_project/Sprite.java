@@ -172,34 +172,13 @@ public abstract class Sprite {
      * Get the cordinates of this Sprites' corners (if it's represented as a rotated
      * rectangle)
      * 
-     * ChatGPT was used for this function. Comments are my own.
-     * 
      * @return
      */
     public Point[] getCorners() {
-        // The distance from the center to the edge of the hitbox
-        double halfWidth = ((double) unrotatedIcon.getIconWidth() / 2) * COLLISION_SCALE_FACTOR;
-        double halfHeight = ((double) unrotatedIcon.getIconHeight() / 2) * COLLISION_SCALE_FACTOR;
-        // 0 if horizontal, 1 if vertical
-        double sin = Math.sin(Math.toRadians(rotationDegrees));
-        // 1 if horizontal, 0 if vertical
-        double cos = Math.cos(Math.toRadians(rotationDegrees));
-
-        // Construct each of the points
-        Point[] corners = new Point[4];
-        corners[0] = new Point(
-                (int) (this.x + halfWidth * cos + halfHeight * sin),
-                (int) (this.y + halfWidth * sin - halfHeight * cos));
-        corners[1] = new Point(
-                (int) (this.x - halfWidth * cos + halfHeight * sin),
-                (int) (this.y - halfWidth * sin - halfHeight * cos));
-        corners[2] = new Point(
-                (int) (this.x - halfWidth * cos - halfHeight * sin),
-                (int) (this.y - halfWidth * sin + halfHeight * cos));
-        corners[3] = new Point(
-                (int) (this.x + halfWidth * cos - halfHeight * sin),
-                (int) (this.y + halfWidth * sin + halfHeight * cos));
-        return corners;
+        int scaledWidth = (int) ((double) rotatedIcon.getIconWidth() * COLLISION_SCALE_FACTOR);
+        int scaledHeight = (int) ((double) rotatedIcon.getIconHeight() * COLLISION_SCALE_FACTOR);
+        return SpriteHelper.getCorners(this.x, this.y, scaledHeight, scaledWidth,
+                rotationDegrees);
     }
 
     /**
@@ -214,29 +193,6 @@ public abstract class Sprite {
         if (!exists || !other.getExistance()) {
             return false;
         }
-        // Get the corners of both sprites
-        Point[] ourCorners = getCorners();
-        Point[] theirCorners = other.getCorners();
-        // Construct Polygons from the points
-        Polygon ourPoly = new Polygon();
-        for (Point corner : ourCorners) {
-            ourPoly.addPoint(corner.x, corner.y);
-        }
-        Polygon theirPoly = new Polygon();
-        for (Point corner : theirCorners) {
-            theirPoly.addPoint(corner.x, corner.y);
-        }
-        // Check if our polygon contains any of their corners
-        for (Point corner : theirCorners) {
-            if (ourPoly.contains(corner))
-                return true;
-        }
-        // Check if their polygon contains any of our corners
-        for (Point corner : ourCorners) {
-            if (theirPoly.contains(corner))
-                return true;
-        }
-        // If none of the corners are within the bounds, we're not colliding
-        return false;
+        return SpriteHelper.isColliding(getCorners(), other.getCorners());
     }
 }

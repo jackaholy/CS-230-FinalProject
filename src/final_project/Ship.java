@@ -18,9 +18,7 @@ public abstract class Ship extends MovingSprite {
     // Variables to store information for cannonball creation, see comment in
     // createCannonball
     private boolean shouldCreateCannonballNextFrame = false;
-    private int cannonTargetX;
-    private int cannonTargetY;
-    private Ship[] cannonTargets;
+    private Cannonball queuedCannonball;
 
     /**
      * Create a Ship
@@ -49,7 +47,10 @@ public abstract class Ship extends MovingSprite {
         // If a cannonball has been requested for this game
         if (shouldCreateCannonballNextFrame) {
             // Create one
-            cannonballs.add(new Cannonball(gameJFrame, x, y, cannonTargetX, cannonTargetY, cannonTargets));
+            if (queuedCannonball != null) {
+                cannonballs.add(queuedCannonball);
+                queuedCannonball = null;
+            }
             // Mark it as finished
             shouldCreateCannonballNextFrame = false;
         }
@@ -78,13 +79,17 @@ public abstract class Ship extends MovingSprite {
         health -= damage * changeTime;
     }
 
-    public void createCannonball(int targetX, int targetY, Ship[] targets) {
-        // If we actually create a cannonball here, we can get a
-        // ConcurrentModificationException.
-        // Instead, we just tell the Ship to create it on the next frame
-        shouldCreateCannonballNextFrame = true;
-        cannonTargetX = targetX;
-        cannonTargetY = targetY;
-        cannonTargets = targets;
+    /**
+     * Requests the creation of a cannonball next tick. Creating a cannonball right
+     * now causes concurrent modification issues, so we store the required
+     * information and create it later.
+     * 
+     * @param targetX X position to fire the cannonball towards
+     * @param targetY Y position to fire the cannonball towards
+     * @param targets Ships to run collision checks on and deal damage to
+     */
+    public Cannonball createCannonball(int targetX, int targetY, Ship[] targets) {
+        queuedCannonball = new Cannonball(gameJFrame, x, y, targetX, targetY, targets);
+        return queuedCannonball;
     }
 }

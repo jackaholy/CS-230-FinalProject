@@ -29,17 +29,17 @@ public class PlayerShip extends Ship {
 	}
 
 	@Override
-	public void createCannonball(int targetX, int targetY, Ship[] targets) {
+	public Cannonball createCannonball(int targetX, int targetY, Ship[] targets) {
 		if (cannonCoolingDown) {
-			return;
+			return null;
 		}
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			public void run() {
 				cannonCoolingDown = false;
-			};
+			}
 		}, cannonCooldownMS);
-		super.createCannonball(targetX, targetY, targets);
 		cannonCoolingDown = true;
+		return super.createCannonball(targetX, targetY, targets);
 	}
 }
