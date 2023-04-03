@@ -125,25 +125,6 @@ public abstract class MovingSprite extends Sprite {
     }
 
     /**
-     * Calculate the angle of the target relative to this MovingSprite.
-     * 
-     * @return Angle of the target in degrees relative to the MovingSprite bounded
-     *         from 0-360.
-     *         Such that right = 0, up = 90,
-     *         left = 180,down = 270
-     */
-    protected double calculateAngleToCoordinates(int xCoord, int yCoord) {
-        // Calculate difference in X and Y
-        double xDiff = this.getX() - xCoord;
-        double yDiff = this.getY() - yCoord;
-
-        // Calculate the angle between the sprite and the cursor
-        double desiredAngle = Math.toDegrees(Math.atan2(yDiff, xDiff));
-        // Restrict angle to 0 < angle < 360
-        return (desiredAngle + 360) % 360;
-    }
-
-    /**
      * Return the direction to turn in order to get closer to the target angle. If
      * the target is to the moving sprite's right, will return CLOCKWISE, if to the
      * left, COUNTER_CLOCKWISE
@@ -151,7 +132,7 @@ public abstract class MovingSprite extends Sprite {
      * @return CLOCKWISE or COUNTERCLOCKWISE
      */
     protected Direction calculateDirectionToDesiredAngle() {
-        double desiredAngle = calculateAngleToCoordinates(targetX, targetY);
+        double desiredAngle = MovingSpriteHelper.calculateAngleToCoordinates(x, y, targetX, targetY);
         // Find the difference between current and target angle
         double angleDiff = desiredAngle - this.getRotation();
 
@@ -236,13 +217,7 @@ public abstract class MovingSprite extends Sprite {
      * @param other The sprite to move away from
      */
     protected void moveAway(Sprite other) {
-        // Get the angle towards "other"
-        double towardsAngle = calculateAngleToCoordinates(other.getX(), other.getY());
-        // Get the opposite angle
-        double awayAngle = towardsAngle + 180;
-        // Force it to be 0-360
-        awayAngle = awayAngle % 360;
-
+        double awayAngle = MovingSpriteHelper.calculateAwayAngle(x, y, other.getX(), other.getY());
         move(awayAngle);
     }
 
