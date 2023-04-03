@@ -18,50 +18,39 @@ public class Loot extends Sprite {
      * Create loot with random coordinates.
      * 
      * @param gameJFrame the window to add the loot to
-     * @param image      the image of the loot
      */
     public Loot(JFrame gameJFrame) {
-        super(gameJFrame, new ImageIcon("assets/loot.png"), 0, 0);
+	super(gameJFrame, new ImageIcon("assets/loot.png"), 0, 0);
 
-        // Subtract 20 so loot doesn't spawn too close to the content pane border.
-        this.x = getRandomX(20, gameJFrame.getContentPane().getWidth() - 20);
-        this.y = getRandomY(20, gameJFrame.getContentPane().getHeight() - 20);
+	/*
+	 * Set the x and y coordinate of the loot to be added to the JFrame. Subtract 20
+	 * so loot doesn't spawn too close to the content pane border.
+	 */
+	this.x = getRandomCoord(20, gameJFrame.getContentPane().getWidth() - 20);
+	this.y = getRandomCoord(20, gameJFrame.getContentPane().getHeight() - 20);
     }
 
     /**
-     * Create loot with specific coordinates.
+     * Create loot with specified coordinates.
      * 
      * @param gameJFrame the window to add the loot to
-     * @param image      the image of the loot
      * @param x          the x coordinate the loot will spawn at
      * @param y          the y coordinate the loot will spawn at
      */
     public Loot(JFrame gameJFrame, int x, int y) {
-        super(gameJFrame, new ImageIcon("assets/loot.png"), x, y);
+	super(gameJFrame, new ImageIcon("assets/loot.png"), x, y);
     }
 
     /**
-     * Set the x coordinate of the loot to a random x value in the window.
+     * Get a random coordinate between a specified maximum and minimum value.
      * 
-     * @param min the minimum x coordinate value that loot could spawn
-     * @param max the maximum x coordinate value that loot could spawn
+     * @param min the minimum coordinate value that loot could spawn
+     * @param max the maximum coordinate value that loot could spawn
      * @return a random number between the min and max value. Number can be the min
      *         or max value.
      */
-    private int getRandomX(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
-    }
-
-    /**
-     * Set the y coordinate of the loot to a random y value in the window.
-     * 
-     * @param min the minimum y coordinate value that loot could spawn
-     * @param max the maximum y coordinate value that loot could spawn
-     * @return a random number between the min and max value. Number can be the min
-     *         or max value.
-     */
-    private int getRandomY(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
+    private int getRandomCoord(int min, int max) {
+	return (int) ((Math.random() * (max - min)) + min);
     }
 
     /**
@@ -73,12 +62,12 @@ public class Loot extends Sprite {
      *         false
      */
     protected boolean isCollected(PlayerShip player, int padding) {
-        if (!collected && x - padding <= player.getX() && player.getX() <= (x + this.getWidth() + padding)
-                && (y - padding <= player.getY() && player.getY() <= (y + this.getHeight() + padding))) {
-            collected = true;
-            return true;
-        }
-        return false;
+	if (!collected && x - padding <= player.getX() && player.getX() <= (x + this.getWidth() + padding)
+		&& (y - padding <= player.getY() && player.getY() <= (y + this.getHeight() + padding))) {
+	    collected = true;
+	    return true;
+	}
+	return false;
     }
 
     /**
@@ -87,6 +76,6 @@ public class Loot extends Sprite {
      * @param gameJFrame the window to remove the loot from
      */
     protected void collect(JFrame gameJFrame) {
-        gameJFrame.getContentPane().remove(spriteJLabel);
+	gameJFrame.getContentPane().remove(spriteJLabel);
     }
 }
