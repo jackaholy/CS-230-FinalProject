@@ -27,7 +27,7 @@ public class PlayerShip extends Ship {
 		// Add player tick stuff here
 		setRotationDirection(calculateDirectionToDesiredAngle());
 
-		// Add just a bit of passive regen
+		// Add some passive health regeneration
 		if (getHealth() < getStartingHealth())
 			takeDamagePerSecond(-0.1);
 

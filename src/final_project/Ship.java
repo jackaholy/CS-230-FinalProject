@@ -13,10 +13,10 @@ public abstract class Ship extends MovingSprite {
     private double health;
     private final double startingHealth;
 
-    // Cannonballs we've fired
+    // Cannon balls we've fired
     private List<Cannonball> cannonballs = new ArrayList<>();
 
-    // Variables to store information for cannonball creation, see comment in
+    // Variables to store information for cannon ball creation, see comment in
     // createCannonball
     private boolean shouldCreateCannonballNextFrame = false;
     private Cannonball queuedCannonball;
@@ -30,7 +30,7 @@ public abstract class Ship extends MovingSprite {
      * @param y            starting Y position
      * @param speed        how many pixels to move per second
      * @param turningSpeed how many degrees to rotate per second
-     * @param health       how much health the ship has, arbitarary units
+     * @param health       how much health the ship has, arbitrary units
      */
     protected Ship(JFrame gameJFrame, ImageIcon image, int x, int y, double speed, double turningSpeed, int health) {
         super(gameJFrame, image, x, y, speed, turningSpeed);
@@ -40,7 +40,7 @@ public abstract class Ship extends MovingSprite {
 
     @Override
     protected void tick() {
-        // Tell all of our cannonballs to update
+        // Tell all of our cannon balls to update
         for (Cannonball cannonBall : cannonballs) {
             cannonBall.tick();
         }
@@ -51,7 +51,7 @@ public abstract class Ship extends MovingSprite {
 
         super.tick();
 
-        // If a cannonball has been requested for this game
+        // If a cannon ball has been requested for this game
         if (shouldCreateCannonballNextFrame) {
             // Create one
             if (queuedCannonball != null) {
@@ -93,7 +93,7 @@ public abstract class Ship extends MovingSprite {
     }
 
     /**
-     * A one-time hit, like a cannonball
+     * A one-time hit, like a cannon ball
      * 
      * @param damage
      */
@@ -112,12 +112,12 @@ public abstract class Ship extends MovingSprite {
     }
 
     /**
-     * Requests the creation of a cannonball next tick. Creating a cannonball right
+     * Requests the creation of a cannon ball next tick. Creating a cannon ball right
      * now causes concurrent modification issues, so we store the required
      * information and create it later.
      * 
-     * @param targetX X position to fire the cannonball towards
-     * @param targetY Y position to fire the cannonball towards
+     * @param targetX X position to fire the cannon ball towards
+     * @param targetY Y position to fire the cannon ball towards
      * @param targets Ships to run collision checks on and deal damage to
      */
     public Cannonball createCannonball(int targetX, int targetY, Ship[] targets) {
