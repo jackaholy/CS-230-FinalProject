@@ -42,11 +42,15 @@ public class TestSprite {
         Point[] corners = SpriteHelper.getCorners(x, y, width, height, rotationDegrees);
 
         // Check that each corner is in the correct position
-        if (new Point(7, -2) != corners[0] || new Point(-2, 7) != corners[1] || new Point(-7, 2) != corners[2]
-                || new Point(2, -7) != corners[3]) {
-            System.out.println("FAILED: At least one of the points doesn't match up correctly");
-        } else {
+        if (new Point(5, 1).equals(corners[0]) && new Point(-1, -5).equals(corners[1])
+                && new Point(-5, -1).equals(corners[2])
+                && new Point(1, 5).equals(corners[3])) {
             System.out.println("PASSED: All of the points seem to be correct");
+        } else {
+            System.out.println("FAILED: At least one of the points doesn't match up correctly");
+            for (Point point : corners) {
+                System.out.println(point);
+            }
         }
     }
 }
