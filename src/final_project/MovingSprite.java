@@ -8,24 +8,6 @@ import javax.swing.Icon;
  * towards a target.
  */
 public abstract class MovingSprite extends Sprite {
-    /**
-     * A direction to rotate
-     */
-    public enum Direction {
-        /**
-         * The sprite will rotate turningSpeed degrees clockwise every second when
-         * tick() is called
-         */
-        CLOCKWISE,
-        /**
-         * The sprite will rotate turningSpeed degrees counter clockwise every second
-         * when tick() is called
-         */
-        COUNTER_CLOCKWISE,
-        /** The sprite will not rotate */
-        NOT_ROTATING
-    }
-
     protected Direction rotationDirection = Direction.NOT_ROTATING;
 
     // Position of the thing to sail towards
@@ -121,30 +103,6 @@ public abstract class MovingSprite extends Sprite {
             setRotation(getRotation() + turningSpeed * changeTime);
         } else if (rotationDirection == Direction.COUNTER_CLOCKWISE) {
             setRotation(getRotation() - turningSpeed * changeTime);
-        }
-    }
-
-    /**
-     * Return the direction to turn in order to get closer to the target angle. If
-     * the target is to the moving sprite's right, will return CLOCKWISE, if to the
-     * left, COUNTER_CLOCKWISE
-     * 
-     * @return CLOCKWISE or COUNTERCLOCKWISE
-     */
-    protected Direction calculateDirectionToDesiredAngle() {
-        double desiredAngle = MovingSpriteHelper.calculateAngleToCoordinates(x, y, targetX, targetY);
-        // Find the difference between current and target angle
-        double angleDiff = desiredAngle - this.getRotation();
-
-        // Force it to be positive
-        if (angleDiff < 0)
-            angleDiff += 360;
-
-        // Find shorter rotation direction
-        if (angleDiff > 180) {
-            return MovingSprite.Direction.COUNTER_CLOCKWISE;
-        } else {
-            return MovingSprite.Direction.CLOCKWISE;
         }
     }
 

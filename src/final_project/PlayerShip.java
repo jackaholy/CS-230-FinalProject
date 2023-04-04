@@ -24,8 +24,10 @@ public class PlayerShip extends Ship {
 
 	@Override
 	public void tick() {
-		// Add player tick stuff here
-		setRotationDirection(calculateDirectionToDesiredAngle());
+		double desiredAngle = MovingSpriteHelper.calculateAngleToCoordinates(x, y, targetX, targetY);
+		Direction desiredDirection = MovingSpriteHelper.calculateDirectionToDesiredAngle(desiredAngle, getRotation());
+
+		setRotationDirection(desiredDirection);
 
 		// Add some passive health regeneration
 		if (getHealth() < getStartingHealth())

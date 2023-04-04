@@ -47,7 +47,10 @@ public class PirateShip extends Ship {
 
     @Override
     public void tick() {
-        Direction directionToRotate = calculateDirectionToDesiredAngle();
+        double desiredAngle = MovingSpriteHelper.calculateAngleToCoordinates(x, y, targetX, targetY);
+        Direction directionToRotate = MovingSpriteHelper.calculateDirectionToDesiredAngle(desiredAngle, getRotation());
+
+        setRotationDirection(directionToRotate);
 
         if (shouldAvoidPlayer()) {
             directionToRotate = oppositeDirection(directionToRotate);

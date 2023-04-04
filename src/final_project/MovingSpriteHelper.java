@@ -32,4 +32,27 @@ public class MovingSpriteHelper {
         // Restrict angle to 0 < angle < 360
         return (desiredAngle + 360) % 360;
     }
+
+    /**
+     * Return the direction to turn in order to get closer to the target angle. If
+     * the target is to the moving sprite's right, will return CLOCKWISE, if to the
+     * left, COUNTER_CLOCKWISE
+     * 
+     * @return CLOCKWISE or COUNTERCLOCKWISE
+     */
+    public static Direction calculateDirectionToDesiredAngle(double desiredAngle, double currentAngle) {
+        // Find the difference between current and target angle
+        double angleDiff = desiredAngle - currentAngle;
+
+        // Force it to be positive
+        if (angleDiff < 0)
+            angleDiff += 360;
+
+        // Find shorter rotation direction
+        if (angleDiff > 180) {
+            return Direction.COUNTER_CLOCKWISE;
+        } else {
+            return Direction.CLOCKWISE;
+        }
+    }
 }
