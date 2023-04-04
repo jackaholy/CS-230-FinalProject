@@ -72,7 +72,7 @@ public class GameController {
 	}
 
 	/**
-	 * Create a new game, entrypoint for entire program
+	 * Create a new game, entry point for entire program
 	 */
 	public GameController() {
 		new TitleScreen();
@@ -87,7 +87,7 @@ public class GameController {
 			}
 		});
 
-		// Every time the player clicks the cannonball, fire the cannon
+		// Every time the player clicks the cannon ball, fire the cannon
 		gameJFrame.getContentPane().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -251,6 +251,7 @@ public class GameController {
 		gameJFrame.getContentPane().add(textAreaEnemyHealth);
 
 		upgradeButton.setBounds(gameJFrame.getContentPane().getWidth() - 110, 10, 100, 50);
+		upgradeButton.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
 		upgradeButton.setVisible(false);
 		gameJFrame.getContentPane().add(upgradeButton);
 		upgradeButton.addActionListener(new ActionListener() {
