@@ -5,8 +5,17 @@ public class MovingSpriteHelper {
     private MovingSpriteHelper() {
     }
 
+    /**
+     * Calculate the angle away from a specific point
+     * 
+     * @param currentX the reference X position (where we are)
+     * @param currentY the reference Y position (where we are)
+     * @param avoidX   the X position to angle away from
+     * @param avoidY   the Y position to angle away from
+     * @return the angle away from the position to avoid
+     */
     public static double calculateAwayAngle(int currentX, int currentY, int avoidX, int avoidY) {
-        // Get the angle towards "other"
+        // Get the angle towards the point to avoid
         double towardsAngle = calculateAngleToCoordinates(currentX, currentY, avoidX, avoidY);
         // Get the opposite angle
         double awayAngle = towardsAngle + 180;
@@ -54,5 +63,30 @@ public class MovingSpriteHelper {
         } else {
             return Direction.CLOCKWISE;
         }
+    }
+
+    /**
+     * Returns the opposite of the given direction
+     * 
+     * @param given the direction to invert
+     * @return the opposite direction
+     */
+    public static Direction oppositeDirection(Direction given) {
+        if (given == Direction.COUNTER_CLOCKWISE)
+            return Direction.CLOCKWISE;
+        else if (given == Direction.CLOCKWISE)
+            return Direction.COUNTER_CLOCKWISE;
+        return Direction.NOT_ROTATING;
+    }
+
+    /**
+     * Calculate the difference in time from the given (past) time, to now
+     * 
+     * @param previousTime the previous time (in milliseconds)
+     * @return the change in time from the previous to the current time
+     */
+    public static float calculateTimeChange(long previousTime) {
+        long currentTime = System.currentTimeMillis();
+        return (currentTime - previousTime) / 1000f;
     }
 }

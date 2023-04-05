@@ -73,9 +73,8 @@ public abstract class MovingSprite extends Sprite {
      * Calculate how much time has passed since the previous tick
      */
     protected void updateTimeChange() {
-        long currentTime = System.currentTimeMillis();
-        changeTime = (currentTime - previousTime) / 1000f;
-        previousTime = currentTime;
+        changeTime = MovingSpriteHelper.calculateTimeChange(previousTime);
+        previousTime = System.currentTimeMillis();
     }
 
     /**
@@ -104,20 +103,6 @@ public abstract class MovingSprite extends Sprite {
         } else if (rotationDirection == Direction.COUNTER_CLOCKWISE) {
             setRotation(getRotation() - turningSpeed * changeTime);
         }
-    }
-
-    /**
-     * Returns the opposite of the given direction
-     * 
-     * @param given the direction to invert
-     * @return the opposite direction
-     */
-    protected Direction oppositeDirection(Direction given) {
-        if (given == Direction.COUNTER_CLOCKWISE)
-            return Direction.CLOCKWISE;
-        else if (given == Direction.CLOCKWISE)
-            return Direction.COUNTER_CLOCKWISE;
-        return Direction.NOT_ROTATING;
     }
 
     /**

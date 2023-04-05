@@ -53,7 +53,7 @@ public class PirateShip extends Ship {
         setRotationDirection(directionToRotate);
 
         if (shouldAvoidPlayer()) {
-            directionToRotate = oppositeDirection(directionToRotate);
+            directionToRotate = MovingSpriteHelper.oppositeDirection(directionToRotate);
         }
 
         setRotationDirection(directionToRotate);
