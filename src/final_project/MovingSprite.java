@@ -73,8 +73,13 @@ public abstract class MovingSprite extends Sprite {
      * Calculate how much time has passed since the previous tick
      */
     protected void updateTimeChange() {
-        changeTime = MovingSpriteHelper.calculateTimeChange(previousTime);
-        previousTime = System.currentTimeMillis();
+        long currentTime = System.currentTimeMillis();
+        changeTime = (currentTime - previousTime) / 1000f;
+        if (changeTime >= 1)
+            // It's been more than 1 second since the previous frame. Bad things are
+            // happening!
+            changeTime = 0;
+        previousTime = currentTime;
     }
 
     /**

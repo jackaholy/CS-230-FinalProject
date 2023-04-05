@@ -35,6 +35,8 @@ public class PlayerShip extends Ship {
 
 		if (Math.hypot(getX() - targetX, getY() - targetY) < SLOW_DOWN_DISTANCE) {
 			setSpeedMultiplier(Math.hypot(getX() - targetX, getY() - targetY) / SLOW_DOWN_DISTANCE);
+		} else {
+			setSpeedMultiplier(1);
 		}
 		super.tick();
 	}
