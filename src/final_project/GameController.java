@@ -61,6 +61,7 @@ public class GameController {
 	private int currentPlayerShipIndex = 0;
 	private PlayerShip currentPlayerShip = availableShips[currentPlayerShipIndex];
 	private List<PirateShip> enemies = new ArrayList<>();
+	private List<PirateShip> enemiesToRemoveNextTick = new ArrayList<>();
 
 	/**
 	 * The main method. Literally just creates a new game object
@@ -101,6 +102,11 @@ public class GameController {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
+				for (PirateShip enemy : enemiesToRemoveNextTick) {
+					enemies.remove(enemy);
+				}
+				enemiesToRemoveNextTick.clear();
+
 				for (Loot loot : lootList) {
 					loot.draw();
 				}
@@ -108,7 +114,7 @@ public class GameController {
 				currentPlayerShip.setTarget(cursorX, cursorY);
 				// Move towards the cursor
 				currentPlayerShip.tick();
-				if (rand.nextInt(5000) == 1)
+				if (rand.nextInt(2000 * enemies.size()) == 1)
 					enemies.add(new PirateShip(
 							gameJFrame,
 							new ImageIcon("assets/cyber_scourge.png"), lootList,
@@ -132,6 +138,7 @@ public class GameController {
 				// Randomly decide to fire the cannons at the player
 				for (PirateShip enemy : enemies) {
 					if (!enemy.getExistance()) {
+						enemiesToRemoveNextTick.add(enemy);
 						continue;
 					}
 					int fireRate = 250;
@@ -178,9 +185,10 @@ public class GameController {
 						}
 					}
 					textAreaEnemyHealth.setText(String.valueOf(enemy.getHealth()));
-				}
 
+				}
 			}
+
 		}, 0, 1000 / FRAME_RATE);
 
 	}
