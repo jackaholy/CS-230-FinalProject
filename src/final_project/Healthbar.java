@@ -1,5 +1,9 @@
 package final_project;
 
+import java.awt.Color;
+
+import java.awt.Color;
+
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
@@ -17,6 +21,7 @@ public class Healthbar {
         this.startingHealth = startingHealth;
         progressBar.setMaximum(startingHealth);
         progressBar.setValue(startingHealth);
+        progressBar.setForeground(Color.green);
         progressBar.setVisible(false);
     }
 
