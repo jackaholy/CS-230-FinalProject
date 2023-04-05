@@ -89,6 +89,10 @@ public abstract class MovingSprite extends Sprite {
     protected void updateTimeChange() {
         long currentTime = System.currentTimeMillis();
         changeTime = (currentTime - previousTime) / 1000f;
+        if (changeTime >= 1)
+            // It's been more than 1 second since the previous frame. Bad things are
+            // happening!
+            changeTime = 0;
         previousTime = currentTime;
     }
 

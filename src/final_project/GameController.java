@@ -97,9 +97,6 @@ public class GameController {
 				currentPlayerShip.createCannonball(cursorX, cursorY, targets.toArray(new Ship[0]));
 			}
 		});
-
-		currentPlayerShip.setX(300);
-		currentPlayerShip.setY(300);
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
