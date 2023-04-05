@@ -46,6 +46,7 @@ public abstract class Sprite {
 
         // Assign instance variables
         this.unrotatedIcon = image;
+        this.rotatedIcon = new RotatedIcon(unrotatedIcon);
         this.x = x;
         this.y = y;
     }
