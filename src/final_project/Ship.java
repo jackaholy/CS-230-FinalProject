@@ -15,6 +15,7 @@ public abstract class Ship extends MovingSprite {
 
     // Cannon balls we've fired
     private List<Cannonball> cannonballs = new ArrayList<>();
+    Healthbar healthbar;
 
     // Variables to store information for cannon ball creation, see comment in
     // createCannonball
@@ -36,6 +37,32 @@ public abstract class Ship extends MovingSprite {
         super(gameJFrame, image, x, y, speed, turningSpeed);
         this.health = health;
         this.startingHealth = health;
+        healthbar = new Healthbar(gameJFrame, (int) startingHealth, getWidth());
+        healthbar.updatePosition(x, y);
+    }
+
+    @Override
+    public void setX(int x) {
+        super.setX(x);
+        healthbar.updatePosition(x, y);
+    }
+
+    @Override
+    public void setY(int y) {
+        super.setY(y);
+        healthbar.updatePosition(x, y);
+    }
+
+    @Override
+    protected void erase() {
+        healthbar.setVisible(false);
+        super.erase();
+    }
+
+    @Override
+    protected void draw() {
+        healthbar.setVisible(true);
+        super.draw();
     }
 
     @Override
@@ -99,6 +126,7 @@ public abstract class Ship extends MovingSprite {
      */
     public void takeDamageAbsolute(int damage) {
         health -= damage;
+        healthbar.setHealth((int) health);
     }
 
     /**
@@ -109,10 +137,12 @@ public abstract class Ship extends MovingSprite {
      */
     public void takeDamagePerSecond(double damage) {
         health -= damage * changeTime;
+        healthbar.setHealth((int) health);
     }
 
     /**
-     * Requests the creation of a cannon ball next tick. Creating a cannon ball right
+     * Requests the creation of a cannon ball next tick. Creating a cannon ball
+     * right
      * now causes concurrent modification issues, so we store the required
      * information and create it later.
      * 
