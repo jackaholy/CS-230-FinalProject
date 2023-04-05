@@ -40,8 +40,8 @@ public class GameController {
 			new PlayerShip(gameJFrame, new ImageIcon("assets/water_bug.png"), 0, 100, 90, 30, 800),
 			new PlayerShip(gameJFrame, new ImageIcon("assets/floating_point.png"), 20, 125, 120, 50, 500),
 			new PlayerShip(gameJFrame, new ImageIcon("assets/byte_me.png"), 50, 150, 140, 100, 300),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/sea++.png"), 100, 125, 70, 250, 100),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/world_wide_wet.png"), 150, 50, 40, 400, 50)
+			new PlayerShip(gameJFrame, new ImageIcon("assets/sea++.png"), 100, 125, 100, 250, 100),
+			new PlayerShip(gameJFrame, new ImageIcon("assets/world_wide_wet.png"), 150, 100, 90, 400, 50)
 	};
 
 	private JTextArea textAreaLoot = new JTextArea();
@@ -137,7 +137,10 @@ public class GameController {
 					if (!enemy.getExistance()) {
 						continue;
 					}
-					if (rand.nextInt(250) == 1) {
+					int fireRate = 250;
+					if (enemy instanceof FinalBoss)
+						fireRate = 75;
+					if (rand.nextInt(fireRate) == 1) {
 						List<Ship> targets = new ArrayList<>();
 						targets.add(currentPlayerShip);
 
@@ -256,6 +259,10 @@ public class GameController {
 		gameJFrame.getContentPane().add(upgradeButton);
 		upgradeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (currentPlayerShipIndex > availableShips.length - 1)
+					return;
+				if (currentPlayerShipIndex == availableShips.length - 2)
+					enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 1000, 300));
 				PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
 				if (money >= upgradedShip.getCost()) {
 					money -= upgradedShip.getCost();
@@ -300,7 +307,8 @@ public class GameController {
 				loot.collect(gameJFrame);
 				// Increment totalLoot only once
 				money++;
-
+				if (currentPlayerShipIndex >= availableShips.length - 1)
+					return;
 				PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
 				if (money >= upgradedShip.getCost()) {
 					upgradeButton.setVisible(true);
