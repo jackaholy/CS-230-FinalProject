@@ -10,7 +10,10 @@ import javax.swing.JFrame;
 public class Cannonball extends MovingSprite {
     public static final ImageIcon ICON = new ImageIcon("assets/cannonball.png");
     private static final int SPEED = 120;
+    private static final int TRAVEL_DISTANCE = 300;
     private Ship[] targets;
+    private int startX;
+    private int startY;
 
     /**
      * Create a cannonball
@@ -26,6 +29,9 @@ public class Cannonball extends MovingSprite {
         // Create a moving sprite
         super(gameJFrame, ICON, startX, startY, SPEED, 0);
 
+        this.startX = startX;
+        this.startY = startY;
+
         // Save Ships to collide with
         this.targets = targetShips;
 
@@ -39,16 +45,6 @@ public class Cannonball extends MovingSprite {
 
     @Override
     public void tick() {
-        // The angle to the target now
-        int expectedAngle = (int) calculateAngleToCoordinates(targetX, targetY);
-
-        // The angle to the target on creation
-        int actualAngle = (int) getRotation();
-
-        // The difference between the angles
-        // Once we pass the target, the difference should be ~180
-        int difference = Math.abs(expectedAngle - actualAngle);
-
         for (Ship ship : targets) {
             if (isColliding(ship)) {
                 // We did, hit it
@@ -57,10 +53,9 @@ public class Cannonball extends MovingSprite {
                 return;
             }
         }
-
-        // Arbitrary difference tolerance. Too low, cannonball disappears early
-        // Too high, cannonball never disappears
-        if (difference > 90) {
+        boolean canMove = canMoveDown() && canMoveLeft() && canMoveRight() && canMoveUp();
+        // See how far the cannonball has travelled
+        if (Math.hypot(startX - x, startY - y) > TRAVEL_DISTANCE || !canMove) {
             // We've reached the target, see if we hit anything
             // Splash! Cannonball's gone
             erase();
