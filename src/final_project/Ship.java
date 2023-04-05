@@ -106,7 +106,7 @@ public class Ship extends MovingSprite {
      * @return int representing the health the ship had at first
      */
     public int getStartingHealth() {
-        return (int) health;
+        return (int) startingHealth;
     }
 
     /**

@@ -29,8 +29,7 @@ public class PlayerShip extends Ship {
 
 		// Add some passive health regeneration
 		if (getHealth() < getStartingHealth())
-			takeDamagePerSecond(-0.1);
-
+			takeDamagePerSecond(-1);
 		if (Math.hypot(getX() - targetX, getY() - targetY) < SLOW_DOWN_DISTANCE) {
 			setSpeedMultiplier(Math.hypot(getX() - targetX, getY() - targetY) / SLOW_DOWN_DISTANCE);
 		} else {
