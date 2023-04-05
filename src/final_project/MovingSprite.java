@@ -174,7 +174,7 @@ public abstract class MovingSprite extends Sprite {
      * 
      * @return boolean, whether or not the sprite can move left
      */
-    private boolean canMoveLeft() {
+    protected boolean canMoveLeft() {
         return (getX() - (getWidth() / 2)) > 0;
     }
 
@@ -184,7 +184,7 @@ public abstract class MovingSprite extends Sprite {
      * @return boolean, whether or not the sprite can move up
      */
 
-    private boolean canMoveUp() {
+    protected boolean canMoveUp() {
         return getY() - (getHeight() / 2) > 0;
     }
 
@@ -193,7 +193,7 @@ public abstract class MovingSprite extends Sprite {
      * 
      * @return boolean, whether or not the sprite can move right
      */
-    private boolean canMoveRight() {
+    protected boolean canMoveRight() {
         return getX() + (getWidth() / 2) < gameJFrame.getContentPane().getWidth();
     }
 
@@ -202,7 +202,7 @@ public abstract class MovingSprite extends Sprite {
      * 
      * @return boolean, whether or not the sprite can move down
      */
-    private boolean canMoveDown() {
+    protected boolean canMoveDown() {
         return getY() + (getHeight() / 2) < gameJFrame.getContentPane().getHeight();
     }
 
