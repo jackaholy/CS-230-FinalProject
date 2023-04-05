@@ -45,8 +45,6 @@ public class GameController {
 	};
 
 	private JTextArea textAreaLoot = new JTextArea();
-	private JTextArea textAreaPlayerHealth = new JTextArea();
-	private JTextArea textAreaEnemyHealth = new JTextArea();
 	private JButton upgradeButton = new JButton("Upgrade");
 	// Last known coordinates of the player
 	private int cursorX;
@@ -114,7 +112,7 @@ public class GameController {
 				currentPlayerShip.setTarget(cursorX, cursorY);
 				// Move towards the cursor
 				currentPlayerShip.tick();
-				if (rand.nextInt(2000 * enemies.size()) == 1)
+				if (rand.nextInt((2000 * enemies.size()) + 1000) == 1)
 					enemies.add(new PirateShip(
 							gameJFrame,
 							new ImageIcon("assets/cyber_scourge.png"), lootList,
@@ -132,8 +130,6 @@ public class GameController {
 
 				// Check if loot can be collected and handle it if it can
 				checkLootCollection();
-				textAreaPlayerHealth.setText(String.valueOf(currentPlayerShip.getHealth()));
-				textAreaEnemyHealth.setText(String.valueOf(enemies.get(0).getHealth()));
 
 				// Randomly decide to fire the cannons at the player
 				for (PirateShip enemy : enemies) {
@@ -184,7 +180,6 @@ public class GameController {
 							otherEnemy.moveAway(enemy);
 						}
 					}
-					textAreaEnemyHealth.setText(String.valueOf(enemy.getHealth()));
 
 				}
 			}
@@ -217,19 +212,6 @@ public class GameController {
 		lblLoot.setBounds(19, 18, 61, 16);
 		gameJFrame.getContentPane().add(lblLoot);
 
-		// Label for the amount of health the user has left
-		JLabel lblUserHealth = new JLabel("Health: ");
-		lblUserHealth.setHorizontalAlignment(SwingConstants.LEFT);
-		lblUserHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
-		lblUserHealth.setBounds(19, 48, 76, 16);
-		gameJFrame.getContentPane().add(lblUserHealth);
-
-		// Label for the amount of health the enemy has left
-		JLabel lblEnemyHealth = new JLabel("Enemy's Health: ");
-		lblEnemyHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
-		lblEnemyHealth.setBounds(19, 69, 144, 33);
-		gameJFrame.getContentPane().add(lblEnemyHealth);
-
 		// Displays the amount of loot the user has collected
 
 		textAreaLoot.setBackground(new Color(30, 144, 255));
@@ -238,25 +220,8 @@ public class GameController {
 		textAreaLoot.setText("0");
 		textAreaLoot.setBounds(77, 11, 30, 33);
 		gameJFrame.getContentPane().add(textAreaLoot);
-
-		// Displays the amount of health the user has left
-		textAreaPlayerHealth.setBackground(new Color(30, 144, 255));
-		textAreaPlayerHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
-		textAreaPlayerHealth.setEditable(false);
-		textAreaPlayerHealth.setText("100");
-		textAreaPlayerHealth.setBounds(87, 40, 43, 33);
-		gameJFrame.getContentPane().add(textAreaPlayerHealth);
-
 		// Show the window and player
 		gameJFrame.setVisible(true);
-
-		// Displays the amount of health the enemy has left
-		textAreaEnemyHealth.setBackground(new Color(30, 144, 255));
-		textAreaEnemyHealth.setEditable(false);
-		textAreaEnemyHealth.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
-		textAreaEnemyHealth.setText("100");
-		textAreaEnemyHealth.setBounds(164, 69, 30, 31);
-		gameJFrame.getContentPane().add(textAreaEnemyHealth);
 
 		upgradeButton.setBounds(gameJFrame.getContentPane().getWidth() - 110, 10, 100, 50);
 		upgradeButton.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
