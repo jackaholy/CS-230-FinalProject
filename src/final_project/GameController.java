@@ -11,6 +11,8 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Timer;
@@ -94,6 +96,33 @@ public class GameController {
 				// targets.add(currentPlayerShip);
 				targets.addAll(enemies);
 				currentPlayerShip.createCannonball(cursorX, cursorY, targets.toArray(new Ship[0]));
+			}
+		});
+		gameJFrame.getContentPane().requestFocus();
+		gameJFrame.getContentPane().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == 85) {
+					if (currentPlayerShipIndex > availableShips.length - 1)
+						return;
+					if (currentPlayerShipIndex == availableShips.length - 2)
+						enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 1000, 300));
+					PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
+					if (money >= upgradedShip.getCost()) {
+						money -= upgradedShip.getCost();
+						currentPlayerShipIndex++;
+						upgradedShip.tick();
+						upgradedShip.setX(currentPlayerShip.getX());
+						upgradedShip.setY(currentPlayerShip.getY());
+						upgradedShip.setRotation(currentPlayerShip.getRotation());
+						currentPlayerShip.erase();
+						currentPlayerShip = upgradedShip;
+						upgradeButton.setVisible(false);
+						String displayMoney = "" + money;
+						textAreaLoot.setText(displayMoney);
+					}
+				}
+				super.keyPressed(e);
 			}
 		});
 		Timer timer = new Timer();
@@ -229,24 +258,7 @@ public class GameController {
 		gameJFrame.getContentPane().add(upgradeButton);
 		upgradeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (currentPlayerShipIndex > availableShips.length - 1)
-					return;
-				if (currentPlayerShipIndex == availableShips.length - 2)
-					enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 1000, 300));
-				PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
-				if (money >= upgradedShip.getCost()) {
-					money -= upgradedShip.getCost();
-					currentPlayerShipIndex++;
-					upgradedShip.tick();
-					upgradedShip.setX(currentPlayerShip.getX());
-					upgradedShip.setY(currentPlayerShip.getY());
-					upgradedShip.setRotation(currentPlayerShip.getRotation());
-					currentPlayerShip.erase();
-					currentPlayerShip = upgradedShip;
-					upgradeButton.setVisible(false);
-					String displayMoney = "" + money;
-					textAreaLoot.setText(displayMoney);
-				}
+
 			}
 		});
 	}
