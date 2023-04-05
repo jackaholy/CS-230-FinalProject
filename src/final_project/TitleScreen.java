@@ -17,9 +17,8 @@ import java.awt.Font;
  * first window to appear to the user when running the program. In order to
  * continue to the main game the user must press the "Play" button. If they want
  * to quit the game they must press the "Quit" button, or close the window.
- * 
- * @author jackholy
  */
+
 @SuppressWarnings("serial")
 public class TitleScreen extends JFrame {
     // Flag to keep track of whether the play button is pressed
