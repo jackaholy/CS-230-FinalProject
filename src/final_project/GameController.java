@@ -32,7 +32,25 @@ import javax.swing.SwingConstants;
  * The main file of the project. Run this one to start the project
  */
 public class GameController {
+	// Number of ticks per second
 	private static final int FRAME_RATE = 120;
+	// 1 / X chance of each pirate firing their cannon every tick
+	private static final int PIRATE_CANNON_FIRE_ODDS = 400;
+	// 1 / X chance of the boss firing its cannon every tick
+	private static final int BOSS_PIRATE_CANNON_FIRE_ODDS = 75;
+	// 1 / X chance of loot spawning every tick
+	private static final int LOOT_SPAWN_ODDS = 150;
+	// Maximum amount of loot to naturally spawn at a time
+	// More may appear if pirates drop it
+	private static final int TOTAL_LOOT = 10;
+	// 1 / X chance of a pirate spawning every tick
+	private static final int BASE_PIRATE_SPAWN_ODDS = 200;
+	// Reduce the chances by X for every pirate that already exists
+	private static final int PER_PIRATE_SPAWN_ODDS_INCREASE = 2000;
+	// How much damage to deal to colliding ships every second
+	private static final int COLLISION_DAMAGE_PER_SECOND = 15;
+
+	private boolean freeze = false;
 
 	private Random rand = new Random();
 
@@ -47,7 +65,7 @@ public class GameController {
 	};
 
 	private JTextArea textAreaLoot = new JTextArea();
-	private JButton upgradeButton = new JButton("Upgrade");
+	private JLabel lblUpgrade = new JLabel();
 	// Last known coordinates of the player
 	private int cursorX;
 	private int cursorY;
@@ -61,7 +79,7 @@ public class GameController {
 	private int currentPlayerShipIndex = 0;
 	private PlayerShip currentPlayerShip = availableShips[currentPlayerShipIndex];
 	private List<PirateShip> enemies = new ArrayList<>();
-	private List<PirateShip> enemiesToRemoveNextTick = new ArrayList<>();
+	private List<PirateShip> deadEnemies = new ArrayList<>();
 
 	/**
 	 * The main method. Literally just creates a new game object
@@ -79,138 +97,29 @@ public class GameController {
 		new TitleScreen();
 		createWindow();
 		createSprites();
-		gameJFrame.getContentPane().addMouseMotionListener(new MouseInputAdapter() {
-			@Override
-			public void mouseMoved(MouseEvent e) {
-				// Every time the cursor moves, save the new coordinates
-				cursorX = e.getX();
-				cursorY = e.getY();
-			}
-		});
+		registerEventListeners();
 
-		// Every time the player clicks the cannon ball, fire the cannon
-		gameJFrame.getContentPane().addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				List<Ship> targets = new ArrayList<>();
-				// targets.add(currentPlayerShip);
-				targets.addAll(enemies);
-				currentPlayerShip.createCannonball(cursorX, cursorY, targets.toArray(new Ship[0]));
-			}
-		});
-		gameJFrame.getContentPane().requestFocus();
-		gameJFrame.getContentPane().addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == 85) {
-					if (currentPlayerShipIndex > availableShips.length - 1)
-						return;
-					if (currentPlayerShipIndex == availableShips.length - 2)
-						enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 1000, 300));
-					PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
-					if (money >= upgradedShip.getCost()) {
-						money -= upgradedShip.getCost();
-						currentPlayerShipIndex++;
-						upgradedShip.tick();
-						upgradedShip.setX(currentPlayerShip.getX());
-						upgradedShip.setY(currentPlayerShip.getY());
-						upgradedShip.setRotation(currentPlayerShip.getRotation());
-						currentPlayerShip.erase();
-						currentPlayerShip = upgradedShip;
-						upgradeButton.setVisible(false);
-						String displayMoney = "" + money;
-						textAreaLoot.setText(displayMoney);
-					}
-				}
-				super.keyPressed(e);
-			}
-		});
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				for (PirateShip enemy : enemiesToRemoveNextTick) {
-					enemies.remove(enemy);
-				}
-				enemiesToRemoveNextTick.clear();
+				if (freeze)
+					return;
+				lblUpgrade.setBounds(gameJFrame.getContentPane().getWidth() / 2 - lblUpgrade.getWidth() / 2,
+						gameJFrame.getContentPane().getHeight() - lblUpgrade.getHeight(), 200, 20);
+				lblUpgrade.setVisible(true);
 
-				for (Loot loot : lootList) {
-					loot.draw();
-				}
-				// Aim for the cursor
-				currentPlayerShip.setTarget(cursorX, cursorY);
-				// Move towards the cursor
-				currentPlayerShip.tick();
-				if (rand.nextInt((2000 * enemies.size()) + 1000) == 1)
-					enemies.add(new PirateShip(
-							gameJFrame,
-							new ImageIcon("assets/cyber_scourge.png"), lootList,
-							120, 75,
-							100, 125));
+				removeDeadEnemies();
 
-				if (rand.nextInt(75) == 1) {
-					Loot newLoot = new Loot(gameJFrame);
-					lootList.add(newLoot);
-					if (lootList.size() > 20)
-						lootList.remove(0).erase();
-
-					newLoot.draw();
-				}
-
-				// Check if loot can be collected and handle it if it can
+				updatePlayer();
 				checkLootCollection();
 
-				// Randomly decide to fire the cannons at the player
-				for (PirateShip enemy : enemies) {
-					if (!enemy.getExistance()) {
-						enemiesToRemoveNextTick.add(enemy);
-						continue;
-					}
-					int fireRate = 250;
-					if (enemy instanceof FinalBoss)
-						fireRate = 75;
-					if (rand.nextInt(fireRate) == 1) {
-						List<Ship> targets = new ArrayList<>();
-						targets.add(currentPlayerShip);
+				updateEnemies();
 
-						for (Ship potentialTarget : enemies) {
-							// Don't let a pirate shoot itself, but let them shoot each other
-							if (potentialTarget != enemy) {
-								targets.add(potentialTarget);
-							}
-						}
-						enemy.createCannonball(currentPlayerShip.getX(), currentPlayerShip.getY(),
-								targets.toArray(new Ship[0]));
-					}
+				redrawLoot();
 
-					// Aim for the player
-					enemy.setTarget(currentPlayerShip.getX(), currentPlayerShip.getY());
-					// Move towards the player
-					enemy.tick();
-
-					// Check if the two ships are colliding
-					if (currentPlayerShip.isColliding(enemy)) {
-						currentPlayerShip.takeDamagePerSecond(15);
-						enemy.takeDamagePerSecond(15);
-						enemy.moveAway(currentPlayerShip);
-						currentPlayerShip.moveAway(enemy);
-					}
-					for (PirateShip otherEnemy : enemies) {
-						if (!enemy.getExistance())
-							continue;
-						// Can't collide with self
-						if (otherEnemy == enemy)
-							continue;
-
-						if (enemy.isColliding(otherEnemy)) {
-							enemy.takeDamagePerSecond(15);
-							otherEnemy.takeDamagePerSecond(15);
-							enemy.moveAway(otherEnemy);
-							otherEnemy.moveAway(enemy);
-						}
-					}
-
-				}
+				attemptLootSpawn();
+				attemptEnemySpawn();
 			}
 
 		}, 0, 1000 / FRAME_RATE);
@@ -221,6 +130,8 @@ public class GameController {
 	 * Create the window and content pane for the game itself.
 	 */
 	private void createWindow() {
+		lblUpgrade
+				.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
 		// With arbitrary default dimensions
 		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -249,18 +160,12 @@ public class GameController {
 		textAreaLoot.setText("0");
 		textAreaLoot.setBounds(77, 11, 30, 33);
 		gameJFrame.getContentPane().add(textAreaLoot);
-		// Show the window and player
+
+		lblUpgrade.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
+		lblUpgrade.setVisible(true);
+		gameJFrame.getContentPane().add(lblUpgrade);
+
 		gameJFrame.setVisible(true);
-
-		upgradeButton.setBounds(gameJFrame.getContentPane().getWidth() - 110, 10, 100, 50);
-		upgradeButton.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
-		upgradeButton.setVisible(false);
-		gameJFrame.getContentPane().add(upgradeButton);
-		upgradeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-			}
-		});
 	}
 
 	/**
@@ -278,6 +183,46 @@ public class GameController {
 				100, 125));
 	}
 
+	private void registerEventListeners() {
+		gameJFrame.getContentPane().addMouseMotionListener(new MouseInputAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				freeze = true;
+				// Every time the cursor moves, save the new coordinates
+				cursorX = e.getX();
+				cursorY = e.getY();
+				freeze = false;
+			}
+		});
+
+		// Every time the player clicks the mouse, fire the cannon
+		gameJFrame.getContentPane().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				freeze = true;
+				fireCannon();
+				freeze = false;
+			}
+		});
+
+		gameJFrame.getContentPane().requestFocus();
+		gameJFrame.getContentPane().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				freeze = true;
+				if (e.getKeyCode() == 85) {
+					// "U"
+					upgradeShip();
+				} else if (e.getKeyCode() == 32) {
+					// Space
+					fireCannon();
+				}
+				super.keyPressed(e);
+				freeze = false;
+			}
+		});
+	}
+
 	/**
 	 * Check if any pieces of loot have been picked up. If so, increase player money
 	 * and create new loot.
@@ -293,7 +238,7 @@ public class GameController {
 					return;
 				PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
 				if (money >= upgradedShip.getCost()) {
-					upgradeButton.setVisible(true);
+					lblUpgrade.setText("Press \"U\" to upgrade");
 				}
 
 				String displayMoney = "" + money;
@@ -301,6 +246,145 @@ public class GameController {
 
 				lootList.remove(loot);
 				break;
+			}
+		}
+	}
+
+	private void upgradeShip() {
+		freeze = true;
+		PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
+		if (money < upgradedShip.getCost())
+			return;
+
+		if (currentPlayerShipIndex > availableShips.length - 1)
+			return;
+		if (currentPlayerShipIndex == availableShips.length - 2)
+			enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 1000, 300));
+		money -= upgradedShip.getCost();
+		currentPlayerShipIndex++;
+		upgradedShip.tick();
+		upgradedShip.setX(currentPlayerShip.getX());
+		upgradedShip.setY(currentPlayerShip.getY());
+		upgradedShip.setRotation(currentPlayerShip.getRotation());
+		currentPlayerShip.erase();
+		currentPlayerShip = upgradedShip;
+		lblUpgrade
+				.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
+		String displayMoney = "" + money;
+		textAreaLoot.setText(displayMoney);
+		freeze = false;
+	}
+
+	private void fireCannon() {
+		List<Ship> targets = new ArrayList<>();
+		// targets.add(currentPlayerShip);
+		targets.addAll(enemies);
+		currentPlayerShip.createCannonball(cursorX, cursorY, targets.toArray(new Ship[0]));
+	}
+
+	private void removeDeadEnemies() {
+		for (PirateShip enemy : deadEnemies) {
+			enemies.remove(enemy);
+		}
+		deadEnemies.clear();
+	}
+
+	private void redrawLoot() {
+		for (Loot loot : lootList) {
+			loot.draw();
+		}
+	}
+
+	private void updatePlayer() {
+		// Aim for the cursor
+		currentPlayerShip.setTarget(cursorX, cursorY);
+		// Move towards the cursor
+		currentPlayerShip.tick();
+	}
+
+	private void attemptEnemySpawn() {
+		if (rand.nextInt((PER_PIRATE_SPAWN_ODDS_INCREASE * enemies.size()) + BASE_PIRATE_SPAWN_ODDS) == 1)
+			enemies.add(new PirateShip(
+					gameJFrame,
+					new ImageIcon("assets/cyber_scourge.png"), lootList,
+					120, 75,
+					100, 125));
+	}
+
+	private void attemptLootSpawn() {
+		if (rand.nextInt(LOOT_SPAWN_ODDS) == 1) {
+			Loot newLoot = new Loot(gameJFrame);
+			lootList.add(newLoot);
+			if (lootList.size() > TOTAL_LOOT)
+				lootList.remove(0).erase();
+
+			newLoot.draw();
+		}
+	}
+
+	private void updateEnemies() {
+		for (PirateShip enemy : enemies) {
+			// If the enemy doesn't exist, skip and mark for removal
+			if (!enemy.getExistance()) {
+				deadEnemies.add(enemy);
+				continue;
+			}
+			updateEnemy(enemy);
+			attemptFireCannon(enemy);
+			checkPlayerCollision(enemy);
+			checkEnemyCollision(enemy);
+		}
+	}
+
+	private void attemptFireCannon(PirateShip enemy) {
+		int fireRate = PIRATE_CANNON_FIRE_ODDS;
+		if (enemy instanceof FinalBoss)
+			fireRate = BOSS_PIRATE_CANNON_FIRE_ODDS;
+		if (rand.nextInt(fireRate) == 1) {
+			List<Ship> targets = new ArrayList<>();
+			targets.add(currentPlayerShip);
+
+			for (Ship potentialTarget : enemies) {
+				// Don't let a pirate shoot itself, but let them shoot each other
+				if (potentialTarget != enemy) {
+					targets.add(potentialTarget);
+				}
+			}
+			enemy.createCannonball(currentPlayerShip.getX(), currentPlayerShip.getY(),
+					targets.toArray(new Ship[0]));
+		}
+	}
+
+	private void updateEnemy(PirateShip enemy) {
+		// Aim for the player
+		enemy.setTarget(currentPlayerShip.getX(), currentPlayerShip.getY());
+		// Move towards the player
+		enemy.tick();
+	}
+
+	private void checkPlayerCollision(PirateShip enemy) {
+		// Check if the two ships are colliding
+		if (currentPlayerShip.isColliding(enemy)) {
+			currentPlayerShip.takeDamagePerSecond(COLLISION_DAMAGE_PER_SECOND);
+			enemy.takeDamagePerSecond(COLLISION_DAMAGE_PER_SECOND);
+			enemy.moveAway(currentPlayerShip);
+			currentPlayerShip.moveAway(enemy);
+		}
+	}
+
+	private void checkEnemyCollision(PirateShip enemy) {
+		for (PirateShip otherEnemy : enemies) {
+			if (!enemy.getExistance())
+				continue;
+			// Can't collide with self
+			if (otherEnemy == enemy)
+				continue;
+
+			if (enemy.isColliding(otherEnemy)) {
+				enemy.takeDamagePerSecond(COLLISION_DAMAGE_PER_SECOND);
+				otherEnemy.takeDamagePerSecond(COLLISION_DAMAGE_PER_SECOND);
+				enemy.moveAway(otherEnemy);
+				otherEnemy.moveAway(enemy);
 			}
 		}
 	}

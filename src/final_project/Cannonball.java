@@ -11,6 +11,7 @@ public class Cannonball extends MovingSprite {
     public static final ImageIcon ICON = new ImageIcon("assets/cannonball.png");
     private static final int SPEED = 120;
     private static final int TRAVEL_DISTANCE = 300;
+    private static final int DAMAGE = 20;
     private Ship[] targets;
     private int startX;
     private int startY;
@@ -48,7 +49,7 @@ public class Cannonball extends MovingSprite {
         for (Ship ship : targets) {
             if (isColliding(ship)) {
                 // We did, hit it
-                ship.takeDamageAbsolute(20);
+                ship.takeDamageAbsolute(DAMAGE);
                 erase();
                 return;
             }
