@@ -15,7 +15,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Timer;
+import javax.swing.Timer;
 import java.util.TimerTask;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,15 +94,14 @@ public class GameController {
 	 * Create a new game, entry point for entire program
 	 */
 	public GameController() {
-		new TitleScreen();
+		// new TitleScreen();
 		createWindow();
 		createSprites();
 		registerEventListeners();
 
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
+		Timer timer = new Timer(1000 / FRAME_RATE, new ActionListener() {
 			@Override
-			public void run() {
+			public void actionPerformed(ActionEvent arg0) {
 				if (freeze)
 					return;
 				lblUpgrade.setBounds(gameJFrame.getContentPane().getWidth() / 2 - lblUpgrade.getWidth() / 2,
@@ -120,10 +119,10 @@ public class GameController {
 
 				attemptLootSpawn();
 				attemptEnemySpawn();
+
 			}
-
-		}, 0, 1000 / FRAME_RATE);
-
+		});
+		timer.start();
 	}
 
 	/**
