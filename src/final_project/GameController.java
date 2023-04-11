@@ -94,7 +94,7 @@ public class GameController {
 	 * Create a new game, entry point for entire program
 	 */
 	public GameController() {
-		// new TitleScreen();
+		new TitleScreen();
 		createWindow();
 		createSprites();
 		registerEventListeners();
