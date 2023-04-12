@@ -1,29 +1,33 @@
 # Virtual Voyagers
+## Table of Contents
 
 ## Introduction
 
 Get ready to set sail! This manual will give you everything you need to collect loot, fight off pirates, and upgrade to the best ship in the sea.
 
-## Running
+## Authors
+Justin Forseth
+Jack Holy
+
+## Installation
 
 Make sure you have java and javac installed.
 
 ```bash
 git clone https://github.com/jackaholy/CS-230-FinalProject.git
 cd CS-230-FinalProject/src
-javac final_project/GameController.java
-cd ../bin
-java src.final_project.GameController
+javac -d .. final_project/GameController.java
+cd ..
+java final_project.GameController
 ```
 
-## Getting Started
 
-### Title Screen
+## Gameplay
 ![[title_screen.png]]
 
 Click "Play" to begin, click "Quit" to quit the program
+src.
 
-### Gameplay
 ![[game_screen.png]]
 
 #### Heads Up Display
@@ -44,3 +48,21 @@ To collect loot, just sail over it. You can use your collected loot to upgrade y
 If you bump into the enemy ship, it'll deal damage to both you and the other ship. Enemies will try to avoid colliding with you, but sometimes they can't turn quick enough!
 
 You can ram other ships to deal a lot of damage quickly, but be careful not to sink yourself in the process. 
+
+#### Upgrading the Ship
+
+#### Ending the Game
+##### Winning
+##### Losing
+##### Playing Again
+
+## Development Process
+### Vision Statement
+### Gantt Chart
+### Testing
+
+## Technical Documentation
+### Flowchart
+### UML
+### Code Snippets
+### Javadoc
