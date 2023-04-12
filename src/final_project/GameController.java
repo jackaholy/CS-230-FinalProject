@@ -1,7 +1,6 @@
 package final_project;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
@@ -16,7 +15,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.Timer;
-import java.util.TimerTask;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,7 +24,6 @@ import javax.swing.JLabel;
 import java.awt.Font;
 
 import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
 
 /**
  * The main file of the project. Run this one to start the project
@@ -50,6 +47,8 @@ public class GameController {
 	// How much damage to deal to colliding ships every second
 	private static final int COLLISION_DAMAGE_PER_SECOND = 15;
 
+	// Flag to disable ticks while another operation completes.
+	// Prevents concurrency issues when event listeners fire
 	private boolean freeze = false;
 
 	private Random rand = new Random();
@@ -119,7 +118,6 @@ public class GameController {
 
 				attemptLootSpawn();
 				attemptEnemySpawn();
-
 			}
 		});
 		timer.start();
@@ -181,6 +179,9 @@ public class GameController {
 				100, 125));
 	}
 
+	/**
+	 * Add event listeners for cursor movement, keypresses, clicks, etc.
+	 */
 	private void registerEventListeners() {
 		gameJFrame.getContentPane().addMouseMotionListener(new MouseInputAdapter() {
 			@Override
