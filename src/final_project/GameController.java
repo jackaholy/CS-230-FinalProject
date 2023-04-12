@@ -129,8 +129,7 @@ public class GameController {
 	 * Create the window and content pane for the game itself.
 	 */
 	private void createWindow() {
-		lblUpgrade
-				.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
+		lblUpgrade.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
 		// With arbitrary default dimensions
 		gameJFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -267,8 +266,8 @@ public class GameController {
 		upgradedShip.setRotation(currentPlayerShip.getRotation());
 		currentPlayerShip.erase();
 		currentPlayerShip = upgradedShip;
-		lblUpgrade
-				.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
+		
+		lblUpgrade.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
 		String displayMoney = "" + money;
 		textAreaLoot.setText(displayMoney);
 		freeze = false;
