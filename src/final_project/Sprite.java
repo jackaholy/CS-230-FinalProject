@@ -1,11 +1,9 @@
 package final_project;
 
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JFrame;
 import java.awt.Point;
-import java.awt.Polygon;
 
 /**
  * A "thing" in the game. Should handle some basic stuff. Show/hide, movement,
