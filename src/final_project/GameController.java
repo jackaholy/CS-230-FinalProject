@@ -60,8 +60,8 @@ public class GameController {
 			new PlayerShip(gameJFrame, new ImageIcon("assets/water_bug.png"), 0, 100, 90, 30, 800),
 			new PlayerShip(gameJFrame, new ImageIcon("assets/floating_point.png"), 20, 125, 120, 50, 500),
 			new PlayerShip(gameJFrame, new ImageIcon("assets/byte_me.png"), 50, 150, 140, 100, 300),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/sea++.png"), 100, 125, 100, 250, 100),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/world_wide_wet.png"), 150, 100, 90, 400, 50)
+			new PlayerShip(gameJFrame, new ImageIcon("assets/sea++.png"), 75, 125, 100, 250, 100),
+			new PlayerShip(gameJFrame, new ImageIcon("assets/world_wide_wet.png"), 100, 100, 90, 400, 50)
 	};
 
 	private JTextArea textAreaLoot = new JTextArea();
@@ -87,42 +87,50 @@ public class GameController {
 	 * @param args boilerplate
 	 */
 	public static void main(String[] args) {
-		new GameController();
+	    	new TitleScreen();
+	    	new GameController();
 	}
 
 	/**
 	 * Create a new game, entry point for entire program
 	 */
 	public GameController() {
-		new TitleScreen();
 		createWindow();
 		createSprites();
 		registerEventListeners();
 
-		Timer timer = new Timer(1000 / FRAME_RATE, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if (freeze)
-					return;
-				lblUpgrade.setBounds(gameJFrame.getContentPane().getWidth() / 2 - lblUpgrade.getWidth() / 2,
-						gameJFrame.getContentPane().getHeight() - lblUpgrade.getHeight(), 200, 20);
-				lblUpgrade.setVisible(true);
-
-				removeDeadEnemies();
-
-				updatePlayer();
-				checkLootCollection();
-
-				updateEnemies();
-
-				redrawLoot();
-
-				attemptLootSpawn();
-				attemptEnemySpawn();
-
-			}
-		});
-		timer.start();
+		Timer timer = new Timer(1000 / FRAME_RATE, null);
+			timer.addActionListener(new ActionListener() {
+			    	public void actionPerformed(ActionEvent arg0) {
+        				if (freeze)
+        					return;
+        				lblUpgrade.setBounds(gameJFrame.getContentPane().getWidth() / 2 - lblUpgrade.getWidth() / 2,
+        						gameJFrame.getContentPane().getHeight() - lblUpgrade.getHeight(), 200, 20);
+        				lblUpgrade.setVisible(true);
+        
+        				removeDeadEnemies();
+        
+        				updatePlayer();
+        				checkLootCollection();
+        
+        				updateEnemies();
+        
+        				redrawLoot();
+        
+        				attemptLootSpawn();
+        				attemptEnemySpawn();
+        				
+        				// If the player dies, erase them and end the game
+        				if (currentPlayerShip.getHealth() <= 0) {
+        				    currentPlayerShip.erase();
+        				    gameJFrame.dispose();
+        				    timer.stop();
+        				    new DeathScreen();
+        				}
+			    }
+    		});
+    		timer.start();
+		
 	}
 
 	/**
