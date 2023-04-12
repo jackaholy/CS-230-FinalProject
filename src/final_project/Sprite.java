@@ -227,25 +227,6 @@ public abstract class Sprite {
         Point[] ourCorners = getCorners();
         Point[] theirCorners = other.getCorners();
         // Construct Polygons from the points
-        Polygon ourPoly = new Polygon();
-        for (Point corner : ourCorners) {
-            ourPoly.addPoint(corner.x, corner.y);
-        }
-        Polygon theirPoly = new Polygon();
-        for (Point corner : theirCorners) {
-            theirPoly.addPoint(corner.x, corner.y);
-        }
-        // Check if our polygon contains any of their corners
-        for (Point corner : theirCorners) {
-            if (ourPoly.contains(corner))
-                return true;
-        }
-        // Check if their polygon contains any of our corners
-        for (Point corner : ourCorners) {
-            if (theirPoly.contains(corner))
-                return true;
-        }
-        // If none of the corners are within the bounds, we're not colliding
-        return false;
+        return SpriteHelper.isColliding(ourCorners, theirCorners);
     }
 }
