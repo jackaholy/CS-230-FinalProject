@@ -129,15 +129,8 @@ public abstract class MovingSprite extends Sprite {
      *         Such that right = 0, up = 90,
      *         left = 180,down = 270
      */
-    protected double calculateAngleToCoordinates(int xCoord, int yCoord) {
-        // Calculate difference in X and Y
-        double xDiff = this.getX() - xCoord;
-        double yDiff = this.getY() - yCoord;
-
-        // Calculate the angle between the sprite and the cursor
-        double desiredAngle = Math.toDegrees(Math.atan2(yDiff, xDiff));
-        // Restrict angle to 0 < angle < 360
-        return (desiredAngle + 360) % 360;
+    protected double calculateAngleToCoordinates(int targetX, int targetY) {
+        return MovingSpriteHelper.calculateAngle(x, y, targetX, targetY);
     }
 
     /**
