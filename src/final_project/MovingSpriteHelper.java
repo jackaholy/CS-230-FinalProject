@@ -57,5 +57,4 @@ public class MovingSpriteHelper {
             return Direction.COUNTER_CLOCKWISE;
         return Direction.NOT_ROTATING;
     }
-
 }

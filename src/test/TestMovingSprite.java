@@ -1,5 +1,9 @@
 package test;
 
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+
+import final_project.MovingSprite;
 import final_project.MovingSpriteHelper;
 import final_project.MovingSprite.Direction;
 
@@ -8,6 +12,7 @@ public class TestMovingSprite {
         testCalculateAngle();
         testCalculateDirectionToAngle();
         testOppositeDirection();
+        testMove();
     }
 
     public static boolean testCalculateAngle() {
@@ -104,6 +109,94 @@ public class TestMovingSprite {
 
         System.out.println("PASSED: All tests passed for oppositeDirection()");
         return true;
+    }
+
+    public static boolean testMove() {
+        JFrame jframe = new JFrame();
+        jframe.setBounds(0, 0, 100, 100);
+        TestableMovingSprite sprite = new TestableMovingSprite(jframe);
+
+        // Move the sprite at a 45 degree angle (xChangeExact and yChangeExact should be
+        // approximately 3.5355)
+        sprite.setRotation(45);
+        sprite.moveForward();
+
+        // Check that the sprite's position has changed appropriately
+        if (sprite.getX() != -3 || sprite.getY() != -3) {
+            System.out.println("FAILED: Sprite position did not change as expected");
+            return false;
+        }
+
+        // Move the sprite at a 90 degree angle (xChangeExact should be 0 and
+        // yChangeExact should be approximately 5)
+        sprite.setRotation(90);
+        sprite.moveForward();
+
+        // Check that the sprite's position has changed appropriately
+        if (sprite.getX() != -3 || sprite.getY() != -8) {
+            System.out.println("FAILED: Sprite position did not change as expected");
+            return false;
+        }
+
+        // Move the sprite at a 180 degree angle (xChangeExact should be approximately 5
+        // and yChangeExact should be 0)
+        sprite.setRotation(180);
+        sprite.moveForward();
+
+        // Check that the sprite's position has changed appropriately
+        if (sprite.getX() != 1 || sprite.getY() != -8) {
+            System.out.println("FAILED: Sprite position did not change as expected");
+            return false;
+        }
+
+        // Move the sprite at a 270 degree angle (xChangeExact should be 0 and
+        // yChangeExact should be approximately -5)
+        sprite.setRotation(270);
+        sprite.moveForward();
+
+        // Check that the sprite's position has changed appropriately
+        if (sprite.getX() != 1 || sprite.getY() != -4) {
+            System.out.println("FAILED: Sprite position did not change as expected");
+            return false;
+        }
+
+        // If all tests passed, return true
+        System.out.println("PASSED: All tests passed for move");
+        return true;
+    }
+
+    /**
+     * An implementation of MovingSprite for testing purposes.
+     */
+    private static class TestableMovingSprite extends MovingSprite {
+        public TestableMovingSprite(JFrame jframe) {
+            super(jframe, new ImageIcon(), 0, 0, 5, 0);
+        }
+
+        public void moveForward() {
+            changeTime = 1;
+            super.moveForward();
+        }
+
+        @Override
+        protected boolean canMoveDown() {
+            return true;
+        }
+
+        @Override
+        protected boolean canMoveLeft() {
+            return true;
+        }
+
+        @Override
+        protected boolean canMoveRight() {
+            return true;
+        }
+
+        @Override
+        protected boolean canMoveUp() {
+            return true;
+        }
     }
 
 }

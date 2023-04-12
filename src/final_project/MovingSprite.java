@@ -152,15 +152,11 @@ public abstract class MovingSprite extends Sprite {
      */
     private void move(double angle) {
         // The exact distance we want to move in each direction
-        double xChangeExact = Math.cos(Math.toRadians(angle)) * speed * speedMultiplier * changeTime
-                + previousFrameXChangeRemainder;
-        double yChangeExact = Math.sin(Math.toRadians(angle)) * speed * speedMultiplier * changeTime
-                + previousFrameYChangeRemainder;
+        double xChangeExact = calculateXChangeExact(angle);
+        double yChangeExact = calculateYChangeExact(angle);
 
-        if (xChangeExact > 0 && !canMoveLeft())
-            xChangeExact = 0;
-        else if (xChangeExact < 0 && !canMoveRight())
-            xChangeExact = 0;
+        xChangeExact = clampXMovement(xChangeExact);
+        yChangeExact = clampYMovement(yChangeExact);
 
         if (yChangeExact > 0 && !canMoveUp())
             yChangeExact = 0;
@@ -170,6 +166,7 @@ public abstract class MovingSprite extends Sprite {
         // Since you can't move part of a pixel, convert to ints
         int xChangeInt = (int) xChangeExact;
         int yChangeInt = (int) yChangeExact;
+
         // Move the desired amount
         setX(getX() - xChangeInt);
         setY(getY() - yChangeInt);
@@ -177,6 +174,60 @@ public abstract class MovingSprite extends Sprite {
         // Save the remaining distance for the next frame
         previousFrameXChangeRemainder = xChangeExact - xChangeInt;
         previousFrameYChangeRemainder = yChangeExact - yChangeInt;
+    }
+
+    /**
+     * Force the xChange to keep the sprite in bounds
+     * 
+     * @param xChange the desired change in X
+     * @return xChange if movement permitted, else 0
+     */
+    private double clampXMovement(double xChange) {
+        if (xChange > 0 && !canMoveLeft()) {
+            return 0;
+        } else if (xChange < 0 && !canMoveRight()) {
+            return 0;
+        }
+        return xChange;
+    }
+
+    /**
+     * Force the yChange to keep the sprite in bounds
+     * 
+     * @param yChange the desired change in X
+     * @return yChange if movement permitted, else 0
+     */
+    private double clampYMovement(double yChange) {
+        if (yChange > 0 && !canMoveUp()) {
+            return 0;
+        } else if (yChange < 0 && !canMoveDown()) {
+            return 0;
+        }
+        return yChange;
+    }
+
+    /**
+     * The exact distance to move on the X axis this tick based on angle, speed,
+     * time since previous frame, and any sub-pixel movements from the previous
+     * frame.
+     * 
+     * @param angle the angle we want to move
+     * @return the number of pixels to move in the x direction this frame
+     */
+    private double calculateXChangeExact(double angle) {
+        return Math.cos(Math.toRadians(angle)) * speed * speedMultiplier * changeTime + previousFrameXChangeRemainder;
+    }
+
+    /**
+     * The exact distance to move on the Y axis this tick based on angle, speed,
+     * time since previous frame, and any sub-pixel movements from the previous
+     * frame.
+     * 
+     * @param angle the angle we want to move
+     * @return the number of pixels to move in the y direction this frame
+     */
+    private double calculateYChangeExact(double angle) {
+        return Math.sin(Math.toRadians(angle)) * speed * speedMultiplier * changeTime + previousFrameYChangeRemainder;
     }
 
     protected void setSpeedMultiplier(double speedMultiplier) {
