@@ -186,29 +186,9 @@ public abstract class Sprite {
      * @return
      */
     public Point[] getCorners() {
-        // The distance from the center to the edge of the hitbox
-        double halfWidth = ((double) unrotatedIcon.getIconWidth() / 2) * COLLISION_SCALE_FACTOR;
-        double halfHeight = ((double) unrotatedIcon.getIconHeight() / 2) * COLLISION_SCALE_FACTOR;
-        // 0 if horizontal, 1 if vertical
-        double sin = Math.sin(Math.toRadians(rotationDegrees));
-        // 1 if horizontal, 0 if vertical
-        double cos = Math.cos(Math.toRadians(rotationDegrees));
-
-        // Construct each of the points
-        Point[] corners = new Point[4];
-        corners[0] = new Point(
-                (int) (this.x + halfWidth * cos + halfHeight * sin),
-                (int) (this.y + halfWidth * sin - halfHeight * cos));
-        corners[1] = new Point(
-                (int) (this.x - halfWidth * cos + halfHeight * sin),
-                (int) (this.y - halfWidth * sin - halfHeight * cos));
-        corners[2] = new Point(
-                (int) (this.x - halfWidth * cos - halfHeight * sin),
-                (int) (this.y - halfWidth * sin + halfHeight * cos));
-        corners[3] = new Point(
-                (int) (this.x + halfWidth * cos - halfHeight * sin),
-                (int) (this.y + halfWidth * sin + halfHeight * cos));
-        return corners;
+        int width = (int) (unrotatedIcon.getIconWidth() * COLLISION_SCALE_FACTOR);
+        int height = (int) (unrotatedIcon.getIconHeight() * COLLISION_SCALE_FACTOR);
+        return SpriteHelper.getRotatedRectangleCorners(x, y, width, height, rotationDegrees);
     }
 
     /**
