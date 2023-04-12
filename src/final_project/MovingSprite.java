@@ -142,33 +142,7 @@ public abstract class MovingSprite extends Sprite {
      */
     protected Direction calculateDirectionToDesiredAngle() {
         double desiredAngle = calculateAngleToCoordinates(targetX, targetY);
-        // Find the difference between current and target angle
-        double angleDiff = desiredAngle - this.getRotation();
-
-        // Force it to be positive
-        if (angleDiff < 0)
-            angleDiff += 360;
-
-        // Find shorter rotation direction
-        if (angleDiff > 180) {
-            return MovingSprite.Direction.COUNTER_CLOCKWISE;
-        } else {
-            return MovingSprite.Direction.CLOCKWISE;
-        }
-    }
-
-    /**
-     * Returns the opposite of the given direction
-     * 
-     * @param given the direction to invert
-     * @return the opposite direction
-     */
-    protected Direction oppositeDirection(Direction given) {
-        if (given == Direction.COUNTER_CLOCKWISE)
-            return Direction.CLOCKWISE;
-        else if (given == Direction.CLOCKWISE)
-            return Direction.COUNTER_CLOCKWISE;
-        return Direction.NOT_ROTATING;
+        return MovingSpriteHelper.calculateDirectionToDesiredAngle(desiredAngle, getRotation());
     }
 
     /**
