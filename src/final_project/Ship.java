@@ -90,8 +90,6 @@ public class Ship extends MovingSprite {
 
         // Die
         if (health <= 0) {
-            erase();
-
             // Solve ghost cannons
             for (Cannonball cannonball : cannonballs) {
                 cannonball.erase();
