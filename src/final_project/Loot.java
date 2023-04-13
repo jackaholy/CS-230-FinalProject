@@ -20,6 +20,7 @@ public class Loot extends Sprite {
      * @param gameJFrame the window to add the loot to
      */
     public Loot(JFrame gameJFrame) {
+    // TODO: Test
 	super(gameJFrame, new ImageIcon("assets/loot.png"), 0, 0);
 
 	/*
@@ -50,6 +51,7 @@ public class Loot extends Sprite {
      *         or max value.
      */
     private int getRandomCoord(int min, int max) {
+        // TODO: Test
 	return (int) ((Math.random() * (max - min)) + min);
     }
 
@@ -62,6 +64,7 @@ public class Loot extends Sprite {
      *         false
      */
     protected boolean isCollected(PlayerShip player, int padding) {
+        // TODO: Test
 	if (!collected && x - padding <= player.getX() && player.getX() <= (x + this.getWidth() + padding)
 		&& (y - padding <= player.getY() && player.getY() <= (y + this.getHeight() + padding))) {
 	    collected = true;
