@@ -46,7 +46,7 @@ public class GameController {
 	private static final int PER_PIRATE_SPAWN_ODDS_INCREASE = 2000;
 	// How much damage to deal to colliding ships every second
 	private static final int COLLISION_DAMAGE_PER_SECOND = 15;
-
+	
 	// Flag to disable ticks while another operation completes.
 	// Prevents concurrency issues when event listeners fire
 	private boolean freeze = false;
@@ -79,7 +79,7 @@ public class GameController {
 	private PlayerShip currentPlayerShip = availableShips[currentPlayerShipIndex];
 	private List<PirateShip> enemies = new ArrayList<>();
 	private List<PirateShip> deadEnemies = new ArrayList<>();
-
+	
 	/**
 	 * The main method. Literally just creates a new game object
 	 * 
@@ -110,6 +110,7 @@ public class GameController {
         				removeDeadEnemies();
         
         				updatePlayer();
+        				
         				checkLootCollection();
         
         				updateEnemies();
@@ -117,14 +118,15 @@ public class GameController {
         				redrawLoot();
         
         				attemptLootSpawn();
+        				
         				attemptEnemySpawn();
         				
         				// If the player dies, erase them and end the game
         				if (currentPlayerShip.getHealth() <= 0) {
-        				    currentPlayerShip.erase();
-        				    gameJFrame.dispose();
-        				    timer.stop();
-        				    new DeathScreen();
+                				    currentPlayerShip.erase();
+                				    gameJFrame.dispose();
+                				    timer.stop();
+                				    new DeathScreen();
         				}
 			    }
     		});
@@ -157,7 +159,6 @@ public class GameController {
 		gameJFrame.getContentPane().add(lblLoot);
 
 		// Displays the amount of loot the user has collected
-
 		textAreaLoot.setBackground(new Color(30, 144, 255));
 		textAreaLoot.setFont(new Font("Apple Chancery", Font.PLAIN, 20));
 		textAreaLoot.setEditable(false);
@@ -188,7 +189,7 @@ public class GameController {
 	}
 
 	/**
-	 * Add event listeners for cursor movement, keypresses, clicks, etc.
+	 * Add event listeners for cursor movement, key presses, clicks, etc.
 	 */
 	private void registerEventListeners() {
 		gameJFrame.getContentPane().addMouseMotionListener(new MouseInputAdapter() {
@@ -256,17 +257,14 @@ public class GameController {
 			}
 		}
 	}
-
+	
 	private void upgradeShip() {
 		freeze = true;
 		PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
 		if (money < upgradedShip.getCost())
 			return;
-
 		if (currentPlayerShipIndex > availableShips.length - 1)
 			return;
-		if (currentPlayerShipIndex == availableShips.length - 2)
-			enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 1000, 300));
 		money -= upgradedShip.getCost();
 		currentPlayerShipIndex++;
 		upgradedShip.tick();
@@ -275,6 +273,8 @@ public class GameController {
 		upgradedShip.setRotation(currentPlayerShip.getRotation());
 		currentPlayerShip.erase();
 		currentPlayerShip = upgradedShip;
+		if (currentPlayerShipIndex == availableShips.length - 1)
+			enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 100, 300));
 		
 		lblUpgrade.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
 		String displayMoney = "" + money;
@@ -363,7 +363,14 @@ public class GameController {
 	}
 
 	private void updateEnemy(PirateShip enemy) {
-		// Aim for the player
+	    	// Check to see if the final boss is dead
+		if (enemy instanceof FinalBoss && enemy.getHealth() <= 0) {
+		    enemy.erase();
+		    gameJFrame.dispose();
+		    new VictoryScreen();
+		}
+	    
+	    	// Aim for the player
 		enemy.setTarget(currentPlayerShip.getX(), currentPlayerShip.getY());
 		// Move towards the player
 		enemy.tick();
