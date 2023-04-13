@@ -3,6 +3,10 @@ package test;
 import java.awt.Point;
 import final_project.SpriteHelper;
 
+/**
+ * Unit tests for Sprites. Much of this code has been written at least in part
+ * by ChatGPT
+ */
 public class TestSprite {
     public static void main(String[] args) {
         testIsColliding();

@@ -3,6 +3,10 @@ package final_project;
 import java.awt.Point;
 import java.awt.Polygon;
 
+/**
+ * Helper functions for Sprite. Logic should be stateless and testable.
+ * Logic moved from Sprite with ChatGPT doing a some of the refactoring.
+ */
 public class SpriteHelper {
     // This shouldn't be instantiated
     private SpriteHelper() {

@@ -8,6 +8,10 @@ import final_project.MovingSpriteHelper;
 import final_project.Sprite;
 import final_project.MovingSprite.Direction;
 
+/**
+ * Unit tests for MovingSprites. Much of this code has been written at least in
+ * part by ChatGPT
+ */
 public class TestMovingSprite {
     public static void main(String[] args) {
         testCalculateAngle();

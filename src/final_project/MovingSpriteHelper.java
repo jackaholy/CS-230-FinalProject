@@ -2,7 +2,12 @@ package final_project;
 
 import final_project.MovingSprite.Direction;
 
+/**
+ * Helper functions for MovingSprite. Logic should be stateless and testable.
+ * Logic moved from MovingSprite with ChatGPT doing a some of the refactoring.
+ */
 public class MovingSpriteHelper {
+    // This class should never be instantiated
     private MovingSpriteHelper() {
     }
 
