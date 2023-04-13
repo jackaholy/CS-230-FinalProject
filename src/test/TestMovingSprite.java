@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 
 import final_project.MovingSprite;
 import final_project.MovingSpriteHelper;
+import final_project.Sprite;
 import final_project.MovingSprite.Direction;
 
 public class TestMovingSprite {
@@ -12,7 +13,8 @@ public class TestMovingSprite {
         testCalculateAngle();
         testCalculateDirectionToAngle();
         testOppositeDirection();
-        testMove();
+        testMoveForward();
+        testMoveAway();
     }
 
     public static boolean testCalculateAngle() {
@@ -111,7 +113,7 @@ public class TestMovingSprite {
         return true;
     }
 
-    public static boolean testMove() {
+    public static boolean testMoveForward() {
         JFrame jframe = new JFrame();
         jframe.setBounds(0, 0, 100, 100);
         TestableMovingSprite sprite = new TestableMovingSprite(jframe);
@@ -165,6 +167,71 @@ public class TestMovingSprite {
         return true;
     }
 
+    public static boolean testMoveAway() {
+        JFrame jframe = new JFrame();
+        jframe.setBounds(0, 0, 100, 100);
+        TestableMovingSprite sprite1 = new TestableMovingSprite(jframe);
+        TestableMovingSprite sprite2 = new TestableMovingSprite(jframe);
+
+        // Test 1: Sprites are horizontally aligned
+        sprite1.setX(0);
+        sprite1.setY(0);
+        sprite2.setX(1);
+        sprite2.setY(0);
+        sprite2.moveAway(sprite1);
+        if (sprite2.getX() <= 1 || sprite2.getY() != 0) {
+            System.out.println("FAILED: Test 1 - Sprite didn't move or moved in an unexpected way!");
+            return false;
+        }
+
+        // Test 2: Sprites are vertically aligned
+        sprite1.setX(0);
+        sprite1.setY(0);
+        sprite2.setX(0);
+        sprite2.setY(1);
+        sprite2.moveAway(sprite1);
+        if (sprite2.getX() != 0 || sprite2.getY() <= 1) {
+            System.out.println("FAILED: Test 2 - Sprite didn't move or moved in an unexpected way!");
+            return false;
+        }
+
+        // Test 3: Sprites are at a diagonal
+        sprite1.setX(0);
+        sprite1.setY(0);
+        sprite2.setX(1);
+        sprite2.setY(1);
+        sprite2.moveAway(sprite1);
+        if (sprite2.getX() <= 1 || sprite2.getY() <= 1) {
+            System.out.println("FAILED: Test 3 - Sprite didn't move or moved in an unexpected way!");
+            return false;
+        }
+
+        // Test 4: Sprites are very far apart
+        sprite1.setX(0);
+        sprite1.setY(0);
+        sprite2.setX(100);
+        sprite2.setY(100);
+        sprite2.moveAway(sprite1);
+        if (sprite2.getX() <= 100 || sprite2.getY() <= 100) {
+            System.out.println("FAILED: Test 4 - Sprite didn't move or moved in an unexpected way!");
+            return false;
+        }
+
+        // Test 5: Sprites are overlapping
+        sprite1.setX(0);
+        sprite1.setY(0);
+        sprite2.setX(0);
+        sprite2.setY(0);
+        sprite2.moveAway(sprite1);
+        if (sprite2.getX() == 0 && sprite2.getY() == 0) {
+            System.out.println("FAILED: Test 5 - Sprite didn't move or moved in an unexpected way!");
+            return false;
+        }
+        System.out.println("PASSED: Sprites move away successfully");
+
+        return true;
+    }
+
     /**
      * An implementation of MovingSprite for testing purposes.
      */
@@ -176,6 +243,11 @@ public class TestMovingSprite {
         public void moveForward() {
             changeTime = 1;
             super.moveForward();
+        }
+
+        public void moveAway(Sprite other) {
+            changeTime = 1;
+            super.moveAway(other);
         }
 
         @Override
