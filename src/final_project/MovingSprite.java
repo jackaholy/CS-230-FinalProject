@@ -230,6 +230,16 @@ public abstract class MovingSprite extends Sprite {
         return Math.sin(Math.toRadians(angle)) * speed * speedMultiplier * changeTime + previousFrameYChangeRemainder;
     }
 
+    /**
+     * Set a multiplier on the speed.
+     * <0: Reverse
+     * 0: Stopped
+     * 0.5: Half speed
+     * 1: Full speed
+     * >1: Faster
+     * 
+     * @param speedMultiplier the amount to multiple speed by
+     */
     protected void setSpeedMultiplier(double speedMultiplier) {
         this.speedMultiplier = speedMultiplier;
     }
@@ -250,10 +260,8 @@ public abstract class MovingSprite extends Sprite {
         // Get the angle towards "other"
         double towardsAngle = calculateAngleToCoordinates(other.getX(), other.getY());
         // Get the opposite angle
-        double awayAngle = towardsAngle + 180;
-        // Force it to be 0-360
-        awayAngle = awayAngle % 360;
-
+        double awayAngle = MovingSpriteHelper.oppositeAngle(towardsAngle);
+        // Move away
         move(awayAngle);
     }
 

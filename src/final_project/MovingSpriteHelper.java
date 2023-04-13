@@ -57,4 +57,15 @@ public class MovingSpriteHelper {
             return Direction.COUNTER_CLOCKWISE;
         return Direction.NOT_ROTATING;
     }
+
+    /**
+     * Returns the opposite angle of the given angle
+     * 
+     * @param angle the angle to invert
+     * @return the opposite angle
+     */
+    public static double oppositeAngle(double angle) {
+        return (angle + 180) % 360;
+    }
+
 }
