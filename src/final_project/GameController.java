@@ -380,10 +380,19 @@ public class GameController {
 		if (enemy instanceof FinalBoss && enemy.getHealth() <= 0) {
 		    // Stop the game
 		    enemy.erase();
-		    timer.stop();
-		    gameJFrame.dispose();
-		    // You win!
-		    new VictoryScreen();
+		    // Start a 3 second timer after defeating the final boss. This gives time for celebration
+		    Timer delayTimer = new Timer(3000, new ActionListener() {
+		        @Override
+		        public void actionPerformed(ActionEvent e) {
+		            // Stop the main game and dispose of the window
+		            timer.stop();
+		            gameJFrame.dispose();
+		            // You win!
+		            new VictoryScreen();
+		        }
+		    });
+		    delayTimer.setRepeats(false);
+		    delayTimer.start();
 		}
 	    
 	    	// Aim for the player
