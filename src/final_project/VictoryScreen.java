@@ -14,15 +14,13 @@ import java.awt.Font;
 
 /**
  * Create a victory screen with a "Play Again?" button and a "Quit?" button. This is the
- * window that will appear after the user defeats the final boss. In order to
+ * window that will appear shortly after the user defeats the final boss. In order to
  * play the game again the user must press the "Play Again?" button. If they want
  * to quit the game they must press the "Quit?" button, or close the window.
  */
 
 @SuppressWarnings("serial")
 public class VictoryScreen extends JFrame {
-    // Flag to keep track of whether the playAgain button is pressed
-    protected boolean playAgainPressed = false;
 
     protected VictoryScreen() {
 	// The label we're adding our background image to
@@ -40,13 +38,12 @@ public class VictoryScreen extends JFrame {
 	backgroundJLabel.add(playAgainBtn);
 
 	/*
-	 * Check to see if the player clicks on the playAgain button. If so, dispose of this
+	 * Check to see if the player clicks on the playAgainBtn. If so, dispose of this
 	 * window and continue to the main program.
 	 */
 	playAgainBtn.addMouseListener(new MouseAdapter() {
 	    public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == playAgainBtn) {
-		    playAgainPressed = true;
 		    dispose();
 		    new GameController();
 		}

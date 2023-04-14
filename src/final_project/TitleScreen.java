@@ -21,9 +21,7 @@ import java.awt.Font;
 
 @SuppressWarnings("serial")
 public class TitleScreen extends JFrame {
-    // Flag to keep track of whether the play button is pressed
-    private boolean playPressed = false;
-
+    
     protected TitleScreen() {
 	// The label we're adding our background image to
 	JLabel backgroundJLabel = new JLabel();
@@ -46,8 +44,8 @@ public class TitleScreen extends JFrame {
 	playBtn.addMouseListener(new MouseAdapter() {
 	    public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == playBtn) {
-		    playPressed = true;
 		    dispose();
+		    new GameController();
 		}
 	    }
 	});
@@ -80,26 +78,5 @@ public class TitleScreen extends JFrame {
 	// Make it visible
 	setVisible(true);
 	setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-	/*
-	 * Taken from ChatGTP. This loop waits for the "Play" button to be pressed
-	 * before continuing execution.
-	 */
-	while (!this.isPlayPressed()) {
-	    try {
-		Thread.sleep(10);
-	    } catch (InterruptedException e) {
-		e.printStackTrace();
-	    }
-	}
-    }
-
-    /**
-     * Checks to see if the user clicked on the "Play" button.
-     * 
-     * @return boolean true if playPressed is set to true.
-     */
-    private boolean isPlayPressed() {
-	return playPressed;
     }
 }

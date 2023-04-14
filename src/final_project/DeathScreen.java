@@ -21,8 +21,6 @@ import java.awt.Font;
 
 @SuppressWarnings("serial")
 public class DeathScreen extends JFrame {
-    // Flag to keep track of whether the playAgain button is pressed
-    protected boolean playAgainPressed = false;
 
     protected DeathScreen() {
 	// The label we're adding our background image to
@@ -46,7 +44,6 @@ public class DeathScreen extends JFrame {
 	playAgainBtn.addMouseListener(new MouseAdapter() {
 	    public void mouseClicked(MouseEvent e) {
 		if (e.getSource() == playAgainBtn) {
-		    playAgainPressed = true;
 		    dispose();
 		    new GameController();
 		}
