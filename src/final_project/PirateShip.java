@@ -47,7 +47,6 @@ public class PirateShip extends Ship {
 
     @Override
     protected void tick() {
-        // TODO: Test
         Direction directionToRotate = calculateDirectionToDesiredAngle();
 
         if (shouldAvoidPlayer()) {
@@ -60,7 +59,6 @@ public class PirateShip extends Ship {
 
     @Override
     protected void erase() {
-        // TODO: Test
         for (int i = 0; i < 15; i++) {
             Loot newLoot = new Loot(gameJFrame, x + rand.nextInt(-15, 15), y + rand.nextInt(-15, 15));
             lootList.add(newLoot);
@@ -76,7 +74,6 @@ public class PirateShip extends Ship {
      * @return true if too close
      */
     private boolean shouldAvoidPlayer() {
-        // TODO: Test
         return Math.hypot(getX() - targetX, getY() - targetY) < turnDistance;
     }
 

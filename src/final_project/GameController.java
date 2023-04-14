@@ -258,7 +258,6 @@ public class GameController {
 		}
 	}
 	
-    // TODO: Test
 	private void upgradeShip() {
 		freeze = true;
 		PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
@@ -283,7 +282,6 @@ public class GameController {
 		freeze = false;
 	}
 
-    // TODO: Test
 	private void fireCannon() {
 		List<Ship> targets = new ArrayList<>();
 		// targets.add(currentPlayerShip);
@@ -291,7 +289,6 @@ public class GameController {
 		currentPlayerShip.createCannonball(cursorX, cursorY, targets.toArray(new Ship[0]));
 	}
 
-    // TODO: Test
 	private void removeDeadEnemies() {
 		for (PirateShip enemy : deadEnemies) {
 			enemies.remove(enemy);
@@ -312,7 +309,6 @@ public class GameController {
 		currentPlayerShip.tick();
 	}
 
-    // TODO: Test
 	private void attemptEnemySpawn() {
 		if (rand.nextInt((PER_PIRATE_SPAWN_ODDS_INCREASE * enemies.size()) + BASE_PIRATE_SPAWN_ODDS) == 1)
 			enemies.add(new PirateShip(
@@ -322,7 +318,6 @@ public class GameController {
 					100, 125));
 	}
 
-    // TODO: Test
 	private void attemptLootSpawn() {
 		if (rand.nextInt(LOOT_SPAWN_ODDS) == 1) {
 			Loot newLoot = new Loot(gameJFrame);
@@ -334,7 +329,6 @@ public class GameController {
 		}
 	}
 
-    // TODO: Test
 	private void updateEnemies() {
 		for (PirateShip enemy : enemies) {
 			// If the enemy doesn't exist, skip and mark for removal
@@ -349,7 +343,6 @@ public class GameController {
 		}
 	}
 
-    // TODO: Test
 	private void attemptFireCannon(PirateShip enemy) {
 		int fireRate = PIRATE_CANNON_FIRE_ODDS;
 		if (enemy instanceof FinalBoss)
@@ -369,7 +362,6 @@ public class GameController {
 		}
 	}
 
-    // TODO: Test
 	private void updateEnemy(PirateShip enemy) {
 	    	// Check to see if the final boss is dead
 		if (enemy instanceof FinalBoss && enemy.getHealth() <= 0) {
@@ -384,7 +376,6 @@ public class GameController {
 		enemy.tick();
 	}
 
-    // TODO: Test
 	private void checkPlayerCollision(PirateShip enemy) {
 		// Check if the two ships are colliding
 		if (currentPlayerShip.isColliding(enemy)) {
@@ -395,7 +386,6 @@ public class GameController {
 		}
 	}
 
-    // TODO: Test
 	private void checkEnemyCollision(PirateShip enemy) {
 		for (PirateShip otherEnemy : enemies) {
 			if (!enemy.getExistance())

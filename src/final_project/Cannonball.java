@@ -45,7 +45,6 @@ public class Cannonball extends MovingSprite {
     }
 
     @Override
-    // TODO: Test
     public void tick() {
         for (Ship ship : targets) {
             if (isColliding(ship)) {

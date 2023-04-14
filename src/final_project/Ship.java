@@ -69,7 +69,6 @@ public class Ship extends MovingSprite {
 
     @Override
     protected void tick() {
-        // TODO: Test
         // Tell all of our cannon balls to update
         for (Cannonball cannonBall : cannonballs) {
             cannonBall.tick();
@@ -150,7 +149,6 @@ public class Ship extends MovingSprite {
      * @param targets Ships to run collision checks on and deal damage to
      */
     public void createCannonball(int targetX, int targetY, Ship[] targets) {
-        // TODO: Test
         shouldCreateCannonballNextFrame = true;
         cannonTargetX = targetX;
         cannonTargetY = targetY;

@@ -24,7 +24,6 @@ public class PlayerShip extends Ship {
 
 	@Override
 	public void tick() {
-		// TODO: Test
 		// Add player tick stuff here
 		setRotationDirection(calculateDirectionToDesiredAngle());
 
@@ -41,7 +40,6 @@ public class PlayerShip extends Ship {
 
 	@Override
 	public void createCannonball(int targetX, int targetY, Ship[] targets) {
-		// TODO: Test
 		if (cannonCoolingDown) {
 			return;
 		}
