@@ -260,6 +260,10 @@ public class GameController {
 	
 	private void upgradeShip() {
 		freeze = true;
+		if (currentPlayerShipIndex == availableShips.length - 1) {
+        		    freeze = false;
+        		    return;
+		}
 		PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
 		if (money < upgradedShip.getCost())
 			return;
@@ -275,8 +279,9 @@ public class GameController {
 		currentPlayerShip = upgradedShip;
 		if (currentPlayerShipIndex == availableShips.length - 1)
 			enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 100, 300));
-		
-		lblUpgrade.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
+		if (currentPlayerShipIndex != availableShips.length - 1) {
+		    	lblUpgrade.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
+		}
 		String displayMoney = "" + money;
 		textAreaLoot.setText(displayMoney);
 		freeze = false;
