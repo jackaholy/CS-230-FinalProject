@@ -99,11 +99,11 @@ public class TestSprite {
         System.out.println("PASSED: Test case 4: Corners are as expected.");
 
         // Test case 5: Large rectangle with rotation of 45 degrees
-        Point[] expectedCorners5 = { new Point(8, 0), new Point(0, 8), new Point(-8, 0), new Point(0, -8) };
+        Point[] expectedCorners5 = { new Point(11, 0), new Point(0, -11), new Point(-11, 0), new Point(0, 11) };
         Point[] actualCorners5 = SpriteHelper.getRotatedRectangleCorners(0, 0, 16, 16, 45);
-        for (int i = 0; i < expectedCorners4.length; i++) {
-            if (!expectedCorners4[i].equals(actualCorners4[i])) {
-                System.out.println("FAILED: Test case 4: Corners are not as expected.");
+        for (int i = 0; i < expectedCorners5.length; i++) {
+            if (!expectedCorners5[i].equals(actualCorners5[i])) {
+                System.out.println("FAILED: Test case 5: Corners are not as expected.");
                 return false;
             }
         }
