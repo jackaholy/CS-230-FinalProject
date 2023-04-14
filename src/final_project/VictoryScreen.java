@@ -13,10 +13,10 @@ import javax.swing.WindowConstants;
 import java.awt.Font;
 
 /**
- * Create a title screen with a "Play Again?" button and a "Quit?" button. This is the
- * first window to appear to the user when running the program. In order to
- * continue to the main game the user must press the "Play" button. If they want
- * to quit the game they must press the "Quit" button, or close the window.
+ * Create a victory screen with a "Play Again?" button and a "Quit?" button. This is the
+ * window that will appear after the user defeats the final boss. In order to
+ * play the game again the user must press the "Play Again?" button. If they want
+ * to quit the game they must press the "Quit?" button, or close the window.
  */
 
 @SuppressWarnings("serial")
@@ -60,7 +60,7 @@ public class VictoryScreen extends JFrame {
 	backgroundJLabel.add(quitBtn);
 
 	/*
-	 * Check to see if the player clicks on the quit button. If so, close all
+	 * Check to see if the player clicks on the quitBtn. If so, close all
 	 * windows and abort the program.
 	 */
 	quitBtn.addMouseListener(new MouseAdapter() {
@@ -81,14 +81,5 @@ public class VictoryScreen extends JFrame {
 	// Make it visible
 	setVisible(true);
 	setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    }
-
-    /**
-     * Checks to see if the user clicked on the "PlayAgain?" button.
-     * 
-     * @return boolean true if playPressed is set to true.
-     */
-    private boolean isPlayAgainPressed() {
-	return playAgainPressed;
     }
 }

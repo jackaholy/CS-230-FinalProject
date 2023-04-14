@@ -81,26 +81,5 @@ public class DeathScreen extends JFrame {
 	// Make it visible
 	setVisible(true);
 	setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-	/*
-	 * Taken from ChatGTP. This loop waits for the "PlayAgain?" button to be pressed
-	 * before continuing execution.
-	 */
-//	while (!this.isPlayAgainPressed()) {
-//	    try {
-//		Thread.sleep(10);
-//	    } catch (InterruptedException e) {
-//		e.printStackTrace();
-//	    }
-//	}
-    }
-
-    /**
-     * Checks to see if the user clicked on the "PlayAgain?" button.
-     * 
-     * @return boolean true if playPressed is set to true.
-     */
-    private boolean isPlayAgainPressed() {
-	return playAgainPressed;
     }
 }
