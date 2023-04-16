@@ -377,27 +377,31 @@ public class GameController {
 	private void updateEnemy(PirateShip enemy, Timer timer) {
 	    	// Check to see if the final boss is dead
 		if (enemy instanceof FinalBoss && enemy.getHealth() <= 0) {
-		    // Stop the game
-		    enemy.erase();
-		    // Start a 3 second timer after defeating the final boss. This gives time for celebration
-		    Timer delayTimer = new Timer(3000, new ActionListener() {
-		        @Override
-		        public void actionPerformed(ActionEvent e) {
-		            // Stop the main game and dispose of the window
-		            timer.stop();
-		            gameJFrame.dispose();
-		            // You win!
-		            new VictoryScreen();
-		        }
-		    });
-		    delayTimer.setRepeats(false);
-		    delayTimer.start();
+		    	victory(enemy, timer);
 		}
 	    
 	    	// Aim for the player
 		enemy.setTarget(currentPlayerShip.getX(), currentPlayerShip.getY());
 		// Move towards the player
 		enemy.tick();
+	}
+	
+	private void victory(PirateShip enemy, Timer timer) {
+        	// Stop the game
+        	enemy.erase();
+        	// Start a 3 second timer after defeating the final boss. This gives time for celebration
+        	Timer delayTimer = new Timer(3000, new ActionListener() {
+        	        @Override
+        	        public void actionPerformed(ActionEvent e) {
+        	                // Stop the main game and dispose of the window
+        	            	timer.stop();
+        	                gameJFrame.dispose();
+            	            	// You win!
+            	            	new VictoryScreen();
+        	        }
+        	});
+        	delayTimer.setRepeats(false);
+        	delayTimer.start();
 	}
 
 	private void checkPlayerCollision(PirateShip enemy) {
