@@ -8,7 +8,7 @@ import javax.swing.JFrame;
  * it collides with on impact
  */
 public class Cannonball extends MovingSprite {
-    public static final ImageIcon ICON = new ImageIcon("assets/cannonball.png");
+    private static final ImageIcon ICON = new ImageIcon("assets/cannonball.png");
     private static final int SPEED = 120;
     private static final int TRAVEL_DISTANCE = 300;
     private static final int DAMAGE = 20;
