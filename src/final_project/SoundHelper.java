@@ -1,6 +1,6 @@
 package final_project;
 
-import java.io.File;    
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.sound.sampled.AudioInputStream;
@@ -38,8 +38,6 @@ public class SoundHelper {
                         Thread.sleep(100);
                     }
                     clip.stop();
-                    clip.close();
-                    audioIn.close();
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -47,24 +45,5 @@ public class SoundHelper {
             }
         });
         audioThread.start();
-    }
-
-    public static void playSoundBackground(String sound) {
-        try {
-            // Open an audio input stream from the sound file
-            File soundFile = new File("assets/sound/" + sound);
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
-
-            // Get a sound clip resource from the audio input stream
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioIn);
-
-            // Play the sound clip
-            clip.start();
-            clip.loop(clip.LOOP_CONTINUOUSLY);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 }
