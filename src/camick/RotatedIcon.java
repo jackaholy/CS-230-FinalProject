@@ -1,4 +1,4 @@
-package final_project;
+package camick;
 
 import java.awt.Component;
 import java.awt.Graphics2D;

@@ -2,6 +2,9 @@ package final_project;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
+
+import camick.RotatedIcon;
+
 import javax.swing.JFrame;
 import java.awt.Point;
 

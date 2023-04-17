@@ -21,6 +21,9 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.event.MouseInputAdapter;
+
+import kuusisto.tinysound.Music;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 
@@ -84,8 +87,7 @@ public class GameController {
 	private List<PirateShip> enemies = new ArrayList<>();
 	private List<PirateShip> deadEnemies = new ArrayList<>();
 
-	// This flag can be used to stop gameMusic
-	AtomicBoolean gameMusicPlaying = new AtomicBoolean(true);
+	Music gameMusic;
 
 	/**
 	 * The main method. Literally just creates a new game object
@@ -100,7 +102,7 @@ public class GameController {
 	 * Create a new game, entry point for entire program
 	 */
 	public GameController() {
-		SoundHelper.getInstance().playSound("gamemusic.wav", gameMusicPlaying, true);
+		gameMusic = SoundHelper.getInstance().playMusic("gamemusic.wav");
 		createWindow();
 		createSprites();
 		registerEventListeners();
@@ -287,8 +289,8 @@ public class GameController {
 		// If the user has the World Wide Wet boat, spawn the boss.
 		if (currentPlayerShipIndex == availableShips.length - 1) {
 			enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 1000, 300));
-			gameMusicPlaying.set(false);
-			SoundHelper.getInstance().playSound("bossmusic.wav");
+			gameMusic.stop();
+			SoundHelper.getInstance().playMusic("bossmusic.wav");
 			// Remove labels
 			textAreaLoot.setVisible(false);
 			lblUpgrade.setVisible(false);
