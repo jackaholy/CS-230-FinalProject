@@ -90,7 +90,7 @@ public class Ship extends MovingSprite {
 
         // Die
         if (health <= 0) {
-            SoundHelper.playSound("sink.wav");
+            SoundHelper.getInstance().playSound("sink.wav");
             erase();
             // Solve ghost cannons
             for (Cannonball cannonball : cannonballs) {
@@ -126,7 +126,7 @@ public class Ship extends MovingSprite {
     public void takeDamageAbsolute(int damage) {
         health -= damage;
         healthbar.setHealth((int) health);
-        SoundHelper.playSound("hit.wav");
+        SoundHelper.getInstance().playSound("hit.wav");
     }
 
     /**

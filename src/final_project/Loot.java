@@ -64,7 +64,7 @@ public class Loot extends Sprite {
     protected boolean isCollected(PlayerShip player, int padding) {
         if (!collected && x - padding <= player.getX() && player.getX() <= (x + this.getWidth() + padding)
                 && (y - padding <= player.getY() && player.getY() <= (y + this.getHeight() + padding))) {
-            SoundHelper.playSound("money2.wav");
+            SoundHelper.getInstance().playSound("money2.wav");
             collected = true;
             return true;
         }
