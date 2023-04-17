@@ -18,6 +18,7 @@ import javax.swing.Timer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.JLabel;
@@ -80,6 +81,9 @@ public class GameController {
 	private List<PirateShip> enemies = new ArrayList<>();
 	private List<PirateShip> deadEnemies = new ArrayList<>();
 
+	// This flag can be used to stop gameMusic
+	AtomicBoolean gameMusicPlaying = new AtomicBoolean(true);
+
 	/**
 	 * The main method. Literally just creates a new game object
 	 * 
@@ -94,7 +98,7 @@ public class GameController {
 	 * Create a new game, entry point for entire program
 	 */
 	public GameController() {
-		SoundHelper.playSoundBackground("gamemusic.wav");
+		SoundHelper.playSound("gamemusic.wav", gameMusicPlaying, true);
 		createWindow();
 		createSprites();
 		registerEventListeners();
@@ -280,8 +284,11 @@ public class GameController {
 		upgradedShip.setRotation(currentPlayerShip.getRotation());
 		currentPlayerShip.erase();
 		currentPlayerShip = upgradedShip;
-		if (currentPlayerShipIndex == availableShips.length - 1)
+		if (currentPlayerShipIndex == availableShips.length - 1) {
 			enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 100, 300));
+			gameMusicPlaying.set(false);
+			SoundHelper.playSound("bossmusic.wav");
+		}
 		if (currentPlayerShipIndex != availableShips.length - 1) {
 			lblUpgrade.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
 		}
