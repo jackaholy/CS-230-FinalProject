@@ -1,12 +1,16 @@
 package final_project;
 
-import kuusisto.tinysound.TinySound;
-
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import kuusisto.tinysound.Music;
-import kuusisto.tinysound.Sound;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class SoundHelper {
     private static SoundHelper instance = null;
@@ -18,34 +22,58 @@ public class SoundHelper {
         return instance;
     }
 
-    private Map<String, Music> musicCache = new HashMap<>();
-    private Map<String, Sound> soundCache = new HashMap<>();
+    private Map<String, AudioInputStream> soundCache = new HashMap<>();
 
     private SoundHelper() {
-        TinySound.init();
     }
 
-    public Sound playSound(String soundName) {
-        Sound sound;
-        if (soundCache.containsKey(soundName)) {
-            sound = soundCache.get(soundName);
-        } else {
-            sound = TinySound.loadSound("assets/sounds/" + soundName);
-            soundCache.put(soundName, sound);
-        }
-        sound.play();
-        return sound;
+    public void playSound(String sound) {
+        playSound(sound, new AtomicBoolean(true), false);
     }
 
-    public Music playMusic(String musicName) {
-        Music music;
-        if (musicCache.containsKey(musicName)) {
-            music = musicCache.get(musicName);
-        } else {
-            music = TinySound.loadMusic("assets/sounds/" + musicName);
-            musicCache.put(musicName, music);
-        }
-        music.play(true);
-        return music;
+    public void playSound(String sound, AtomicBoolean isPlaying, boolean loop) {
+        Thread audioThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Clip clip;
+                if (soundCache.containsKey(sound)) {
+                     AudioInputStream audioIn = soundCache.get(sound);
+                    try {
+                        audioIn.reset();
+                        clip = AudioSystem.getClip();
+                        clip.open(audioIn);
+                    } catch (IOException | LineUnavailableException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                } else {
+                    File soundFile = new File("assets/sound/" + sound);
+                    try {
+                        AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+                        audioIn.mark(0);
+                        soundCache.put(sound, audioIn);
+                        clip = AudioSystem.getClip();
+                        clip.open(audioIn);
+                    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                }
+                clip.setFramePosition(0);
+                clip.start();
+                if (loop)
+                    clip.loop(clip.LOOP_CONTINUOUSLY);
+
+                // Check if the sound should be stopped
+                do {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ignored) {
+                    }
+                } while (isPlaying.get() && clip.isRunning());
+                clip.stop();
+            }
+        });
+        audioThread.start();
     }
 }
