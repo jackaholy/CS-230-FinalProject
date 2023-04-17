@@ -1,9 +1,10 @@
 package final_project;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 /**
  * This class will probably do some heavy lifting. Controls, player inventory,
@@ -23,7 +24,7 @@ public class PlayerShip extends Ship {
 	}
 
 	@Override
-	public void tick() {
+	protected void tick() {
 		// Add player tick stuff here
 		setRotationDirection(calculateDirectionToDesiredAngle());
 
@@ -45,15 +46,16 @@ public class PlayerShip extends Ship {
 		}
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
+			@Override
 			public void run() {
 				cannonCoolingDown = false;
-			};
+			}
 		}, cannonCooldownMS);
 		super.createCannonball(targetX, targetY, targets);
 		cannonCoolingDown = true;
 	}
 
-	public int getCost() {
+	protected int getCost() {
 		return cost;
 	}
 }
