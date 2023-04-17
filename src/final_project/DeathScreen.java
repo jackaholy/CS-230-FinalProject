@@ -26,7 +26,7 @@ public class DeathScreen extends JFrame {
 	// The label we're adding our background image to
 	JLabel backgroundJLabel = new JLabel();
 	// The image that we're setting to the background
-	ImageIcon backgroundPicture = new ImageIcon("assets/tropical_deathscreen.jpeg");
+	ImageIcon backgroundPicture = new ImageIcon("assets/images/tropical_deathscreen.jpeg");
 	backgroundJLabel.setIcon(backgroundPicture);
 	// The background image will fit the screen
 	backgroundJLabel.setBounds(0, 0, backgroundPicture.getIconWidth(), backgroundPicture.getIconHeight());
