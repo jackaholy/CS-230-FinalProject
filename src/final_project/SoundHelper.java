@@ -20,8 +20,7 @@ public class SoundHelper {
             @Override
             public void run() {
                 File soundFile = new File("assets/sound/" + sound);
-                try (
-                        AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+                try (AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
                         Clip clip = AudioSystem.getClip();) {
                     // Open an audio input stream from the sound file
 
@@ -34,9 +33,9 @@ public class SoundHelper {
                         clip.loop(clip.LOOP_CONTINUOUSLY);
 
                     // Check if the sound should be stopped
-                    while (isPlaying.get() && clip.getFramePosition() < clip.getFrameLength()) {
+                    do {
                         Thread.sleep(100);
-                    }
+                    } while (isPlaying.get() && clip.isRunning());
                     clip.stop();
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
