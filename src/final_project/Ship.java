@@ -15,7 +15,7 @@ public class Ship extends MovingSprite {
 
     // Cannon balls we've fired
     private List<Cannonball> cannonballs = new ArrayList<>();
-    Healthbar healthbar;
+    private Healthbar healthbar;
 
     // Variables to store information for cannon ball creation, see comment in
     // createCannonball
