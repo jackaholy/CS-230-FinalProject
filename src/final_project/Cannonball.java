@@ -55,7 +55,7 @@ public class Cannonball extends MovingSprite {
             }
         }
         boolean canMove = canMoveDown() && canMoveLeft() && canMoveRight() && canMoveUp();
-        // See how far the cannonball has travelled
+        // See how far the cannonball has traveled
         if (Math.hypot(startX - x, startY - y) > TRAVEL_DISTANCE || !canMove) {
             // We've reached the target, see if we hit anything
             // Splash! Cannonball's gone
