@@ -61,6 +61,10 @@ public class Ship extends MovingSprite {
     protected void erase() {
         healthbar.setVisible(false);
         super.erase();
+        // Solve ghost cannons
+        for (Cannonball cannonball : cannonballs) {
+            cannonball.erase();
+        }
     }
 
     @Override
@@ -92,10 +96,6 @@ public class Ship extends MovingSprite {
         if (health <= 0) {
             SoundHelper.getInstance().playSound("sink.wav");
             erase();
-            // Solve ghost cannons
-            for (Cannonball cannonball : cannonballs) {
-                cannonball.erase();
-            }
         }
 
     }
