@@ -2,8 +2,6 @@ package final_project;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.sound.sampled.AudioInputStream;
@@ -22,8 +20,6 @@ public class SoundHelper {
         return instance;
     }
 
-    private Map<String, AudioInputStream> soundCache = new HashMap<>();
-
     private SoundHelper() {
     }
 
@@ -35,43 +31,28 @@ public class SoundHelper {
         Thread audioThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Clip clip;
-                if (soundCache.containsKey(sound)) {
-                     AudioInputStream audioIn = soundCache.get(sound);
-                    try {
-                        audioIn.reset();
-                        clip = AudioSystem.getClip();
-                        clip.open(audioIn);
-                    } catch (IOException | LineUnavailableException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                } else {
-                    File soundFile = new File("assets/sound/" + sound);
-                    try {
-                        AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
-                        audioIn.mark(0);
-                        soundCache.put(sound, audioIn);
-                        clip = AudioSystem.getClip();
-                        clip.open(audioIn);
-                    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                }
-                clip.setFramePosition(0);
-                clip.start();
-                if (loop)
-                    clip.loop(clip.LOOP_CONTINUOUSLY);
+                File soundFile = new File("assets/sound/" + sound);
+                try (AudioInputStream audioInputStream = AudioSystem
+                        .getAudioInputStream(soundFile);
+                        Clip clip = AudioSystem.getClip();) {
+                    clip.open(audioInputStream);
+                    clip.start();
+                    if (loop)
+                        clip.loop(Clip.LOOP_CONTINUOUSLY);
 
-                // Check if the sound should be stopped
-                do {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ignored) {
-                    }
-                } while (isPlaying.get() && clip.isRunning());
-                clip.stop();
+                    // Check if the sound should be stopped
+                    do {
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException ignored) {
+                        }
+                    } while (isPlaying.get() && clip.isRunning());
+                    clip.stop();
+                    clip.close();
+                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         });
         audioThread.start();
