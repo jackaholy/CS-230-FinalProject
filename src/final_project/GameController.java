@@ -411,6 +411,7 @@ public class GameController {
 	}
 
 	private void victory(PirateShip enemy, Timer timer) {
+		SoundHelper.getInstance().playSound("victory.wav");
 		// Stop the game
 		enemy.erase();
 		// Start a 3 second timer after defeating the final boss. This gives time for
