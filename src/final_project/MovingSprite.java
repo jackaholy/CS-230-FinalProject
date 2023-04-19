@@ -312,6 +312,16 @@ public abstract class MovingSprite extends Sprite {
     }
 
     /**
+     * Get the basic speed in pixels per second, not taking into account the speed
+     * multiplier or change in time from previous frame.
+     * 
+     * @return
+     */
+    public double getSpeed() {
+        return speed;
+    }
+
+    /**
      * Specifies the direction this sprite should rotate every time rotate() is
      * called.
      * 

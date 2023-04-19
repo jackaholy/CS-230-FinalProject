@@ -47,6 +47,8 @@ public class GameController {
 	private static final int PER_PIRATE_SPAWN_ODDS_INCREASE = 2000;
 	// How much damage to deal to colliding ships every second
 	private static final int COLLISION_DAMAGE_PER_SECOND = 15;
+	// How many pixels ahead of the player the enemy should aim.
+	private static final double CANNONBALL_LEAD = 0.75;
 
 	// Flag to disable ticks while another operation completes.
 	// Prevents concurrency issues when event listeners fire
@@ -384,8 +386,15 @@ public class GameController {
 					targets.add(potentialTarget);
 				}
 			}
-			enemy.createCannonball(currentPlayerShip.getX(), currentPlayerShip.getY(),
+			int predictedX = (int) (currentPlayerShip.getX()
+					- Math.cos(Math.toRadians(currentPlayerShip.getRotation())) * currentPlayerShip.getSpeed()
+							* CANNONBALL_LEAD);
+			int predictedY = (int) (currentPlayerShip.getY()
+					- Math.sin(Math.toRadians(currentPlayerShip.getRotation())) * currentPlayerShip.getSpeed()
+							* CANNONBALL_LEAD);
+			enemy.createCannonball(predictedX, predictedY,
 					targets.toArray(new Ship[0]));
+
 		}
 	}
 
