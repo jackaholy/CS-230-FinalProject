@@ -8,13 +8,14 @@ import javax.swing.JFrame;
  * it collides with on impact
  */
 public class Cannonball extends MovingSprite {
-    private static final ImageIcon ICON = new ImageIcon("assets/cannonball.png");
+    public static final int TRAVEL_DISTANCE = 300;
+    private static final ImageIcon ICON = new ImageIcon("assets/images/cannonball.png");
     private static final int SPEED = 120;
-    private static final int TRAVEL_DISTANCE = 300;
     private static final int DAMAGE = 20;
     private Ship[] targets;
     private int startX;
     private int startY;
+    private boolean firstTick = true;
 
     /**
      * Create a cannonball
@@ -46,7 +47,13 @@ public class Cannonball extends MovingSprite {
 
     @Override
     public void tick() {
-        for (Ship ship : targets) {
+        if (firstTick) {
+            SoundHelper.getInstance().playSound("fire.wav");
+            firstTick = false;
+        }
+        for (
+
+        Ship ship : targets) {
             if (isColliding(ship)) {
                 // We did, hit it
                 ship.takeDamageAbsolute(DAMAGE);

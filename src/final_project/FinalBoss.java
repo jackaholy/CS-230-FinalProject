@@ -9,6 +9,6 @@ public class FinalBoss extends PirateShip {
     public FinalBoss(JFrame gameJFrame, List<Loot> lootList, double speed,
             double turningSpeed, int health,
             int turnDistance) {
-        super(gameJFrame, new ImageIcon("assets/boss.png"), lootList, speed, turningSpeed, health, turnDistance);
+        super(gameJFrame, new ImageIcon("assets/images/boss.png"), lootList, speed, turningSpeed, health, turnDistance);
     }
 }

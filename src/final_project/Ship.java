@@ -1,8 +1,15 @@
 package final_project;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -17,12 +24,7 @@ public class Ship extends MovingSprite {
     private List<Cannonball> cannonballs = new ArrayList<>();
     private Healthbar healthbar;
 
-    // Variables to store information for cannon ball creation, see comment in
-    // createCannonball
-    private boolean shouldCreateCannonballNextFrame = false;
-    private int cannonTargetX;
-    private int cannonTargetY;
-    private Ship[] cannonTargets;
+    private Cannonball queuedCannonball;
 
     /**
      * Create a Ship
@@ -59,6 +61,10 @@ public class Ship extends MovingSprite {
     protected void erase() {
         healthbar.setVisible(false);
         super.erase();
+        // Solve ghost cannons
+        for (Cannonball cannonball : cannonballs) {
+            cannonball.erase();
+        }
     }
 
     @Override
@@ -81,20 +87,15 @@ public class Ship extends MovingSprite {
         super.tick();
 
         // If a cannon ball has been requested for this game
-        if (shouldCreateCannonballNextFrame) {
-            // Create one
-            cannonballs.add(new Cannonball(gameJFrame, x, y, cannonTargetX, cannonTargetY, cannonTargets));
-            // Mark it as finished
-            shouldCreateCannonballNextFrame = false;
+        if (queuedCannonball != null) {
+            cannonballs.add(queuedCannonball);
+            queuedCannonball = null;
         }
 
         // Die
         if (health <= 0) {
+            SoundHelper.getInstance().playSound("sink.wav");
             erase();
-            // Solve ghost cannons
-            for (Cannonball cannonball : cannonballs) {
-                cannonball.erase();
-            }
         }
 
     }
@@ -125,6 +126,7 @@ public class Ship extends MovingSprite {
     public void takeDamageAbsolute(int damage) {
         health -= damage;
         healthbar.setHealth((int) health);
+        SoundHelper.getInstance().playSound("hit.wav");
     }
 
     /**
@@ -144,14 +146,11 @@ public class Ship extends MovingSprite {
      * now causes concurrent modification issues, so we store the required
      * information and create it later.
      * 
-     * @param targetX X position to fire the cannon ball towards
-     * @param targetY Y position to fire the cannon ball towards
-     * @param targets Ships to run collision checks on and deal damage to
+     * @param cannonTargetX X position to fire the cannon ball towards
+     * @param cannonTargetY Y position to fire the cannon ball towards
+     * @param targets       Ships to run collision checks on and deal damage to
      */
-    public void createCannonball(int targetX, int targetY, Ship[] targets) {
-        shouldCreateCannonballNextFrame = true;
-        cannonTargetX = targetX;
-        cannonTargetY = targetY;
-        cannonTargets = targets;
+    public void createCannonball(int cannonTargetX, int cannonTargetY, Ship[] targets) {
+        queuedCannonball = new Cannonball(gameJFrame, x, y, cannonTargetX, cannonTargetY, targets);
     }
 }

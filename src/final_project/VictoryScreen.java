@@ -22,20 +22,20 @@ import java.awt.Font;
 @SuppressWarnings("serial")
 public class VictoryScreen extends JFrame {
 
-    protected VictoryScreen() {
-	// The label we're adding our background image to
-	JLabel backgroundJLabel = new JLabel();
-	// The image that we're setting to the background
-	ImageIcon backgroundPicture = new ImageIcon("assets/tropical_victory.jpeg");
-	backgroundJLabel.setIcon(backgroundPicture);
-	// The background image will fit the screen
-	backgroundJLabel.setBounds(0, 0, backgroundPicture.getIconWidth(), backgroundPicture.getIconHeight());
-	getContentPane().add(backgroundJLabel);
-	// Create our playAgain button
-	JButton playAgainBtn = new JButton("Play Again?");
-	playAgainBtn.setFont(new Font("Apple Chancery", Font.BOLD, 18));
-	playAgainBtn.setBounds(325, 320, 130, 50);
-	backgroundJLabel.add(playAgainBtn);
+	protected VictoryScreen() {
+		// The label we're adding our background image to
+		JLabel backgroundJLabel = new JLabel();
+		// The image that we're setting to the background
+		ImageIcon backgroundPicture = new ImageIcon("assets/images/tropical_victory.jpeg");
+		backgroundJLabel.setIcon(backgroundPicture);
+		// The background image will fit the screen
+		backgroundJLabel.setBounds(0, 0, backgroundPicture.getIconWidth(), backgroundPicture.getIconHeight());
+		getContentPane().add(backgroundJLabel);
+		// Create our playAgain button
+		JButton playAgainBtn = new JButton("Play Again?");
+		playAgainBtn.setFont(new Font("Apple Chancery", Font.BOLD, 18));
+		playAgainBtn.setBounds(325, 320, 130, 50);
+		backgroundJLabel.add(playAgainBtn);
 
 	/*
 	 * Check to see if the player clicks on the playAgainBtn. If so, dispose of this

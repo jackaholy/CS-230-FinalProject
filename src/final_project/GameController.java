@@ -18,6 +18,7 @@ import javax.swing.Timer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.JLabel;
@@ -46,7 +47,7 @@ public class GameController {
 	private static final int PER_PIRATE_SPAWN_ODDS_INCREASE = 2000;
 	// How much damage to deal to colliding ships every second
 	private static final int COLLISION_DAMAGE_PER_SECOND = 15;
-	
+
 	// Flag to disable ticks while another operation completes.
 	// Prevents concurrency issues when event listeners fire
 	private boolean freeze = false;
@@ -56,18 +57,18 @@ public class GameController {
 	private JFrame gameJFrame = new JFrame("Virtual Voyagers");
 
 	private PlayerShip[] availableShips = {
-			new PlayerShip(gameJFrame, new ImageIcon("assets/water_bug.png"), 0, 100, 90, 30, 800),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/floating_point.png"), 20, 125, 120, 50, 500),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/byte_me.png"), 50, 150, 140, 100, 300),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/sea++.png"), 75, 125, 100, 250, 100),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/world_wide_wet.png"), 100, 100, 90, 400, 50)
+			new PlayerShip(gameJFrame, new ImageIcon("assets/images/water_bug.png"), 0, 100, 90, 30, 800),
+			new PlayerShip(gameJFrame, new ImageIcon("assets/images/floating_point.png"), 20, 125, 120, 50, 500),
+			new PlayerShip(gameJFrame, new ImageIcon("assets/images/byte_me.png"), 50, 150, 140, 100, 300),
+			new PlayerShip(gameJFrame, new ImageIcon("assets/images/sea++.png"), 75, 125, 100, 250, 100),
+			new PlayerShip(gameJFrame, new ImageIcon("assets/images/world_wide_wet.png"), 100, 100, 90, 400, 50)
 	};
-	
+
 	// Labels on the screen
 	private JTextArea textAreaLoot = new JTextArea();
 	private JLabel lblUpgrade = new JLabel();
 	private JLabel lblLoot = new JLabel("Loot: ");
-	
+
 	// Last known coordinates of the player
 	private int cursorX;
 	private int cursorY;
@@ -82,56 +83,63 @@ public class GameController {
 	private PlayerShip currentPlayerShip = availableShips[currentPlayerShipIndex];
 	private List<PirateShip> enemies = new ArrayList<>();
 	private List<PirateShip> deadEnemies = new ArrayList<>();
-	
+
+	// This flag can be used to stop gameMusic
+	AtomicBoolean gameMusicPlaying = new AtomicBoolean(true);
+	AtomicBoolean bossMusicPlaying = new AtomicBoolean(false);
+
 	/**
 	 * The main method. Literally just creates a new game object
 	 * 
 	 * @param args boilerplate
 	 */
 	public static void main(String[] args) {
-	    	new TitleScreen();
+		new TitleScreen();
 	}
 
 	/**
 	 * Create a new game, entry point for entire program
 	 */
 	public GameController() {
+		SoundHelper.getInstance().playSound("gamemusic.wav", gameMusicPlaying, true);
 		createWindow();
 		createSprites();
 		registerEventListeners();
 
 		Timer timer = new Timer(1000 / FRAME_RATE, null);
-			timer.addActionListener(new ActionListener() {
-			    	public void actionPerformed(ActionEvent arg0) {
-        				if (freeze)
-        					return;
-        				lblUpgrade.setBounds(gameJFrame.getContentPane().getWidth() / 2 - lblUpgrade.getWidth() / 2,
-        						gameJFrame.getContentPane().getHeight() - lblUpgrade.getHeight(), 200, 20);
-        
-        				removeDeadEnemies();
-        
-        				updatePlayer();
-        				
-        				checkLootCollection();
-        
-        				updateEnemies(timer);
-        
-        				redrawLoot();
-        
-        				attemptLootSpawn();
-        				
-        				attemptEnemySpawn();
-        				
-        				// If the player dies, erase them and end the game
-        				if (currentPlayerShip.getHealth() <= 0) {
-                				    currentPlayerShip.erase();
-                				    gameJFrame.dispose();
-                				    timer.stop();
-                				    new DeathScreen();
-        				}
-			    }
-    		});
-    		timer.start();
+		timer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (freeze)
+					return;
+				lblUpgrade.setBounds(gameJFrame.getContentPane().getWidth() / 2 - lblUpgrade.getWidth() / 2,
+						gameJFrame.getContentPane().getHeight() - lblUpgrade.getHeight(), 200, 20);
+
+				removeDeadEnemies();
+
+				updatePlayer();
+
+				checkLootCollection();
+
+				updateEnemies(timer);
+
+				redrawLoot();
+
+				attemptLootSpawn();
+
+				attemptEnemySpawn();
+
+				// If the player dies, erase them and end the game
+				if (currentPlayerShip.getHealth() <= 0) {
+					currentPlayerShip.erase();
+					gameJFrame.dispose();
+					gameMusicPlaying.set(false);
+					bossMusicPlaying.set(false);
+					timer.stop();
+					new DeathScreen();
+				}
+			}
+		});
+		timer.start();
 	}
 
 	/**
@@ -184,7 +192,7 @@ public class GameController {
 		// Create an enemy
 		enemies.add(new PirateShip(
 				gameJFrame,
-				new ImageIcon("assets/cyber_scourge.png"), lootList,
+				new ImageIcon("assets/images/cyber_scourge.png"), lootList,
 				120, 75,
 				100, 125));
 	}
@@ -258,12 +266,13 @@ public class GameController {
 			}
 		}
 	}
-	
+
 	private void upgradeShip() {
 		freeze = true;
+		SoundHelper.getInstance().playSound("money.wav");
 		if (currentPlayerShipIndex == availableShips.length - 1) {
-        		    freeze = false;
-        		    return;
+			freeze = false;
+			return;
 		}
 		PlayerShip upgradedShip = availableShips[currentPlayerShipIndex + 1];
 		if (money < upgradedShip.getCost())
@@ -281,13 +290,16 @@ public class GameController {
 		// If the user has the World Wide Wet boat, spawn the boss.
 		if (currentPlayerShipIndex == availableShips.length - 1) {
 			enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 1000, 300));
+			gameMusicPlaying.set(false);
+			bossMusicPlaying.set(true);
+			SoundHelper.getInstance().playSound("bossmusic.wav", bossMusicPlaying, true);
 			// Remove labels
 			textAreaLoot.setVisible(false);
 			lblUpgrade.setVisible(false);
 			lblLoot.setVisible(false);
 		}
 		if (currentPlayerShipIndex != availableShips.length - 1) {
-		    	lblUpgrade.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
+			lblUpgrade.setText("Next ship costs: " + availableShips[currentPlayerShipIndex + 1].getCost());
 		}
 		String displayMoney = "" + money;
 		textAreaLoot.setText(displayMoney);
@@ -325,7 +337,7 @@ public class GameController {
 		if (rand.nextInt((PER_PIRATE_SPAWN_ODDS_INCREASE * enemies.size()) + BASE_PIRATE_SPAWN_ODDS) == 1)
 			enemies.add(new PirateShip(
 					gameJFrame,
-					new ImageIcon("assets/cyber_scourge.png"), lootList,
+					new ImageIcon("assets/images/cyber_scourge.png"), lootList,
 					120, 75,
 					100, 125));
 	}
@@ -359,6 +371,9 @@ public class GameController {
 		int fireRate = PIRATE_CANNON_FIRE_ODDS;
 		if (enemy instanceof FinalBoss)
 			fireRate = BOSS_PIRATE_CANNON_FIRE_ODDS;
+		if (Math.hypot(enemy.getX() - currentPlayerShip.getX(),
+				enemy.getY() - currentPlayerShip.getY()) > Cannonball.TRAVEL_DISTANCE)
+			return;
 		if (rand.nextInt(fireRate) == 1) {
 			List<Ship> targets = new ArrayList<>();
 			targets.add(currentPlayerShip);
@@ -375,33 +390,36 @@ public class GameController {
 	}
 
 	private void updateEnemy(PirateShip enemy, Timer timer) {
-	    	// Check to see if the final boss is dead
+		// Check to see if the final boss is dead
 		if (enemy instanceof FinalBoss && enemy.getHealth() <= 0) {
-		    	victory(enemy, timer);
+			victory(enemy, timer);
 		}
-	    
-	    	// Aim for the player
+
+		// Aim for the player
 		enemy.setTarget(currentPlayerShip.getX(), currentPlayerShip.getY());
 		// Move towards the player
 		enemy.tick();
 	}
-	
+
 	private void victory(PirateShip enemy, Timer timer) {
-        	// Stop the game
-        	enemy.erase();
-        	// Start a 3 second timer after defeating the final boss. This gives time for celebration
-        	Timer delayTimer = new Timer(3000, new ActionListener() {
-        	        @Override
-        	        public void actionPerformed(ActionEvent e) {
-        	                // Stop the main game and dispose of the window
-        	            	timer.stop();
-        	                gameJFrame.dispose();
-            	            	// You win!
-            	            	new VictoryScreen();
-        	        }
-        	});
-        	delayTimer.setRepeats(false);
-        	delayTimer.start();
+		// Stop the game
+		enemy.erase();
+		// Start a 3 second timer after defeating the final boss. This gives time for
+		// celebration
+		Timer delayTimer = new Timer(3000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Stop the main game and dispose of the window
+				timer.stop();
+				gameJFrame.dispose();
+				gameMusicPlaying.set(false);
+				bossMusicPlaying.set(false);
+				// You win!
+				new VictoryScreen();
+			}
+		});
+		delayTimer.setRepeats(false);
+		delayTimer.start();
 	}
 
 	private void checkPlayerCollision(PirateShip enemy) {
