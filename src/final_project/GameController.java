@@ -86,6 +86,7 @@ public class GameController {
 
 	// This flag can be used to stop gameMusic
 	AtomicBoolean gameMusicPlaying = new AtomicBoolean(true);
+	AtomicBoolean bossMusicPlaying = new AtomicBoolean(false);
 
 	/**
 	 * The main method. Literally just creates a new game object
@@ -131,6 +132,8 @@ public class GameController {
 				if (currentPlayerShip.getHealth() <= 0) {
 					currentPlayerShip.erase();
 					gameJFrame.dispose();
+					gameMusicPlaying.set(false);
+					bossMusicPlaying.set(false);
 					timer.stop();
 					new DeathScreen();
 				}
@@ -288,7 +291,8 @@ public class GameController {
 		if (currentPlayerShipIndex == availableShips.length - 1) {
 			enemies.add(new FinalBoss(gameJFrame, lootList, 100, 40, 1000, 300));
 			gameMusicPlaying.set(false);
-			SoundHelper.getInstance().playSound("bossmusic.wav");
+			bossMusicPlaying.set(true);
+			SoundHelper.getInstance().playSound("bossmusic.wav", bossMusicPlaying, true);
 			// Remove labels
 			textAreaLoot.setVisible(false);
 			lblUpgrade.setVisible(false);
@@ -408,6 +412,8 @@ public class GameController {
 				// Stop the main game and dispose of the window
 				timer.stop();
 				gameJFrame.dispose();
+				gameMusicPlaying.set(false);
+				bossMusicPlaying.set(false);
 				// You win!
 				new VictoryScreen();
 			}
