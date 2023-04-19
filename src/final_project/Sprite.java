@@ -195,7 +195,7 @@ public abstract class Sprite {
      * @param other the sprite to check ours against
      * @return
      */
-    boolean isColliding(Sprite other) {
+    protected boolean isColliding(Sprite other) {
         // If one of the sprites doesn't exist,
         // there's no collision
         if (!exists || !other.getExistance()) {

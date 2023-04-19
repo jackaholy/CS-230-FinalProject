@@ -22,7 +22,7 @@ public class Ship extends MovingSprite {
 
     // Cannon balls we've fired
     private List<Cannonball> cannonballs = new ArrayList<>();
-    Healthbar healthbar;
+    private Healthbar healthbar;
 
     private Cannonball queuedCannonball;
 
