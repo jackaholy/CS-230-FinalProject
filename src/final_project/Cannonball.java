@@ -59,9 +59,7 @@ public class Cannonball extends MovingSprite {
             SoundHelper.getInstance().playSound("fire.wav");
             firstTick = false;
         }
-        for (
-
-        Ship ship : targets) {
+        for (Ship ship : targets) {
             if (isColliding(ship)) {
                 // We did, hit it
                 ship.takeDamageAbsolute(DAMAGE);

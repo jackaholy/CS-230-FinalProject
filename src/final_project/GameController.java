@@ -437,6 +437,7 @@ public class GameController {
 		if (currentPlayerShip.isColliding(enemy)) {
 			currentPlayerShip.takeDamagePerSecond(COLLISION_DAMAGE_PER_SECOND);
 			enemy.takeDamagePerSecond(COLLISION_DAMAGE_PER_SECOND);
+			
 			enemy.moveAway(currentPlayerShip);
 			currentPlayerShip.moveAway(enemy);
 		}
