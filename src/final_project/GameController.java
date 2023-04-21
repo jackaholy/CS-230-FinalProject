@@ -409,11 +409,9 @@ public class GameController {
 		// Move towards the player
 		enemy.tick();
 	}
-
+	// Called when the final boss is defeated
 	private void victory(PirateShip enemy, Timer timer) {
 		SoundHelper.getInstance().playSound("victory.wav");
-		// Stop the game
-		enemy.erase();
 		// Start a 3 second timer after defeating the final boss. This gives time for
 		// celebration
 		Timer delayTimer = new Timer(3000, new ActionListener() {
