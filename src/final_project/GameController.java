@@ -212,6 +212,15 @@ public class GameController {
 				cursorY = e.getY();
 				freeze = false;
 			}
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				freeze = true;
+				// Every time the cursor moves, save the new coordinates
+				cursorX = e.getX();
+				cursorY = e.getY();
+				freeze = false;
+			}
 		});
 
 		// Every time the player clicks the mouse, fire the cannon
@@ -437,7 +446,7 @@ public class GameController {
 		if (currentPlayerShip.isColliding(enemy)) {
 			currentPlayerShip.takeDamagePerSecond(COLLISION_DAMAGE_PER_SECOND);
 			enemy.takeDamagePerSecond(COLLISION_DAMAGE_PER_SECOND);
-			
+
 			enemy.moveAway(currentPlayerShip);
 			currentPlayerShip.moveAway(enemy);
 		}
