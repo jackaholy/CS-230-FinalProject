@@ -49,6 +49,8 @@ public class VictoryScreen extends JFrame {
 		}
 	    }
 	});
+	// Don't have a default button selected.
+	playAgainBtn.setFocusable(false);
 
 	// Create our quit button
 	JButton quitBtn = new JButton("Quit?");
@@ -66,6 +68,8 @@ public class VictoryScreen extends JFrame {
 		System.exit(ABORT);
 	    }
 	});
+	// Don't have a default button selected.
+	quitBtn.setFocusable(false);
 
 	// Get the size of the screen
 	GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
