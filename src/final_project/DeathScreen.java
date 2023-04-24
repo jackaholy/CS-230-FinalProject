@@ -32,7 +32,7 @@ public class DeathScreen extends JFrame {
 	backgroundJLabel.setBounds(0, 0, backgroundPicture.getIconWidth(), backgroundPicture.getIconHeight());
 	getContentPane().add(backgroundJLabel);
 	// Create our playAgain button
-	JButton playAgainBtn = new JButton("Play Again?");
+	JButton playAgainBtn = new JButton("Play Again");
 	playAgainBtn.setFont(new Font("Apple Chancery", Font.BOLD, 18));
 	playAgainBtn.setBounds(325, 320, 130, 50);
 	backgroundJLabel.add(playAgainBtn);
@@ -53,7 +53,7 @@ public class DeathScreen extends JFrame {
 	playAgainBtn.setFocusable(false);
 
 	// Create our quit button
-	JButton quitBtn = new JButton("Quit?");
+	JButton quitBtn = new JButton("Quit");
 	quitBtn.setFont(new Font("Apple Chancery", Font.BOLD, 18));
 	quitBtn.setBounds(325, 400, 130, 50);
 	backgroundJLabel.add(quitBtn);
