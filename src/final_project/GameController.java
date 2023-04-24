@@ -212,7 +212,7 @@ public class GameController {
 				cursorY = e.getY();
 				freeze = false;
 			}
-
+			
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				freeze = true;
@@ -244,6 +244,10 @@ public class GameController {
 				} else if (e.getKeyCode() == 32) {
 					// Space
 					fireCannon();
+				}
+				if (e.getKeyCode() == 81) {
+					// "Q"
+					System.exit(0);
 				}
 				super.keyPressed(e);
 				freeze = false;
@@ -418,6 +422,7 @@ public class GameController {
 		// Move towards the player
 		enemy.tick();
 	}
+
 	// Called when the final boss is defeated
 	private void victory(PirateShip enemy, Timer timer) {
 		SoundHelper.getInstance().playSound("victory.wav");
