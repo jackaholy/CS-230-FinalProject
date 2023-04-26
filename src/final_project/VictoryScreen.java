@@ -46,6 +46,7 @@ public class VictoryScreen extends JFrame {
 		 * window and continue to the main program.
 		 */
 		playAgainBtn.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource() == playAgainBtn) {
 					dispose();
@@ -68,6 +69,7 @@ public class VictoryScreen extends JFrame {
 		 */
 		quitBtn.addMouseListener(new MouseAdapter() {
 			// Close the application if clicked
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.exit(ABORT);
 			}

@@ -60,6 +60,7 @@ public class TitleScreen extends JFrame {
 		 * window and continue to the main program.
 		 */
 		playBtn.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (e.getSource() == playBtn) {
 					dispose();
@@ -101,6 +102,7 @@ public class TitleScreen extends JFrame {
 		 */
 		quitBtn.addMouseListener(new MouseAdapter() {
 			// Close the application if clicked
+			@Override
 			public void mouseClicked(MouseEvent e) {
 				System.exit(ABORT);
 			}

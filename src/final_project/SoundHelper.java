@@ -42,15 +42,13 @@ public class SoundHelper {
 
                     // Check if the sound should be stopped
                     do {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException ignored) {
-                        }
+                        Thread.sleep(100);
                     } while (isPlaying.get() && clip.isRunning());
                     clip.stop();
-                    clip.close();
-                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-                    // TODO Auto-generated catch block
+                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException
+                        | InterruptedException e) {
+                    // Something went wrong with playback that this class can't handle. Print the
+                    // stack trace so we at least know what happened
                     e.printStackTrace();
                 }
             }

@@ -47,12 +47,6 @@ public class Cannonball extends MovingSprite {
 
     @Override
     public void tick() {
-        /*
-         * if (getExistance()) {
-         * Graphics g = gameJFrame.getContentPane().getGraphics();
-         * g.drawLine(targetX, targetY, x, y);
-         * }
-         */
         if (firstTick) {
             SoundHelper.getInstance().playSound("fire.wav");
             firstTick = false;
