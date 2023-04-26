@@ -45,7 +45,7 @@ public class TitleScreen extends JFrame {
 		JLabel gameSummaryLabel = new JLabel(
 				"Sail the high seas, amass loot, upgrade your ship, and rid the sea of pirates");
 		gameSummaryLabel.setFont(new Font("Apple Chancery", Font.PLAIN, 15));
-		gameSummaryLabel.setBounds(135, 120, 600, 50);
+		gameSummaryLabel.setBounds(165, 150, 600, 50);
 		backgroundJLabel.add(gameSummaryLabel);
 
 		// Create our play button
