@@ -42,10 +42,6 @@ public class GameController {
 	// Maximum amount of loot to naturally spawn at a time
 	// More may appear if pirates drop it
 	private static final int TOTAL_LOOT = 10;
-	// 1 / X chance of a pirate spawning every tick
-	private static final int BASE_PIRATE_SPAWN_ODDS = 200;
-	// Reduce the chances by X for every pirate that already exists
-	private static final int PER_PIRATE_SPAWN_ODDS_INCREASE = 2000;
 	// How much damage to deal to colliding ships every second
 	private static final int COLLISION_DAMAGE_PER_SECOND = 15;
 	// How many pixels ahead of the player the enemy should aim.
@@ -62,9 +58,12 @@ public class GameController {
 			new PlayerShip(gameJFrame, new ImageIcon("assets/images/water_bug.png"), 0, 100, 90, 30, 800),
 			new PlayerShip(gameJFrame, new ImageIcon("assets/images/floating_point.png"), 20, 125, 120, 50, 500),
 			new PlayerShip(gameJFrame, new ImageIcon("assets/images/byte_me.png"), 50, 150, 140, 100, 300),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/images/sea++.png"), 75, 125, 100, 250, 100),
-			new PlayerShip(gameJFrame, new ImageIcon("assets/images/world_wide_wet.png"), 100, 100, 90, 400, 50)
+			new PlayerShip(gameJFrame, new ImageIcon("assets/images/sea++.png"), 75, 125, 100, 250, 150),
+			new PlayerShip(gameJFrame, new ImageIcon("assets/images/world_wide_wet.png"), 100, 100, 90, 500, 50)
 	};
+
+	// The last time we tried spawning a pirate
+	private long previousEnemySpawnTime = 0;
 
 	// Labels on the screen
 	private JTextArea textAreaLoot = new JTextArea();
@@ -206,7 +205,7 @@ public class GameController {
 				cursorY = e.getY();
 				freeze = false;
 			}
-			
+
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				freeze = true;
@@ -343,10 +342,22 @@ public class GameController {
 	}
 
 	private void attemptEnemySpawn() {
-		if (rand.nextInt((PER_PIRATE_SPAWN_ODDS_INCREASE * enemies.size()) + BASE_PIRATE_SPAWN_ODDS) == 1)
+		if (previousEnemySpawnTime + 1000 > System.currentTimeMillis())
+			return;
+		previousEnemySpawnTime = System.currentTimeMillis();
+
+		double cap = 1.2 * currentPlayerShipIndex + 1;
+
+		double r = 0.2;
+
+		// Formula my roommate gave me for modeling ecosystems that works well on
+		// pirates
+		double probability = r * (enemies.size() + 1) * (1 - (enemies.size() / (double) cap)) + 0.001;
+		System.out.println(probability);
+		if (rand.nextDouble() < probability)
 			enemies.add(new PirateShip(
 					gameJFrame,
-					new ImageIcon("assets/images/cyber_scourge.png"), lootList,
+					new ImageIcon("assets/images/cyber_scourge.png"), lootList, 
 					120, 75,
 					100, 125));
 	}

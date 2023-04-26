@@ -44,6 +44,13 @@ public class TitleScreen extends JFrame {
 		// The background image will fit the screen
 		backgroundJLabel.setBounds(0, 0, backgroundPicture.getIconWidth(), backgroundPicture.getIconHeight());
 		getContentPane().add(backgroundJLabel);
+
+		JLabel gameSummaryLabel = new JLabel(
+				"Sail the high seas, amass loot, upgrade your ship, and rid the sea of pirates");
+		gameSummaryLabel.setFont(new Font("Apple Chancery", Font.PLAIN, 15));
+		gameSummaryLabel.setBounds(135, 120, 600, 50);
+		backgroundJLabel.add(gameSummaryLabel);
+
 		// Create our play button
 		JButton playBtn = new JButton("Play");
 		playBtn.setFont(new Font("Apple Chancery", Font.BOLD, 20));
