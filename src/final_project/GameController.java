@@ -25,7 +25,6 @@ import javax.swing.JLabel;
 import java.awt.Font;
 
 import javax.swing.JTextArea;
-import javax.swing.UIManager;
 
 /**
  * The main file of the project. Run this one to start the project

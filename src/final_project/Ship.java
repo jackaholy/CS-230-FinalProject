@@ -1,15 +1,8 @@
 package final_project;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 

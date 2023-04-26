@@ -4,16 +4,13 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Font;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.UIManager;
 import javax.swing.WindowConstants;
-
-import java.awt.Color;
-import java.awt.Font;
 
 /**
  * Create a title screen with a "Play" button and a "Quit" button. This is the

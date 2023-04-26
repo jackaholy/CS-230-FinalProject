@@ -2,11 +2,10 @@ package final_project;
 
 import java.awt.Color;
 
-import java.awt.Color;
-
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
+@SuppressWarnings("serial")
 public class Healthbar extends JProgressBar {
 
     private final int maxHealth;
