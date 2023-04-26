@@ -25,6 +25,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 
 import javax.swing.JTextArea;
+import javax.swing.UIManager;
 
 /**
  * The main file of the project. Run this one to start the project
@@ -57,7 +58,6 @@ public class GameController {
 	private Random rand = new Random();
 
 	private JFrame gameJFrame = new JFrame("Virtual Voyagers");
-
 	private PlayerShip[] availableShips = {
 			new PlayerShip(gameJFrame, new ImageIcon("assets/images/water_bug.png"), 0, 100, 90, 30, 800),
 			new PlayerShip(gameJFrame, new ImageIcon("assets/images/floating_point.png"), 20, 125, 120, 50, 500),
@@ -90,19 +90,13 @@ public class GameController {
 	AtomicBoolean gameMusicPlaying = new AtomicBoolean(true);
 	AtomicBoolean bossMusicPlaying = new AtomicBoolean(false);
 
-	/**
-	 * The main method. Literally just creates a new game object
-	 * 
-	 * @param args boilerplate
-	 */
-	public static void main(String[] args) {
-		new TitleScreen();
-	}
+
 
 	/**
 	 * Create a new game, entry point for entire program
 	 */
 	public GameController() {
+	    	
 		SoundHelper.getInstance().playSound("gamemusic.wav", gameMusicPlaying, true);
 		createWindow();
 		createSprites();

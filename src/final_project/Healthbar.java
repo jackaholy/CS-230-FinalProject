@@ -7,8 +7,7 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
-public class Healthbar {
-    private JProgressBar progressBar = new JProgressBar();
+public class Healthbar extends JProgressBar {
 
     private final int maxHealth;
 
@@ -21,14 +20,15 @@ public class Healthbar {
      * @param yShift how far above the parent element the sprite should be
      */
     public Healthbar(JFrame gameJFrame, int maxHealth, int yShift) {
-        this.yShift = yShift;
-        progressBar.setMinimum(0);
-        gameJFrame.getContentPane().add(progressBar);
-        this.maxHealth = maxHealth;
-        progressBar.setMaximum(maxHealth);
-        progressBar.setValue(maxHealth);
-        progressBar.setForeground(Color.green);
-        progressBar.setVisible(false);
+            this.yShift = yShift;
+            setMinimum(0);
+            gameJFrame.getContentPane().add(this);
+            this.maxHealth = maxHealth;
+            setMaximum(maxHealth);
+            setValue(maxHealth);
+            setForeground(Color.green);
+            setBackground(Color.green);
+            setVisible(false);
     }
 
     /**
@@ -37,7 +37,7 @@ public class Healthbar {
      * @param health an arbitrary integer value. Less than maxHealth, greater than 0
      */
     public void setHealth(int health) {
-        progressBar.setValue(health);
+		setValue(health);
     }
 
     /**
@@ -48,14 +48,6 @@ public class Healthbar {
      * @param parentY Center Y position
      */
     public void updatePosition(int parentX, int parentY) {
-        progressBar.setBounds(parentX - progressBar.getWidth() / 2, parentY - yShift, maxHealth, 10);
-    }
-
-    /**
-     * Make the healthbar visible/invisible
-     * @param visibility true - visible, false - invisible
-     */
-    public void setVisible(boolean visibility) {
-        progressBar.setVisible(visibility);
+		setBounds(parentX - getWidth() / 2, parentY - yShift, maxHealth, 10);
     }
 }

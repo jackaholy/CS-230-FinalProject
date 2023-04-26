@@ -9,7 +9,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
+
+import java.awt.Color;
 import java.awt.Font;
 
 /**
@@ -21,8 +24,18 @@ import java.awt.Font;
 
 @SuppressWarnings("serial")
 public class TitleScreen extends JFrame {
+    
+	/**
+	 * The main method. Literally just creates a new game object
+	 *
+	 * @param args boilerplate
+	 */
+	public static void main(String[] args) {
+	        new TitleScreen();
+	}
 
 	protected TitleScreen() {
+	    	
 		// The label we're adding our background image to
 		JLabel backgroundJLabel = new JLabel();
 		// The image that we're setting to the background
