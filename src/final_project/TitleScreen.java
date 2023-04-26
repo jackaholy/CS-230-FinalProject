@@ -29,7 +29,6 @@ public class TitleScreen extends JFrame {
 	 */
 	public static void main(String[] args) {
 	        new TitleScreen();
-//	    	new DeathScreen();
 	}
 
 	protected TitleScreen() {
