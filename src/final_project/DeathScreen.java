@@ -24,6 +24,7 @@ import java.awt.Font;
 public class DeathScreen extends JFrame {
 
 	protected DeathScreen() {
+	    	setResizable(false);
 		// The label we're adding our background image to
 		JLabel backgroundJLabel = new JLabel();
 		// The image that we're setting to the background
@@ -34,8 +35,8 @@ public class DeathScreen extends JFrame {
 		getContentPane().add(backgroundJLabel);
 		// Create our playAgain button
 		JButton playAgainBtn = new JButton("Play Again");
-		playAgainBtn.setFont(new Font("Apple Chancery", Font.BOLD, 18));
-		playAgainBtn.setBounds(325, 320, 130, 50);
+		playAgainBtn.setFont(new Font("Apple Chancery", Font.BOLD, 20));
+		playAgainBtn.setBounds(310, 320, 130, 50);
 		backgroundJLabel.add(playAgainBtn);
 
 		/*
@@ -55,10 +56,29 @@ public class DeathScreen extends JFrame {
 		// Don't have a default button selected.
 		playAgainBtn.setFocusable(false);
 
+		// Create our instructions button
+		JButton instructionsBtn = new JButton("Instructions");
+		instructionsBtn.setFont(new Font("Apple Chancery", Font.BOLD, 15));
+		instructionsBtn.setBounds(310, 390, 130, 50);
+		backgroundJLabel.add(instructionsBtn);
+
+		/*
+		 * Check to see if the player clicks on the instructions button. If so,
+		 * move to the instructions JFrame.
+		 */
+		instructionsBtn.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+				new Instructions();
+			}
+		});
+		// Don't have a default button selected.
+		instructionsBtn.setFocusable(false);
+		
 		// Create our quit button
 		JButton quitBtn = new JButton("Quit");
-		quitBtn.setFont(new Font("Apple Chancery", Font.BOLD, 18));
-		quitBtn.setBounds(325, 400, 130, 50);
+		quitBtn.setFont(new Font("Apple Chancery", Font.BOLD, 15));
+		quitBtn.setBounds(325, 460, 100, 40);
 		backgroundJLabel.add(quitBtn);
 
 		/*

@@ -26,6 +26,7 @@ import java.awt.Font;
 public class VictoryScreen extends JFrame {
 
 	protected VictoryScreen() {
+	    	setResizable(false);
 		// The label we're adding our background image to
 		JLabel backgroundJLabel = new JLabel();
 		// The image that we're setting to the background
