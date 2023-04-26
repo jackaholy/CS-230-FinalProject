@@ -63,7 +63,7 @@ public abstract class MovingSprite extends Sprite {
      * @param speed        how many pixels the player should move per second
      * @param turningSpeed how many degrees the player should rotate per second
      */
-    public MovingSprite(JFrame gameJFrame, ImageIcon image, int x, int y, double speed,
+    protected MovingSprite(JFrame gameJFrame, ImageIcon image, int x, int y, double speed,
             double turningSpeed) {
         super(gameJFrame, image, x, y);
         previousTime = System.currentTimeMillis();
@@ -158,11 +158,6 @@ public abstract class MovingSprite extends Sprite {
         xChangeExact = clampXMovement(xChangeExact);
         yChangeExact = clampYMovement(yChangeExact);
 
-        if (yChangeExact > 0 && !canMoveUp())
-            yChangeExact = 0;
-        else if (yChangeExact < 0 && !canMoveDown())
-            yChangeExact = 0;
-
         // Since you can't move part of a pixel, convert to ints
         int xChangeInt = (int) xChangeExact;
         int yChangeInt = (int) yChangeExact;
@@ -183,9 +178,7 @@ public abstract class MovingSprite extends Sprite {
      * @return xChange if movement permitted, else 0
      */
     private double clampXMovement(double xChange) {
-        if (xChange > 0 && !canMoveLeft()) {
-            return 0;
-        } else if (xChange < 0 && !canMoveRight()) {
+        if ((xChange > 0 && !canMoveLeft()) || (xChange < 0 && !canMoveRight())) {
             return 0;
         }
         return xChange;
@@ -198,9 +191,7 @@ public abstract class MovingSprite extends Sprite {
      * @return yChange if movement permitted, else 0
      */
     private double clampYMovement(double yChange) {
-        if (yChange > 0 && !canMoveUp()) {
-            return 0;
-        } else if (yChange < 0 && !canMoveDown()) {
+        if ((yChange > 0 && !canMoveUp()) || (yChange < 0 && !canMoveDown())) {
             return 0;
         }
         return yChange;

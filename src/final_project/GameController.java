@@ -88,20 +88,19 @@ public class GameController {
 	AtomicBoolean gameMusicPlaying = new AtomicBoolean(true);
 	AtomicBoolean bossMusicPlaying = new AtomicBoolean(false);
 
-
+	Timer gameTimer = new Timer(1000 / FRAME_RATE, null);
 
 	/**
 	 * Create a new game, entry point for entire program
 	 */
 	public GameController() {
-	    	
+
 		SoundHelper.getInstance().playSound("gamemusic.wav", gameMusicPlaying, true);
 		createWindow();
 		createSprites();
 		registerEventListeners();
 
-		Timer timer = new Timer(1000 / FRAME_RATE, null);
-		timer.addActionListener(new ActionListener() {
+		gameTimer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (freeze)
 					return;
@@ -114,7 +113,7 @@ public class GameController {
 
 				checkLootCollection();
 
-				updateEnemies(timer);
+				updateEnemies();
 
 				redrawLoot();
 
@@ -128,12 +127,12 @@ public class GameController {
 					gameJFrame.dispose();
 					gameMusicPlaying.set(false);
 					bossMusicPlaying.set(false);
-					timer.stop();
+					gameTimer.stop();
 					new DeathScreen();
 				}
 			}
 		});
-		timer.start();
+		gameTimer.start();
 	}
 
 	/**
@@ -315,7 +314,6 @@ public class GameController {
 
 	private void fireCannon() {
 		List<Ship> targets = new ArrayList<>();
-		// targets.add(currentPlayerShip);
 		targets.addAll(enemies);
 		currentPlayerShip.createCannonball(cursorX, cursorY, targets.toArray(new Ship[0]));
 	}
@@ -352,11 +350,10 @@ public class GameController {
 		// Formula my roommate gave me for modeling ecosystems that works well on
 		// pirates
 		double probability = r * (enemies.size() + 1) * (1 - (enemies.size() / (double) cap)) + 0.001;
-		System.out.println(probability);
 		if (rand.nextDouble() < probability)
 			enemies.add(new PirateShip(
 					gameJFrame,
-					new ImageIcon("assets/images/cyber_scourge.png"), lootList, 
+					new ImageIcon("assets/images/cyber_scourge.png"), lootList,
 					120, 75,
 					100, 125));
 	}
@@ -372,14 +369,14 @@ public class GameController {
 		}
 	}
 
-	private void updateEnemies(Timer timer) {
+	private void updateEnemies() {
 		for (PirateShip enemy : enemies) {
 			// If the enemy doesn't exist, skip and mark for removal
 			if (!enemy.getExistance()) {
 				deadEnemies.add(enemy);
 				continue;
 			}
-			updateEnemy(enemy, timer);
+			updateEnemy(enemy);
 			attemptFireCannon(enemy);
 			checkPlayerCollision(enemy);
 			checkEnemyCollision(enemy);
@@ -415,10 +412,10 @@ public class GameController {
 		}
 	}
 
-	private void updateEnemy(PirateShip enemy, Timer timer) {
+	private void updateEnemy(PirateShip enemy) {
 		// Check to see if the final boss is dead
 		if (enemy instanceof FinalBoss && enemy.getHealth() <= 0) {
-			victory(enemy, timer);
+			victory();
 		}
 
 		// Aim for the player
@@ -428,7 +425,7 @@ public class GameController {
 	}
 
 	// Called when the final boss is defeated
-	private void victory(PirateShip enemy, Timer timer) {
+	private void victory() {
 		SoundHelper.getInstance().playSound("victory.wav");
 		// Start a 3 second timer after defeating the final boss. This gives time for
 		// celebration
@@ -436,7 +433,7 @@ public class GameController {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// Stop the main game and dispose of the window
-				timer.stop();
+				gameTimer.stop();
 				gameJFrame.dispose();
 				gameMusicPlaying.set(false);
 				bossMusicPlaying.set(false);
@@ -461,10 +458,8 @@ public class GameController {
 
 	private void checkEnemyCollision(PirateShip enemy) {
 		for (PirateShip otherEnemy : enemies) {
-			if (!enemy.getExistance())
-				continue;
-			// Can't collide with self
-			if (otherEnemy == enemy)
+			// Can't collide with nonexistant ships or self
+			if (!enemy.getExistance() || otherEnemy == enemy)
 				continue;
 
 			if (enemy.isColliding(otherEnemy)) {
