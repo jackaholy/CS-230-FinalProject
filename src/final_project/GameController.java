@@ -85,10 +85,11 @@ public class GameController {
 	private List<PirateShip> deadEnemies = new ArrayList<>();
 
 	// This flag can be used to stop gameMusic
-	AtomicBoolean gameMusicPlaying = new AtomicBoolean(true);
-	AtomicBoolean bossMusicPlaying = new AtomicBoolean(false);
+	private AtomicBoolean gameMusicPlaying = new AtomicBoolean(true);
+	private AtomicBoolean bossMusicPlaying = new AtomicBoolean(false);
 
-	Timer gameTimer = new Timer(1000 / FRAME_RATE, null);
+	private Timer gameTimer = new Timer(1000 / FRAME_RATE, null);
+	private boolean gameOver = false;
 
 	/**
 	 * Create a new game, entry point for entire program
@@ -123,6 +124,7 @@ public class GameController {
 
 				// If the player dies, erase them and end the game
 				if (currentPlayerShip.getHealth() <= 0) {
+					gameOver = true;
 					currentPlayerShip.erase();
 					gameJFrame.dispose();
 					gameMusicPlaying.set(false);
@@ -275,7 +277,6 @@ public class GameController {
 
 	private void upgradeShip() {
 		freeze = true;
-		SoundHelper.getInstance().playSound("money.wav");
 		if (currentPlayerShipIndex == availableShips.length - 1) {
 			freeze = false;
 			return;
@@ -285,6 +286,7 @@ public class GameController {
 			return;
 		if (currentPlayerShipIndex > availableShips.length - 1)
 			return;
+		SoundHelper.getInstance().playSound("money.wav");
 		money -= upgradedShip.getCost();
 		currentPlayerShipIndex++;
 		upgradedShip.tick();
@@ -426,6 +428,11 @@ public class GameController {
 
 	// Called when the final boss is defeated
 	private void victory() {
+		// Prevent multiple victories from displaying
+		if (gameOver)
+			return;
+		gameOver = true;
+
 		SoundHelper.getInstance().playSound("victory.wav");
 		// Start a 3 second timer after defeating the final boss. This gives time for
 		// celebration
