@@ -13,12 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
 /**
- * Create a title screen with a "Play" button and a "Quit" button. This is the
- * first window to appear to the user when running the program. In order to
- * continue to the main game the user must press the "Play" button. If they want
- * to quit the game they must press the "Quit" button, or close the window.
+ * The main file of the project. Run this one to start the project
  */
-
 @SuppressWarnings("serial")
 public class TitleScreen extends JFrame {
     
@@ -30,7 +26,13 @@ public class TitleScreen extends JFrame {
 	public static void main(String[] args) {
 	        new TitleScreen();
 	}
-
+	
+	/*
+	 * Create a title screen with a "Play" button and a "Quit" button. This is the
+	 * first window to appear to the user when running the program. In order to
+	 * continue to the main game the user must press the "Play" button. If they want
+	 * to quit the game they must press the "Quit" button, or close the window.
+	 */
 	protected TitleScreen() {
 	    	setResizable(false);
 		// The label we're adding our background image to

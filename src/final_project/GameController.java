@@ -27,7 +27,9 @@ import java.awt.Font;
 import javax.swing.JTextArea;
 
 /**
- * The main file of the project. Run this one to start the project
+ * This file handles the actual gameplay of the project including the various
+ * levels of boats, updating the player and enemy, and handling collisions for 
+ * boats and loot.
  */
 public class GameController {
 	// Number of ticks per second
